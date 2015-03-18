@@ -48,4 +48,11 @@ categories:
 
 最后嘛，反正blog的各种东西还不太清楚，貌似现在还没评论功能。慢慢搞咯 _(:з」∠)_
 
-
+##更新
+第一篇文章上传成功 ，第二篇题解就跪了(汗)  
+rake generate 的时候warning 没解决  
+各种百度发现是加了代码的锅。  
+Jekyll 默认的代码高亮的插件是 pygments 一个python插件
+这个不知道为啥不能正常工作 ，然后我就换成了另一个 rouge  
+详细教程在 [__这里__](http://jekyll-windows.juthilo.com/3-syntax-highlighting/)  
+看来还有各种问题要解决Orz

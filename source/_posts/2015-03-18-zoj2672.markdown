@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "ZOJ 2672"
-date: 2015-03-18 12:25:53 +0800
+title: "ZOJ2672"
+date: 2015-03-18 13:03:25 +0800
 comments: true
 categories: 
 ---
