@@ -3,10 +3,10 @@ layout: post
 title: "ZOJ2672"
 date: 2015-03-18 13:03:25 +0800
 comments: true
-categories: 
+categories: dp
 ---
  [**Fibonacci Subsequence**](http://acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=2672)
-
+<!--more-->
 Description
 A sequence of integer numbers a1 , a2 , ..., an is called a Fibonacci sequence if ai = ai-2+ai-1 for all i=3,4,...,n.
 

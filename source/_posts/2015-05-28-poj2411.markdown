@@ -1,0 +1,90 @@
+---
+layout: post
+title: "poj2411"
+date: 2015-05-28 16:41:42 +0800
+comments: true
+categories: 搜索dp
+---
+
+[Mondriaan's Dream](http://poj.org/problem?id=2411)
+<!--more-->
+题意很简单，用2 * 1的砖铺满n * m的地方有多少种方法，经典的搜索+dp的问题。
+
+```cpp
+/*
+ *File:  2411.cpp
+ *Date : 2015-05-19 23:43:40
+ */
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+LL dp[12][1<<11];
+vector <int > v[12];
+bool inque[12][1<<11];
+int n,m;
+int res;
+int now;
+void dfs(int l,int st)
+{
+    if(l>m) return ; 
+    if(l==m)
+    {
+        dp[now+1][st] += dp[now][res];
+        if(!inque[now+1][st])
+        {
+            inque[now+1][st] = 1;
+            v[now+1].push_back(st);
+        }
+        return ;
+    }
+    if((res&(1<<l))==0&&(res&(1<<(l+1)))==0)
+    {
+        dfs(l+2,st);
+    }
+    if((res&(1<<l)))
+    {
+        dfs(l+1,st);
+    }
+    else {
+        dfs(l+1,st|(1<<l));
+    }
+   
+}
+
+int main()
+{
+    while(~scanf("%d%d",&n,&m)&&n*m)
+    {
+        memset(dp,0,sizeof dp);
+        memset(inque,0,sizeof inque);
+        dp[0][0] = 1;
+        for(int i =0;i<=n;i++)
+            v[i].clear();
+        v[0].push_back(0);
+        for(int i = 1;i<=n;i++)
+        {
+            for(int j = 0 ;j<v[i-1].size();j++)
+            {
+                res = v[i-1][j];
+                now = i-1;
+                dfs(0,0);
+               // printf("%d %d %d\n",i,j,dp[i][j]);
+            }
+        }
+        printf("%lld\n",dp[n][0]);
+    }
+    return 0;
+}
+
+
+
+```

@@ -1,0 +1,155 @@
+---
+layout: post
+title: "hdu4858"
+date: 2015-03-31 21:39:56 +0800
+comments: true
+categories: 杂 hdu
+---
+##[项目管理](http://acm.hdu.edu.cn/showproblem.php?pid=4858)
+
+<!--more-->
+
+Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 32768/32768 K (Java/Others)
+Total Submission(s): 1521    Accepted Submission(s): 556
+
+
+###Problem Description
+我们建造了一个大项目！这个项目有n个节点，用很多边连接起来，并且这个项目是连通的！
+两个节点间可能有多条边，不过一条边的两端必然是不同的节点。
+每个节点都有一个能量值。
+
+现在我们要编写一个项目管理软件，这个软件呢有两个操作：
+1.给某个项目的能量值加上一个特定值。
+2.询问跟一个项目相邻的项目的能量值之和。（如果有多条边就算多次，比如a和b有2条边，那么询问a的时候b的权值算2次）。
+ 
+
+###Input
+第一行一个整数T(1 <= T <= 3),表示测试数据的个数。
+然后对于每个测试数据，第一行有两个整数n(1 <= n <= 100000)和m(1 <= m <= n + 10)，分别表示点数和边数。
+
+然后m行，每行两个数a和b，表示a和b之间有一条边。
+然后一个整数Q。
+
+然后Q行，每行第一个数cmd表示操作类型。如果cmd为0，那么接下来两个数u v表示给项目u的能量值加上v(0 <= v <= 100)。
+如果cmd为1，那么接下来一个数u表示询问u相邻的项目的能量值之和。
+
+所有点从1到n标号。
+ 
+
+###Output
+对每个询问，输出一行表示答案。
+ 
+
+###Sample Input
+1  
+3 2  
+1 2  
+1 3  
+6  
+0 1 15  
+0 3 4   
+1 1  
+1 3   
+0 2 33  
+1 2  
+ 
+
+###Sample Output
+4  
+15  
+15  
+ 
+
+####Author
+CLJ
+ 
+
+####Source
+BestCoder Round #1
+
+直接模拟就行了， 会超时的原因是卡了输入和输出， 这个时候又要用挂了orz
+
+```cpp
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+vector <int > v[100010];
+int ans [100010];
+int n,m;
+void read2(int & x)
+{
+      char c;
+    bool neg=false;
+    while(((c=getchar())<'0'||c>'9')&&c!='-');
+    if(c=='-')
+    {
+        neg=true;
+        while((c=getchar())<'0'||c>'9');
+    }
+    x=c-'0';
+    while(c=getchar(),c>='0'&&c<='9') x=x*10+c-'0';
+    if(neg) x=-x;
+}
+void out(int a)
+{
+    if(a>9)
+        out(a/10);
+    putchar(a%10+'0');
+}
+
+int main()
+{
+    int t ;
+    scanf("%d",&t);
+    int x,y,z;
+    while(t--)
+    {
+        scanf("%d%d",&n,&m);
+        for(int i =1;i<=n;i++)
+            v[i].clear();
+        for(int i =1;i<=m;i++)
+        {
+            read2(x);read2(y);
+            v[x].push_back(y);
+            v[y].push_back(x);
+        }
+        int q;
+        memset(ans,0,sizeof ans);
+        scanf("%d",&q);
+        while(q--)
+        {
+            read2(x);
+            if(x==0)
+            {
+                read2(y);read2(z);
+                for(int i = 0;i<v[y].size();i++)
+                {
+                    ans[v[y][i]] += z;
+                }
+                 
+            }
+            else 
+            {
+                read2(y);
+                out(ans[y]);
+                putchar('\n');
+                
+            }
+            
+        }
+        
+    }
+    return 0;
+}
+
+
+```

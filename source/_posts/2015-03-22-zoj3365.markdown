@@ -1,0 +1,171 @@
+---
+layout: post
+title: "ZOJ3365"
+date: 2015-03-22 23:21:57 +0800
+comments: true
+categories: 想法
+---
+
+##[Integer Numbers](http://acm.hust.edu.cn/vjudge/problem/visitOriginUrl.action?id=13580)
+<!--more-->
+##Description
+The boy likes numbers. He has a sheet of paper. He have written a sequence of consecutive integer numbers on the sheet. The boy likes them.
+
+But then the girl came. The girl is cruel. She changed some of the numbers.
+
+The boy is disappointed. He cries. He does not like all these random numbers. He likes consecutive numbers. He really likes them. But his numbers are not consecutive any more. The boy is disappointed. He cries.
+
+Help the boy. He can change some numbers. He would not like to change many of them. He would like to change as few as possible. He cannot change their order. He would like the numbers to be consecutive again. Help the boy.
+
+##Input
+The first line of the input file contains n --- the number of numbers in the sequence (1 ≤ n ≤ 50000). The next line contains the sequence itself --- integer numbers not exceeding 109 by their absolute values.
+
+There are multiple cases. Process to the end of file.
+
+##Output
+Output the minimal number of numbers that the boy must change. After that output the sequence after the change.
+
+###Sample Input
+6  
+5 4 5 2 1 8
+###Sample Output
+3  
+3 4 5 6 7 8
+
+
+
+这题想清楚比较简单， 其实就是记录a[i]-i中出现最多次数的值。
+因为值有 10^9 那么大所以也不能简单的用数组存。 这个时候可以用mp
+
+自己写了一个麻烦的用数组的。 
+先给别人的简单代码吧。
+map 的用法都没搞清楚我真是Orz
+
+```cpp
+
+#include<bits/stdc++.h>
+
+#define in freopen("solve_in.txt", "r", stdin);
+using namespace std;
+typedef long long LL;
+typedef map<LL, int> mapCount;
+typedef long long LL;
+
+const int maxn = 50000 + 10;
+LL a[maxn], b[maxn];
+mapCount mc;
+int main() {
+//    in
+    int n;
+    while (scanf("%d", &n) == 1) {
+        mc.clear();
+        for (int i = 1; i <= n; i++) {
+            scanf("%lld", a+i);
+        }
+        int mx = 0, id;
+        for (int i = 1; i <= n; i++) {
+            b[i] = a[i] - i;
+            if (++mc[b[i]] > mx) {
+                mx = mc[b[i]];
+                id = i;
+            }
+        }
+        printf("%d\n", n - mx);
+        for (int i = 1; i <= n; i++) {
+            printf("%lld%c", a[id] - (id - i), i == n ? '\n' : ' ');
+        }
+    }
+    return 0;
+}
+```
+
+```cpp  
+/*
+ *File:  d.cpp
+ *Date : 2015-03-22 12:45:32
+ */
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+#include<set>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+
+int a[50050];
+int b[50050];
+int num[50050];
+int v[50050];
+int n;
+
+int main()
+{
+
+    while(~scanf("%d",&n))
+    {
+        memset(num,0,sizeof(num));
+        for(int i = 0;i<n;i++)
+        {
+            scanf("%d",&a[i]);
+            b[i] =a[i]-i;
+        }
+        sort(b,b+n);
+        int tot =0;
+        int now = b[0];
+        v[0] = b[0];
+        for(int i = 0;i<n;i++)
+        {
+            if(b[i]==now)
+            {
+                num[tot]++;
+            }
+            else{
+                num[++tot]++;
+                v[tot] = b[i];
+                now = b[i];
+            }
+            
+        }
+        int maxn = 0;
+        int res = -1;
+        int pos = -1;
+        for(int i =0 ;i<=tot;i++)
+        {
+            if(num[i]>maxn)
+            {
+                maxn = num[i];
+                res = v[i];
+            }
+        }
+        for(int i =0;i<n;i++)
+        {
+            if(res == a[i]-i)
+            {
+                pos= i;
+                break;
+            }
+        }
+        printf("%d\n",n-maxn);
+        int ans = a[pos]-pos;
+        int first = 1;
+        for(int i =0;i<n;i++)
+        {
+            if(first)
+            {
+                printf("%d",ans+i);
+                first = 0;
+            }else printf(" %d",ans+i);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
+
+```

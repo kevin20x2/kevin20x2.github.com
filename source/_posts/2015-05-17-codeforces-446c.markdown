@@ -1,0 +1,193 @@
+---
+layout: post
+title: "codeforces 446C"
+date: 2015-05-17 00:04:38 +0800
+comments: true
+categories: codefoces 线段树 
+---
+<!--more-->
+##C. DZY Loves Fibonacci Numbers
+time limit per test4 seconds
+memory limit per test256 megabytes
+inputstandard input
+outputstandard output
+In mathematical terms, the sequence Fn of Fibonacci numbers is defined by the recurrence relation
+
+F1 = 1; F2 = 1; Fn = Fn - 1 + Fn - 2 (n > 2).
+DZY loves Fibonacci numbers very much. Today DZY gives you an array consisting of n integers: a1, a2, ..., an. Moreover, there are m queries, each query has one of the two types:
+
+Format of the query "1 l r". In reply to the query, you need to add Fi - l + 1 to each element ai, where l ≤ i ≤ r.
+Format of the query "2 l r". In reply to the query you should output the value of  modulo 1000000009 (109 + 9).
+Help DZY reply to all the queries.
+
+##Input
+The first line of the input contains two integers n and m (1 ≤ n, m ≤ 300000). The second line contains n integers a1, a2, ..., an (1 ≤ ai ≤ 109) — initial array a.
+
+Then, m lines follow. A single line describes a single query in the format given in the statement. It is guaranteed that for each query inequality 1 ≤ l ≤ r ≤ n holds.
+
+##Output
+For each query of the second type, print the value of the sum on a single line.
+
+##Sample test(s)
+##input
+4 4  
+1 2 3 4  
+1 1 4  
+2 1 4   
+1 2 4  
+2 1 3  
+##output
+17  
+12  
+##Note  
+After the first query, a = [2, 3, 5, 7].
+
+For the second query, sum = 2 + 3 + 5 + 7 = 17.
+
+After the third query, a = [2, 4, 6, 9].
+
+For the fourth query, sum = 2 + 4 + 6 = 12.
+
+
+先膜拜一下神牛。orz
+
+很明显的区间更新线段树，问题是快速求得由两个斐波拉切数 得到的后面的各序列的值 和 区间的和。
+
+然后就有4个数组：
+f1[i],f2[i],s1[i],s2[i];
+
+初始化如下：
+```cpp
+    f1[0] = 1; f1[1] = 0;s1[0] = 1;s1[1] = 1;
+    f2[0] = 0; f2[1] = 1;s2[0] = 0 ;s2[1] =1;
+    for(int i =2;i<maxn;i++)
+    {
+        f1[i]= (f1[i-1]+f1[i-2])%mod;
+        f2[i] = (f2[i-1] + f2[i-2])%mod;
+        s1[i] = (s1[i-1] + f1[i])%mod;
+        s2[i] = (s2[i-1] + f2[i])%mod;
+    }
+```
+
+这4个数组就是专门用来处理斐波拉切数列的。
+     (p)*f1[n]+(q)*f2[n] 
+得到的是以p，q为开头，距离p长度为n的数列上的值。
+     p*s1[len]+s2[len]*q
+得到的是以p，q为开头，长度为len 的数列各项和 。
+然后用两个懒惰标记数组 来处理线段树， 一个存p，一个存q。
+
+校赛看了一下没做。。各种orz
+```cpp
+/*
+ *File:  FF.C.cpp
+ *Date : 2015-05-16 22:11:23
+ */
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+const int mod = 1000000009;
+const int maxn = 300010;
+#define calc(p,q,n) (((p)*f1[n]+(q)*f2[n])%mod)
+LL sum[maxn<<2];
+LL add1[maxn<<2],add2[maxn<<2];
+LL f1[maxn],f2[maxn],s1[maxn],s2[maxn];
+LL a[maxn];
+int n,m;
+void upd(int rt,int len ,LL p,LL q)
+{
+    add1[rt] = (add1[rt]+p)%mod;
+    add2[rt] = (add2[rt]+q)%mod;
+    sum[rt] = (sum[rt]+p*s1[len]+s2[len]*q)%mod;
+}
+void build(int rt,int l,int r)
+{
+    if(l==r)
+    {
+        sum[rt] = a[l];
+        add1[rt] =add2[rt]= 0;
+        return ;
+    }
+    int m = (l+r)>>1;
+    build(rt<<1,l,m);
+    build(rt<<1|1,m+1,r);
+    sum[rt] = (sum[rt<<1] + sum[rt<<1|1])%mod;
+}
+void push_down(int rt,int l,int r)
+{
+    int m = (l+r)>>1;
+    upd(rt<<1,m-l,add1[rt],add2[rt]);
+    upd(rt<<1|1,r-m-1,calc(add1[rt],add2[rt],m+1-l),calc(add1[rt],add2[rt],m+2-l));
+    add1[rt] = add2[rt] = 0;
+            
+}
+void update(int rt,int l,int r ,int L,int R,LL p,LL q)
+{
+    if(l>=L&&R>=r)
+    {
+        upd(rt,r-l,calc(p,q,l-L),calc(p,q,l-L+1));
+        return;
+    }
+    int m = (l+r)>>1;
+    push_down(rt,l,r);
+    if(L<=m) update(rt<<1,l,m,L,R,p,q);
+    if(R>m) update(rt<<1|1,m+1,r,L,R,p,q);
+    sum[rt] = (sum[rt<<1]+sum[rt<<1|1])%mod;
+}
+LL query(int rt,int l,int r,int L,int R)
+{
+    if(L<=l&&R>=r)
+    {
+        return sum[rt];
+    }
+    int m = (l+r)>>1;
+    push_down(rt,l,r);
+    LL ans = 0;
+    if(L<=m)  ans += query(rt<<1,l,m,L,R);
+    if(R>m) ans += query(rt<<1|1,m+1,r,L,R);
+    sum[rt] = (sum[rt<<1]+sum[rt<<1|1])%mod;
+    return ans %mod;
+}
+
+int main()
+{
+    f1[0] = 1; f1[1] = 0;s1[0] = 1;s1[1] = 1;
+    f2[0] = 0; f2[1] = 1;s2[0] = 0 ;s2[1] =1;
+    for(int i =2;i<maxn;i++)
+    {
+        f1[i]= (f1[i-1]+f1[i-2])%mod;
+        f2[i] = (f2[i-1] + f2[i-2])%mod;
+        s1[i] = (s1[i-1] + f1[i])%mod;
+        s2[i] = (s2[i-1] + f2[i])%mod;
+    }
+    scanf("%d%d",&n,&m);
+    for(int i =1;i<=n;i++)
+    {
+        scanf("%d",&a[i]);
+    }
+    build(1,1,n);
+    int x,y,z;
+    for(int i =1;i<=m;i++)
+    {
+        scanf("%d%d%d",&x,&y,&z);
+        if(x==1)
+        {
+            update(1,1,n,y,z,1,1);
+        }
+        else {
+            printf("%I64d\n",query(1,1,n,y,z));
+        }
+    }
+    return 0;
+}
+
+
+```

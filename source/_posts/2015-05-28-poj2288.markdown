@@ -1,0 +1,132 @@
+---
+layout: post
+title: "poj2288"
+date: 2015-05-28 16:19:00 +0800
+comments: true
+categories: 状压dp
+---
+###[Islands and Bridges](http://poj.org/problem?id=2288)
+<!--more-->
+题意是在一个无向图中找一条哈密顿路径(每个点通过一遍) 使得权值最大
+权值由3部分组成，第一部分是每个点的权值的和，第二部分为这个路径上相邻两点的权值之乘积。第三部分为对于路径上连续3点i,i+1,i+2，若存在
+i 和i+2之间的边(形成三角形)则加上3点乘积。然后输出这种最大路径的条数。
+
+
+点的个数不超过13因此可以用状态压缩。
+dp[i][m][j]表示以i为终点，j为前一个节点，m为当前2进制状态的状态的最小值。
+
+这样每向前找一个不在路径上的节点k
+有
+dp[k][m|(1<<(k-1)][i] = dp[i][m][j] + v[k]**v[i] + (如果k和j之间有边  )v[i]*v[k]*[j]
+
+然后结果也需要dp求出来，num[i][m][j]表示得到这个最小结果的有多少条路径那么这个值等于所有满足条件的能够转移到该状态的数目之和。
+
+```cpp
+
+/*
+ *File:  2288.cpp
+ *Date : 2015-05-17 20:28:22
+ */
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+LL dp[14][1<<14][14];
+LL num[14][1<<14][14];
+int t;
+bool g[14][14];
+LL a[14];
+int n,m;
+int main()
+{
+    cin>>t;
+    while(t--)
+    {
+        cin>>n>>m;
+        LL sum=0;
+        a[0] = 0;
+        for(int i =1;i<=n;i++)
+        {
+            cin>>a[i];
+            sum+=a[i];
+        }
+        if(n==1)
+        {
+            cout<<sum<<" "<<1<<endl;
+            continue;
+        }
+        int x,y;
+        memset(g,0,sizeof g);
+        memset(dp,-1,sizeof dp);
+        memset(num,0,sizeof num);
+        for(int i =1;i<=m;i++)
+        {
+            cin>>x>>y;
+            if(x^y)
+            g[x][y]= g[y][x] = 1;
+        }
+        for(int i=0;i<(1<<n);i++)
+        {
+            for(int j =1;j<=n;j++) if((i&(1<<(j-1)))!=0)
+            {
+                int ti = (i^(1<<(j-1)));
+                for(int tt = 1;tt<=n;tt++) if((ti&(1<<(tt-1)))!=0&&g[j][tt])
+                {
+                    int t = (ti^(1<<(tt-1)));
+                    if(t==0)
+                    {
+                        dp[j][i][tt] = a[tt]*a[j];
+                        num[j][i][tt] = 1;
+                       // continue;
+                    }
+                    for(int k = 1;k<=n;k++) if((t&(1<<(k-1)))!=0&&g[tt][k])
+                    {
+                        if(dp[tt][ti][k]==-1) continue;
+                        LL tmp = dp[tt][ti][k]+a[j]*a[tt];
+                        if(g[j][k])
+                        {
+                            tmp += a[tt]*a[j]*a[k];
+                        }
+                        if(tmp > dp[j][i][tt])
+                        {
+                            dp[j][i][tt] = tmp;
+                            num[j][i][tt] = num[tt][ti][k];
+                        }else if(tmp == dp[j][i][tt]) num[j][i][tt]+= num[tt][ti][k];
+                    }
+                   // printf("%d %d %d %d %I64d\n",j,i,tt,t,dp[j][i][tt]);
+                }
+            }
+        }
+        LL count = 0;
+        LL ans = -1 ;
+        for(int i =1;i<=n;i++)
+        {
+            for(int j = 1;j<=n;j++) if(i!=j)
+            {
+                if(dp[i][(1<<n)-1][j]>ans)
+                {
+                    ans = dp[i][(1<<n)-1][j];
+                    count  = num[i][(1<<n)-1][j];
+                }else if(dp[i][(1<<n)-1][j]==ans)
+                 count += num[i][(1<<n)-1][j];
+            }
+            
+        }
+        if(ans >=0) 
+        cout<<ans+sum<<" "<<count/2<<endl;
+        else puts("0 0");
+               
+    }
+    return 0;
+}
+
+
+```

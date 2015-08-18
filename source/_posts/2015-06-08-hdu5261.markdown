@@ -1,0 +1,97 @@
+---
+layout: post
+title: "hdu5261"
+date: 2015-06-08 19:48:25 +0800
+comments: true
+categories: dp 优先队列
+---
+
+###[蜀道难](http://acm.hdu.edu.cn/showproblem.php?pid=5261)
+<!--more-->
+
+百度之星复赛 的题目。
+题目大意是有n座山均匀放置在一个圆上，然后每一座山有一个高度，山顶之间的距离定义为 两个山的高度加上山之间路的距离。 
+要求求出两个山峰之间的最大距离，并且输出字典序最小的编号对。n为100000，简单的n^2 肯定超时。     
+将山看成点。h[i]表示编号为i的山的高度，我们要求的是 h[i]+h[j]+dist[i,j]的最大距离。 设 j>i.因为在圆上面所以当  
+i>=j-n/2 时 dist[i,j] = (j-i)*R   
+i<j-n/2 时 dist[i,j] = (n+i-j)*R  
+可以用优先队列进行优化，对于确定的 j ，我们只需要维护 h[i]+i*R (i<j-n/2)或者 h[i]-i*R (i>=j-n/2)的最大值。  
+这样优化过后， 因为每一个元素进入队列一次 ， 效率为O(n).
+
+
+```cpp
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+const int maxn = 100050;
+int s[maxn],s2[maxn];
+int l,r;
+int l2,r2;
+int t,n;
+LL R;
+LL a[maxn];
+
+int main()
+{
+	scanf("%d",&t);
+	int cas = 0;
+	while(t--)
+	{
+		scanf("%d%lld",&n,&R);
+		for(int i = 1;i<=n;i++)
+			scanf("%lld",&a[i]);
+		l = r = 0;
+		l2= r2=0;
+		s[r++] = 1;
+		pair <int,int > ans = make_pair(inf,inf);
+		LL res=0;
+		for(int i = 2;i<=n;i++)
+		{
+			if(res<a[s[l]]+a[i] + (i-s[l])*R)
+			{
+				res = a[s[l]] +a[i] +(i-s[l])*R;
+				ans = make_pair(s[l],i);
+		    }
+			else if(s[l]<ans.first&&res == a[s[l]]+a[i]+(i-s[l])*R)
+			{
+				ans = make_pair(s[l],i);
+		    }
+			while(l<r&&a[i]-i*R >a[s[r-1]]-s[r-1]*R) r--;
+			s[r++] = i;
+			while(l<r&&s[l]<=i-n/2) l++;
+			if(i==n/2+1)
+			{
+				s2[r2++] = 1;
+			}
+
+			if(i>n/2+1)
+			{
+				if(res<a[s2[l2]]+a[i]+(s2[l2]+n-i)*R)
+				{
+					res = a[s2[l2]] +a[i] +(s2[l2]+n-i)*R;
+					ans = make_pair(s2[l2],i);
+		        }
+				else if(s2[l2]<ans.first&&res==a[s2[l2]]+a[i]+(s2[l2]+n-i)*R)
+				{
+					ans = make_pair(s2[l2],i);
+				}
+				while(l2<r2&&a[i-n/2]+(i-n/2)*R>a[s2[r2-1]]+s2[r2-1]*R) r2--;
+				s2[r2++] = i-n/2;
+			}
+		}
+		printf("Case #%d:\n",++cas);
+		printf("%d %d\n",ans.first,ans.second);
+	}
+    return 0;
+}
+
+```

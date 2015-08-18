@@ -1,0 +1,209 @@
+---
+layout: post
+title: "codeforces 507E"
+date: 2015-04-04 16:51:31 +0800
+comments: true
+categories: codeforces dp 最短路
+---
+
+
+###[B - Breaking Good](http://acm.hust.edu.cn/vjudge/problem/visitOriginUrl.action?id=108837)
+<!--more-->
+###Description
+Breaking Good is a new video game which a lot of gamers want to have. There is a certain level in the game that is really difficult even for experienced gamers.
+
+Walter William, the main character of the game, wants to join a gang called Los Hermanos (The Brothers). The gang controls the whole country which consists of n cities with m bidirectional roads connecting them. There is no road is connecting a city to itself and for any two cities there is at most one road between them. The country is connected, in the other words, it is possible to reach any city from any other city using the given roads.
+
+The roads aren't all working. There are some roads which need some more work to be performed to be completely functioning.
+
+The gang is going to rob a bank! The bank is located in city 1. As usual, the hardest part is to escape to their headquarters where the police can't get them. The gang's headquarters is in city n. To gain the gang's trust, Walter is in charge of this operation, so he came up with a smart plan.
+
+First of all the path which they are going to use on their way back from city 1 to their headquarters n must be as short as possible, since it is important to finish operation as fast as possible.
+
+Then, gang has to blow up all other roads in country that don't lay on this path, in order to prevent any police reinforcements. In case of non-working road, they don't have to blow up it as it is already malfunctional.
+
+If the chosen path has some roads that doesn't work they'll have to repair those roads before the operation.
+
+Walter discovered that there was a lot of paths that satisfied the condition of being shortest possible so he decided to choose among them a path that minimizes the total number of affected roads (both roads that have to be blown up and roads to be repaired).
+
+Can you help Walter complete his task and gain the gang's trust?
+
+###Input
+The first line of input contains two integers n, m (2 ≤ n ≤ 105, ), the number of cities and number of roads respectively.
+
+In following m lines there are descriptions of roads. Each description consists of three integers x, y, z (1 ≤ x, y ≤ n, ) meaning that there is a road connecting cities number x and y. If z = 1, this road is working, otherwise it is not.
+
+###Output
+In the first line output one integer k, the minimum possible number of roads affected by gang.
+
+In the following k lines output three integers describing roads that should be affected. Each line should contain three integers x, y, z (1 ≤ x, y ≤ n, ), cities connected by a road and the new state of a road. z = 1 indicates that the road between cities x and y should be repaired and z = 0 means that road should be blown up.
+
+You may output roads in any order. Each affected road should appear exactly once. You may output cities connected by a single road in any order. If you output a road, it's original state should be different from z.
+
+After performing all operations accroding to your plan, there should remain working only roads lying on some certain shortest past between city 1 and n.
+
+If there are multiple optimal answers output any.
+
+##Sample Input
+###Input
+2 1  
+1 2 0  
+###Output
+1  
+1 2 1  
+###Input
+4 4  
+1 2 1  
+1 3 0  
+2 3 1  
+3 4 1  
+###Output
+3  
+1 2 0  
+1 3 1  
+2 3 0  
+###Input
+8 9  
+1 2 0  
+8 3 0  
+2 3 1  
+1 4 1  
+8 7 0  
+1 5 1  
+4 6 1  
+5 7 0  
+6 8 0  
+###Output
+3  
+2 3 0  
+1 5 0  
+6 8 1  
+
+题意是一个公路网络可以看做无向图，要找到从点1到点n的最短路径，然后其他的路如果是能工作的就要炸掉， 这条最短路上的如果有路不能工作就要修好，然后问总共炸掉和修好的路最少有多少条，并且输出来。
+
+首先单点最短路 用spfa 或者Dijkstra 可以很快的找出来，用两个数组d1和dn分别表示各点到点1和点n的距离  
+，那么如果d1[x]+dn[x] == dist （1和n之间的距离）这个点就在最短路上。剩下的就是经典的k段图问题了。用bfs加上dp可以求解。
+
+```cpp
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+#include<queue>
+#include<map>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+const int maxn = 100050;
+int d1[maxn];
+int dn[maxn];
+bool inque[maxn];
+vector <pair <int,int> > v[maxn];
+void spfa(int x,int * a)
+{
+    memset(inque,0,sizeof inque);
+    queue <int > q;
+    q.push(x);
+    inque[x] = true;
+    a[x] = 0;
+    while(!q.empty())
+    {
+        int t = q.front();
+        q.pop();
+        for(int i =0;i<v[t].size();i++) if(a[v[t][i].first]>a[t]+1)
+        {
+            a[v[t][i].first] = a[t]+1;
+            if(!inque[v[t][i].first])
+            {
+                inque[v[t][i].first] = true;
+                q.push(v[t][i].first);
+            }
+            
+        }
+        inque[t] = false;
+    }
+}
+int n,m;
+int dp[maxn];
+int vis[maxn];
+pair <int,int> head[maxn];
+vector <pair <pair <int ,int >,int > > edge;
+map <pair <int ,int> ,int > mp;
+
+int main()
+{
+    int x,y,z;
+    for(int i = 1;i<=n;i++)
+        v[i].clear();
+    edge.clear();
+    scanf("%d%d",&n,&m);
+    int sum=0;
+    for(int i = 0;i<m;i++)
+    {
+        scanf("%d%d%d",&x,&y,&z);
+        sum+= z;
+        v[x].push_back(make_pair(y,z));
+        v[y].push_back(make_pair(x,z));
+        edge.push_back(make_pair(make_pair(x,y), z ));
+    }
+    memset(d1,0x3f,sizeof d1);
+    spfa(1,d1);
+    memset(dn,0x3f,sizeof dn);
+    spfa(n,dn);
+    int dist = d1[n];
+    memset(dp, 0,sizeof dp);
+    memset(vis,0x3f ,sizeof vis);
+    queue <int > q;
+    q.push(1);
+    vis[1] = 0;
+    while(!q.empty())
+    {
+        int t = q.front() ; q.pop();
+        for(int i = 0;i<v[t].size();i++) 
+        {
+            int u = v[t][i].first;
+            if(d1[u]+dn[u]==dist&&vis[u]>=vis[t]+1)
+            {
+                vis[u] = vis[t]+1;
+                dp[u] = max(dp[u],dp[t]+v[t][i].second);
+                if(dp[u] == dp[t]+v[t][i].second)
+                {
+                    head[u] = make_pair(t,v[t][i].second);
+                }
+                q.push(u);
+            }
+            
+        }
+    }
+
+    printf("%d\n",sum+dist-2*dp[n]);
+    int t = n;
+    int tot = 0;
+    mp.clear();
+    while(t!=1)
+    {
+        mp[make_pair(head[t].first,t)] = tot++;
+        mp[make_pair(t,head[t].first)] = tot++;
+        if(head[t].second==0)
+        {
+            printf("%d %d 1\n",head[t].first,t);
+            
+        }
+        t = head[t].first;
+    }
+    for(int i = 0;i<edge.size();i++) if(mp.find(edge[i].first)==mp.end())
+    {
+        if(edge[i].second==1)
+        printf("%d %d 0\n",edge[i].first.first,edge[i].first.second);
+    }
+
+    return 0;
+}
+
+
+``` 

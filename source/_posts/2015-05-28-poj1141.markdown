@@ -1,0 +1,114 @@
+---
+layout: post
+title: "poj1141"
+date: 2015-05-28 15:43:37 +0800
+comments: true
+categories: 区间dp
+---
+###[Brackets Sequence](http://poj.org/problem?id=1141)
+<!--more-->
+
+题意是给你一个括号序列， 让你添加最少的括号 使得，整个序列变成合法的，(每个括号有对应的匹配的且不存在交叉状况。)
+
+基本上能想到这个是区间dp能写出方程来就没什么问题
+
+dp[i][j] = dp[i+1][j-1]+1 when i 匹配 j  
+or  
+dp[i][j] = dp[i][k]+dp[k+1][j]
+
+比较麻烦的就是需要记录路径，这个我做法是记录下来每次状态的转移的情况，然后再重新标记一下，没有被标记的地方就需要补全了。  
+写的仍然这么丑orz  
+
+```cpp
+
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+char str[1000];
+int dp[110][110];
+int head[110][110];
+bool vis[110];
+bool ok(int i,int j)
+{
+    if((str[i]==')'&&str[j]=='(')||(str[i]==']'&&str[j] =='['))
+        return true;
+    return false;
+}
+int dfs(int l,int r)
+{
+    if(r<=l) return dp[l][r] = 0;
+    if(dp[l][r]!=-1) return dp[l][r];
+    int ans = 0;
+    if(ok(r,l))  
+    {
+        ans = max(ans,dfs(l+1,r-1)+1);
+        head[l][r] = -1;
+    }
+    
+    for(int i =l;i<r;i++)
+    {
+        ans = max(ans,dfs(l,i)+dfs(i+1,r));
+        if(ans == dfs(l,i)+dfs(i+1,r))
+        {
+            head[l][r] = i;
+        }
+        
+    }
+    //printf(" %d %d %d %d\n",l,r,head[l][r],ans);
+    return dp[l][r] = ans;
+}
+void mark(int l,int r)
+{
+    if(r<=l) return ;
+    if(head[l][r] ==-1) { 
+        vis[l] = vis[r] = 1;
+       // printf("%d %d\n",l,r);
+        mark(l+1,r-1);
+        return ;
+    }
+    int t = head[l][r];
+    mark(l,t);
+    mark(t+1,r);
+}
+
+int main()
+{
+    scanf("%s",str);
+    {
+        memset(dp,-1,sizeof dp);
+        memset(vis,0,sizeof vis);
+        memset(head,0,sizeof head);
+        int len = strlen(str);
+        int ans = dfs(0,len-1);
+        mark(0,len-1);
+      //  printf("%d\n",ans);
+        for(int i =0;i<len;i++)
+        {
+            if(vis[i]) putchar(str[i]);
+            else {
+                if(str[i]=='('||str[i]==')')
+                {
+                    printf("()");
+                }
+                else{
+                    printf("[]");
+                }
+            }
+        }
+        putchar('\n');
+    }
+    return 0;
+}
+
+
+
+```

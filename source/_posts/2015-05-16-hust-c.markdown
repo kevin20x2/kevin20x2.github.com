@@ -1,0 +1,102 @@
+---
+layout: post
+title: "HUST C"
+date: 2015-05-16 21:08:27 +0800
+comments: true
+categories: dp 
+---
+
+##C		Move the books
+##Time Limit: 4000/2000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)
+<!--more-->
+###Description
+Because our new library was built. there are many books to move from the
+old one to the new one. Because there are so many books, every book has a weight.
+and some of them are so heavy.So the administrator need many volunteers to help him.
+When someone move one book, he costs the same energy.The administrator wants to sort
+the books from the light to the heavy. Xiaoming is one of volunteers, and he is a lazy people.He
+wants to costs the minimum energy. But he can't not find a way. So it's the time to show your
+talent.Help him and tell him the minimum energy he must costs.
+You can move the book as long as you like.
+
+
+##Input
+The first line of input contains only one integer, T, the number of test cases. Following T blocks, each block describe one test case.
+Each test case there is one integer n (1 <= n <= 100 )denoting the number of books.
+The next line contains n integers a1,a2,...an (1 <= ai <= 10000)denoting the weight of books.
+
+##Output
+For each test case output one integer denoting the minimum energy Xiaoming must costs.
+
+##Sample Input
+2  
+5  
+2 2 5 3 4  
+2  
+1 5  
+
+##Sample Output
+5  
+0  
+
+Hint
+In test 1, you can move the books weighted 3 and 4 before 5, which costs 7 energy or you can move
+the books weighted 5 to the last, which costs 5 energy.5 is the minimum.
+In test 2,the books are already sorted.
+
+校赛C题
+大意是将一个乱序串变成一个从小到大的有序串，然后每移动一个位置，需要的花费为移动的数字的大小。然后求最小花费。
+
+思路： 求和最大的最长上升子序列，然后答案等于所有数的和减去这个最大的值。
+证明： 要完成这个操作，则最终总有一个字串保持当前相对位置不变， 剩下位置的数全部需要调整，因为 不变的数需要的是递增的，那么答案自然是求出和最大的最长上升子序列。
+
+现在能分析好，比赛就脑袋就是不开窍。
+
+总之就是太弱了orz
+
+然后是标程：
+
+```cpp
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int maxn = 108;
+
+int dp[maxn], weight[maxn];
+int sums, n;
+int main() {
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+    int test_case;
+    scanf("%d", &test_case);
+    while (test_case--) {
+        scanf("%d", &n);
+        sums = 0;
+        for (int i = 1; i <= n; i++) {
+            scanf("%d", &weight[i]);
+            sums += weight[i];
+        }
+        for (int i = 1; i <= n; i++) {
+            dp[i] = weight[i];
+            for (int j = i - 1; j >= 1; j--) {
+                if (weight[j] <= weight[i]) {
+                    dp[i] = max(dp[i], dp[j] + weight[i]);
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 1; i <= n; i++) {
+            if (dp[i] > ans) {
+                ans = dp[i];
+            }
+        }
+        printf("%d\n", sums - ans);
+    }
+    return 0;
+}
+
+
+```

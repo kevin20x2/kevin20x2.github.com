@@ -1,0 +1,147 @@
+---
+layout: post
+title: "poj1848"
+date: 2015-05-28 15:53:15 +0800
+comments: true
+categories: 树状dp
+---
+
+###[Tree](http://poj.org/problem?id=1848)
+<!--more-->
+题意是给你一颗树加最少的边使得每一个节点刚好在一个环上。
+如果不能做到就输出-1.
+
+很明显的树状dp ，然而也有不少坑。
+首先题意中的意思就是不能有重边，也就是这个环必须得是3个或3个以上的点组成的。
+
+如果用dp[x][0]表示当前节点还没有成环的状态， 
+dp[x][1]表示当前节点已经在环中。  
+不考虑其父节点，那么对于dp[x][0]分两种情况，一种是他的所有子节点已经在环中，另外一种是他有一个没有成环的子节点与它相连。  
+
+对于dp[x][1]  
+可以在其子节点中找1个或者两个没有成环的点加一条边形成环。
+
+然而这样做没有考虑到重边的情况。。
+
+连边的时候如果只找了一个没有成环的节点，那么此时有可能这个节点就是没有成环的端点，即其子节点全部都已经在环中，这个时候连边的话就相当于重边了。
+
+所以我们还需要加一个特殊的状态表示当前没有成环，且该节点的子节点全部在环中的特殊状态。即端点。
+
+写的太挫，感觉应该有更好的方法 _(:з」∠)_
+
+```cpp
+
+/*
+ *File:  1848.cpp
+ *Date : 2015-05-21 22:28:22
+ */
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+LL dp[110][3];
+vector <int> v[110];
+int n;
+LL dfs(int x,int l,int fa)
+{
+    if(dp[x][l]!=-1) return dp[x][l];
+    LL ans = inf;
+    int t = v[x].size();
+    if(t == 1&&v[x][0] == fa) 
+    {
+        if(l ==2)
+        return dp[x][l] = 0;
+        else return dp[x][l] = inf;
+    }
+    if(l == 1)
+    {
+       
+        int len = v[x].size();
+        LL tmp = 0;
+        for(int i = 0 ;i<len;i++) if(v[x][i]!=fa)
+        {
+            tmp = dfs(v[x][i],0,x);
+            for(int j = 0;j<len;j++) if(j!=i&&v[x][j]!=fa)
+            {
+                tmp += dfs(v[x][j],1,x);
+            }
+        }
+        ans = min(ans,tmp+1);
+        for(int i =0;i<len;i++) if(v[x][i]!=fa)
+        {
+            for(int j = 0;j<len;j++) if(i!=j&&v[x][j]!=fa)
+            {
+                LL tmp = 0;
+                for(int t = 0;t<len;t++) if(t!=i&&t!=j&&v[x][t]!=fa)
+                {
+                    tmp += dfs(v[x][t],1,x);
+                }
+                ans = min(ans,tmp+dfs(v[x][i],0,x)+dfs(v[x][j],0,x)+1);
+                ans = min(ans,tmp+dfs(v[x][i],2,x)+dfs(v[x][j],0,x)+1);
+                ans = min(ans,tmp+dfs(v[x][i],2,x)+dfs(v[x][j],2,x)+1);
+            }
+            
+        }
+      //  printf("%d %d %d\n",x,l,ans);
+        return dp[x][l] = ans;
+    }
+    else if(l == 0)
+    {
+        LL tt;
+       for(int i = 0;i<v[x].size();i++)  if(v[x][i]!=fa)
+       {
+           tt = min(dfs(v[x][i],0,x),dfs(v[x][i],2,x));
+           for(int j = 0;j<v[x].size();j++) if(i!=j&&v[x][j]!=fa)
+           {
+               tt+= dfs(v[x][j],1,x);
+           }
+           ans = min(ans,tt);
+       }
+    // printf("%d %d %d\n",x,l,ans);
+       return dp[x][l] = ans;
+    }
+    else if(l==2)
+    {
+        LL tmp = 0;
+        for(int i =0;i<v[x].size();i++) if(v[x][i]!=fa)
+        {
+            tmp += dfs(v[x][i],1,x);
+        }
+        ans = min(ans,tmp);
+    // printf("%d %d %d\n",x,l,ans);
+        return dp[x][l] =ans;
+    }
+}
+int main()
+{
+    while(~scanf("%d",&n))
+    {
+        int x,y;
+        memset(dp,-1,sizeof dp);
+        for(int i= 1;i<=n;i++)
+            v[i].clear();
+        for(int i = 1;i<n;i++)
+        {
+            scanf("%d%d",&x,&y);
+            v[x].push_back(y);
+            v[y].push_back(x);
+        }
+        LL ans = dfs(1,1,0) ;
+        if(ans >= inf)
+            ans = -1;
+        printf("%lld\n", ans);
+    }
+    return 0;
+}
+
+
+
+```

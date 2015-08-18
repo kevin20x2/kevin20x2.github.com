@@ -3,10 +3,10 @@ layout: post
 title: "ZOJ2673"
 date: 2015-03-18 22:03:49 +0800
 comments: true
-categories: 
+categories: dp 搜索
 ---
 ##[Hexagon and Rhombic Dominoes](http://acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=2673)
-
+<!--more-->
 A regular hexagon with side length n is divided into 6n2 unit triangles.
 
 ![1](http://acm.zju.edu.cn/onlinejudge/showImage.do?name=0000%2F2673%2FDP1.gif)

@@ -1,0 +1,131 @@
+---
+layout: post
+title: "codeforces 508E"
+date: 2015-04-04 17:13:00 +0800
+comments: true
+categories: codeforces 贪心
+---
+
+
+##[C - Arthur and Brackets](http://acm.hust.edu.cn/vjudge/problem/visitOriginUrl.action?id=111976)
+<!--more-->
+###Description
+Notice that the memory limit is non-standard.
+
+Recently Arthur and Sasha have studied correct bracket sequences. Arthur understood this topic perfectly and become so amazed about correct bracket sequences, so he even got himself a favorite correct bracket sequence of length 2n. Unlike Arthur, Sasha understood the topic very badly, and broke Arthur's favorite correct bracket sequence just to spite him.
+
+All Arthur remembers about his favorite sequence is for each opening parenthesis ('(') the approximate distance to the corresponding closing one (')'). For the i-th opening bracket he remembers the segment [li, ri], containing the distance to the corresponding closing bracket.
+
+Formally speaking, for the i-th opening bracket (in order from left to right) we know that the difference of its position and the position of the corresponding closing bracket belongs to the segment [li, ri].
+
+Help Arthur restore his favorite correct bracket sequence!
+
+###Input
+The first line contains integer n (1 ≤ n ≤ 600), the number of opening brackets in Arthur's favorite correct bracket sequence.
+
+Next n lines contain numbers li and ri (1 ≤ li ≤ ri < 2n), representing the segment where lies the distance from the i-th opening bracket and the corresponding closing one.
+
+The descriptions of the segments are given in the order in which the opening brackets occur in Arthur's favorite sequence if we list them from left to right.
+
+###Output
+If it is possible to restore the correct bracket sequence by the given data, print any possible choice.
+
+If Arthur got something wrong, and there are no sequences corresponding to the given information, print a single line "IMPOSSIBLE" (without the quotes).
+
+##Sample Input
+###Input
+4  
+1 1  
+1 1  
+1 1  
+1 1  
+###Output
+()()()()
+###Input
+3  
+5 5  
+3 3  
+1 1  
+###Output
+((()))
+###Input
+3  
+5 5  
+3 3  
+2 2  
+###Output
+IMPOSSIBLE
+###Input
+3  
+2 3  
+1 4  
+1 4  
+###Output
+(())()
+
+
+这种带括号匹配的问题一般都能用到栈,然而我却傻乎乎的用dfs然后wa了很久。
+
+代码借鉴了别人的，我加点注释吧orz。
+
+```cpp
+
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+char ans[1250];
+int l[650],r[650];
+int pos[650];//存放第i个'('的位置
+int s[1250];//栈
+int top=0;
+int n;
+bool flag ;
+
+
+int main()
+{
+    flag =0;
+    int len=0; //表示位置
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++)
+    {
+        scanf("%d%d",&l[i],&r[i]);
+        if(flag )  continue;
+        s[++top] = i;
+        pos[i] = len;
+        ans[len++] = '(';
+        while(top>0&& pos[s[top]]+l[s[top]] <=len)//表示要匹配栈顶左括号时候若这时候实际长度可能
+        {                                          //在匹配范围之内
+            if(pos[s[top]]+r[s[top]]<len)      //不在匹配范围之内
+            {
+                flag = 1;
+                break;
+            }
+            else {
+                ans[len++] = ')';  //匹配到，出栈
+                s[top--] = 0;
+            }
+            
+        }
+        
+    }
+    if(!flag&&top ==0) //top!=0 还有括号没有得到匹配
+    {
+        puts(ans);
+    }
+    else
+     puts("IMPOSSIBLE");
+    return 0;
+}
+
+
+```

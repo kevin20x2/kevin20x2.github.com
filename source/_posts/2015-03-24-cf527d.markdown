@@ -1,0 +1,108 @@
+---
+layout: post
+title: "CF527D"
+date: 2015-03-24 17:02:36 +0800
+comments: true
+categories: codeforces 贪心
+---
+
+###[D. Clique Problem](http://codeforces.com/contest/527/problem/D)
+<!--more-->
+
+The clique problem is one of the most well-known NP-complete problems. Under some simplification it can be formulated as follows. Consider an undirected graph G. It is required to find a subset of vertices C of the maximum size such that any two of them are connected by an edge in graph G. Sounds simple, doesn't it? Nobody yet knows an algorithm that finds a solution to this problem in polynomial time of the size of the graph. However, as with many other NP-complete problems, the clique problem is easier if you consider a specific type of a graph.
+
+Consider n distinct points on a line. Let the i-th point have the coordinate xi and weight wi. Let's form graph G, whose vertices are these points and edges connect exactly the pairs of points (i, j), such that the distance between them is not less than the sum of their weights, or more formally: |xi - xj| ≥ wi + wj.
+
+Find the size of the maximum clique in such graph.
+
+###Input
+The first line contains the integer n (1 ≤ n ≤ 200 000) — the number of points.
+
+Each of the next n lines contains two numbers xi, wi (0 ≤ xi ≤ 109, 1 ≤ wi ≤ 109) — the coordinate and the weight of a point. All xi are different.
+
+###Output
+Print a single number — the number of vertexes in the maximum clique of the given graph.
+
+###Sample test(s)  
+###input  
+4  
+2 3  
+3 1  
+6 1  
+0 2   
+###output  
+3
+
+
+n个点每个点有两个属性 x和w ，需要找出这样一个点的集合，每两个点满足 |xi - xj| ≥ wi + wj.  
+问最大的集合里面有多少个点。  
+这个题真是想复杂了。  
+本来想着按x 来排序的 ，因为考虑到如果按x+w 来排序会出现 后面的值x x小于前面x的情况。  
+后来发现这种情况是不可能出现的  
+因为要同时满足下面3个条件的点是不可能出现的
+
+1.xi+wi < xj+wj 
+2.xi> xj
+3.xi-wi > xj+wj  
+所以就简单了，按照 x+w排序 然后记录x+w的最大值 能往集合里面插（xj-wj>=maxn）就往里面插  
+因为 这次不插下次插的话 再插的 x+w的最大值比这一次要大，后面的结果就有可能变小。  
+满足贪心的原理。
+
+```cpp
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+#include<queue>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+struct seg{
+    int x;
+    int w;
+    seg(int x,int w):x(x),w(w){};
+    seg(){};
+    friend bool operator <(seg a,seg b){
+        return a.w<b.w;
+    };
+}a[200050];
+int n;
+int cmp(seg a,seg b)
+{
+    return a.w<b.w;
+}
+
+int main()
+{
+    scanf("%d",&n);
+    int x,y;
+    for(int i= 1;i<=n;i++)
+    {
+        scanf("%d%d",&x,&y);
+        a[i].x = x-y;
+        a[i].w = x+y;
+    }
+    sort(a+1,a+n+1,cmp);
+    int t = a[1].x;
+    int ans = 0;
+    for(int i =1;i<=n;i++)
+    {
+        if(a[i].x>=t)
+        {
+            ans ++;
+            t = a[i].w;
+        }
+    }
+    printf("%d\n",ans);
+    return 0;
+}
+
+
+```
+
+

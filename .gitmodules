@@ -1,0 +1,3 @@
+[submodule ".themes/cleanpress"]
+	path = .themes/cleanpress
+	url = https://github.com/imathis/octopress.wiki.git

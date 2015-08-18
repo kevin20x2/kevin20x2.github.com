@@ -3,7 +3,7 @@ layout: post
 title: "折腾了好久"
 date: 2015-03-17 15:26:14 +0800
 comments: true
-categories: 
+categories: 杂
 ---
 
 翔在github上搞了一个blog ，然后我也就闲的蛋疼也想搞一个了。
@@ -11,6 +11,7 @@ categories:
 然后真的就是蛋疼了。
 --
 写这篇blog简直也是蛋疼的一部分。
+<!--more-->
 
 **首先我不会markdown**
 
@@ -56,3 +57,27 @@ Jekyll 默认的代码高亮的插件是 pygments 一个python插件
 这个不知道为啥不能正常工作 ，然后我就换成了另一个 rouge  
 详细教程在 [__这里__](http://jekyll-windows.juthilo.com/3-syntax-highlighting/)  
 看来还有各种问题要解决Orz
+
+###3月22号更新
+今天尝试加上一篇blog zoj3369   
+reke generate 
+妈个鸡居然报错了 。
+####jekyll 2.5.3 | Error:  undefined method `[]' for nil:NilClass  
+百度谷歌各种 发现说这是个高亮插件的错误，但是我已经把插件换成了rouge而且成功上传了两篇文章 。这么说只能是这篇新博客的问题。
+然后我把它剪切了出去  
+rake generate  
+__成功了__  
+我真是 (╯‵□′)╯︵┻━┻︵┻━┻
+
+然后把新文件稍微改了一下
+把其中的 50\*50\*50\*50
+改成了  50\\\*50\\\*50\\\*50
+似乎就成功了。已经无力吐槽了，下次注意。
+
+###3月23日更新
+尝试加上了侧边的分类栏  
+之后在每篇文章categoris: 上面加上分类标签就好了
+具体见 [这里](http://codemacro.com/2012/07/18/add-category-list-to-octopress/)  
+
+
+

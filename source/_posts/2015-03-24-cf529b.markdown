@@ -1,0 +1,154 @@
+---
+layout: post
+title: "CF529B"
+date: 2015-03-24 20:39:42 +0800
+comments: true
+categories:  codeforces 贪心 暴力
+---
+
+##[B. Group Photo 2 (online mirror version)](http://codeforces.com/problemset/problem/529/B)
+<!--more-->
+Many years have passed, and n friends met at a party again. Technologies have leaped forward since the last meeting, cameras with timer appeared and now it is not obligatory for one of the friends to stand with a camera, and, thus, being absent on the photo.
+
+Simply speaking, the process of photographing can be described as follows. Each friend occupies a rectangle of pixels on the photo: the i-th of them in a standing state occupies a wi pixels wide and a hi pixels high rectangle. But also, each person can lie down for the photo, and then he will occupy a hi pixels wide and a wi pixels high rectangle.
+
+The total photo will have size W × H, where W is the total width of all the people rectangles, and H is the maximum of the heights. The friends want to determine what minimum area the group photo can they obtain if no more than n / 2 of them can lie on the ground (it would be strange if more than n / 2 gentlemen lie on the ground together, isn't it?..)
+
+Help them to achieve this goal.
+
+###Input
+The first line contains integer n (1 ≤ n ≤ 1000) — the number of friends.
+
+The next n lines have two integers wi, hi (1 ≤ wi, hi ≤ 1000) each, representing the size of the rectangle, corresponding to the i-th friend.
+
+###Output
+Print a single integer equal to the minimum possible area of the photo containing all friends if no more than n / 2 of them can lie on the ground.
+
+###Sample test(s)
+###input
+3  
+10 1  
+20 2  
+30 3 
+###output
+180 
+###input
+3  
+3 1  
+2 2  
+4 3  
+###output
+21  
+###input
+1  
+5 10  
+###output
+50  
+
+
+题目大意： n个长方形 ，排成一排 ， 总占面积 为 宽w 的和 高h的最大值 组成的长方形。
+即∑w * max(h) 。  
+现在可调换不超过 n/2个 长方形的 长和宽  
+使得上式取最小值  
+
+
+n只有1000 因此可以枚举 作为 最大的 高h的值 。  
+对于每个h 看能否满足条件 ，即其他的高比h小， 并且调换的个数不超过n/2。   
+要求得最小值则需要 w和h调换之后 最高的h不变 而 调换过后的 w比原来的小 。   
+若w-h>0 则此时应该在不超过2/n的基础上尽量调换   
+若 w-h<0 则此时不要调换。  
+因此按照 w-h 来排序。
+
+复杂度 n^2
+
+code:
+```cpp
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+struct seg{
+    int w,h;
+}a[1050];
+int cmp(seg a,seg b)
+{
+    return a.w-a.h>b.w-b.h;
+}
+int n;
+bool vis[1050];
+int main()
+{
+    scanf("%d",&n);
+    for(int i =1;i<=n;i++)
+    {
+        scanf("%d%d",&a[i].w,&a[i].h);
+    }
+    sort(a+1,a+n+1,cmp);
+    int ans = inf;
+    for(int i =1;i<=n;i++)
+    {
+        for(int t= 0;t<2;t++)
+        {
+            int h;
+            int w ;
+            memset(vis,0,sizeof vis);
+            vis[i] = 1;
+            if(t==0)
+            {
+                h = a[i].h;
+                w = a[i].w;
+            }
+            else { 
+                h = a[i].w;
+                w = a[i].h;
+            }
+            int count =t;
+            bool flag = 0;
+            for(int j=1;j<=n;j++) if(j!=i)
+            {
+                if(a[j].h>h &&a[j].w<=h) 
+                { 
+                    vis[j] = 1;
+                    w+= a[j].h;
+                    count++;
+                }
+                if(a[j].h>h&&a[j].w>h) {
+                    flag = 1;
+                    break;
+                }
+            }
+            if(count> n/2) flag = 1;
+           // printf("%d \n",count);
+            int num = n/2-count; 
+            if(!flag)
+            {
+                for(int j = 1;j<=n;j++) 
+                {
+                    if(!vis[j]&&a[j].w<=h&&a[j].w-a[j].h>0&&num>0)  // 尽量调换 w和h的情况   
+                    {
+                        w+=a[j].h;
+                        num--;
+                    }
+                    else if(!vis[j]) w+=a[j].w;
+                }
+                ans =min(ans,w*h);
+                //printf("*%d\n",w*h);
+            }
+        }
+    }
+    printf("%d\n",ans);
+    
+    
+    return 0;
+}
+
+```
+

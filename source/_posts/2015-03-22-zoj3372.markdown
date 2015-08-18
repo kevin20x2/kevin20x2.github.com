@@ -1,0 +1,205 @@
+---
+layout: post
+title: "ZOJ3372"
+date: 2015-03-22 23:29:48 +0800
+comments: true
+categories: dp
+---
+##[Gone Swimming](http://acm.hust.edu.cn/vjudge/problem/visitOriginUrl.action?id=13587)
+<!--more-->
+
+##Description
+Macrohard head Bill Hates has recently decided to build the new swimming pool at his villa. He called his designer and asked him to design the pool. Since there are many people in Bill's family, the pool must have several sections of different depths.
+
+Today the construction of the pool is completed. It has the form of a rectangle and consists of several rectangular sections. Sections are separated by the borders, top side of each border is on the ground level. Each section has some depth.
+
+Now Bill wants to fill the pool with water. The water gets to the pool from the source located in some section. It brings s liters of water per minute to the pool. When the section is filled with water, the waters starts to flow to the adjacent sections. The amount of water flowing over the border is proportional to its length. When several adjacent sections are filled, they act as one section, i.e. as if there were no border between them. The water flowing over the outer border of the pool is carried away by a special system of the pipes, thus it leaves the pool.
+
+Bill wants to know, what is the time required to fill the pool, if it's initially empty. Help him!
+
+![1](http://acm.zju.edu.cn/onlinejudge/showImage.do?name=asc11-swimming-1.jpg)
+
+
+For example, let the pool be designed as shown on the picture, number in each section specifies its depth in centimeters, source is located in the center section of the pool. Let the amount of water getting from the source be 1000 liters per minute. The center section is filled after 6 minutes and the water starts to flow to adjacent sections. The section on the top left gets 125 liters per minute, the section on the top right gets 250 liters per minute and the section on the bottom gets 375 liters per minute. Another 250 liters per minute flow over the outer borders.
+
+In 8 minutes the section on the top right gets filled. Now it is joined with the center section, their common border length is 10 meters, so 200 liters per minute flows to the section on the top left, and 300 to the section on the bottom. 500 liters per minute flows over the outer pool borders.
+
+Another 5 minutes are required for the bottom section to get filled. Now the bottom section is joined with the main section and they act as the whole. The border length is 12 meters, so now 166.67 liters per minute gets to the top right section. It takes another 6 minutes to fill it completely.
+
+##Input
+The first line of the input file contains n, x, y, p and s --- the number of sections of the pool, its size x * y in meters, the number of the section where the water source is located, and the number of liters getting out of the source per minute (1 ≤ n ≤ 100, 1 ≤ x, y ≤ 100, 1 ≤ s ≤ 100000).
+
+The following n lines contain descriptions of the sections: each section is described with five integer numbers: x1, y1, x2, y2 and d --- the coordinates of its bottom-left and top-right corner in meters and its depth in centimeters (1 ≤ d ≤ 1000). Sections do not overlap and cover the whole pool.
+
+There are multiple cases. Process to the end of file.
+
+##Output
+Output a real number --- the number of minutes required to fill the whole pool with water. Your answer must be accurate up to 10-4.
+
+###Sample Input
+4 3 3 2 1000  
+0 0 3 1 150  
+0 1 3 2 200  
+0 2 1 3 300  
+1 2 3 3 100  
+##Sample Output
+25.000000
+
+这题貌似没啥好说的， 数据只有100 n^2 的判断都可以随意过  
+建个图把周围当成一个点然后直接模拟时间就行了  
+
+```cpp
+/*
+ *File:  k.cpp
+ *Date : 2015-03-22 14:10:25
+ */
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+struct reg{
+    int a,b;
+    int c,d;
+    int dep;
+    reg(int _a,int _b,int _c,int _d,int _dep):a(_a),b(_b),c(_c),d(_d),dep(_dep){};
+    reg(){}
+    double sq()
+    {
+        return (c-a)*(d-b)*dep*10;
+    }
+};
+struct seg{
+    int n,w;
+    seg(int a,int b):n(a),w(b){};
+};
+reg a[110];
+int n,x,y,p,s;
+vector <seg > v[110];
+int w[110];
+double re[110];
+int c[110];
+bool in[110];
+int cross(reg a,reg b)
+{
+    if(a.a>b.a)
+    {
+        swap(a,b);
+    }
+    if(a.c==b.a)
+    {
+        int l = max(a.b,b.b);
+        int r = min(a.d,b.d);
+        return r-l;
+    }
+    if(a.b>b.b)
+    {
+        swap(a,b);
+    }
+    if(a.d==b.b)
+    {
+        int l = max(a.a,b.a);
+        int r =min(a.c,b.c);
+        return r-l;
+    }
+    return -1;
+}
+void join(int t,int &length)
+{
+    for(int i =0;i<v[t].size();i++)
+    {
+        w[v[t][i].n] += v[t][i].w;
+    }
+    length += c[t];
+    for(int i =1;i<=n;i++) if(in[i])
+    {
+        if(cross(a[t],a[i])>0)
+            length-=2*cross(a[t],a[i]);
+        w[i] = 0;
+    }
+    in[t] = true;
+}
+reg out[4];
+int main()
+{
+    
+    while(~scanf("%d%d%d%d%d",&n,&x,&y,&p,&s))
+    {
+        
+        out[0]=reg(0,-1,x,0,inf);
+        out[1]=reg(x,0,x+1,y,inf);
+        out[2]=reg(-1,0,0,y,inf);
+        out[3]=reg(0,y,x,y+1,inf);
+        memset(c,0,sizeof c);
+        for(int i = 1;i<=n;i++)
+        {
+            v[i].clear();
+            scanf("%d%d%d%d%d",&a[i].a,&a[i].b,&a[i].c,&a[i].d,&a[i].dep);
+            re[i]= 1.0*a[i].sq();
+            int t=0; 
+            for(int j =0;j<4;j++) if(cross(a[i],out[j])>0)
+            {
+                t+= cross(a[i],out[j]);
+            }
+            v[i].push_back(seg(0,t));
+            c[i]+=t;
+        }
+        for(int i = 1;i<=n;i++)
+            for(int j = i+1;j<=n;j++)
+            {
+                int t = cross(a[i],a[j]);
+                if(t>0)
+                {
+                    v[i].push_back(seg(j, t));
+                    c[i]+=t;
+                    v[j].push_back(seg(i, t));
+                    c[j]+=t;
+                }
+            }
+        memset(w,0,sizeof(w));
+        memset(in,0,sizeof in);
+        in[p]= true;
+        for(int i = 0;i<v[p].size();i++)
+        {
+            w[v[p][i].n] += v[p][i].w;
+        }
+        double ans = 1.0*re[p]/s;
+        re[p] = 0;
+        int length = c[p];
+        int count = n-1;
+        while(count--)
+        {
+            double tmp = 1e10;
+            int res = 0;
+            for(int i = 1;i<=n;i++) if(w[i]>0&&in[i]==false)
+            {
+                double t = re[i]/(s*1.0*w[i]/length);
+                if(tmp>t)
+                {
+                    tmp=t;
+                    res = i;
+                }
+            }
+            ans +=tmp;
+            for(int i = 1;i<=n;i++) if(re[i]>0)
+            {
+                re[i] -= tmp*(s*1.0*w[i]/length);
+            }
+            join(res,length);
+        }
+        printf("%lf\n",ans);
+        
+    }
+    return 0;
+}
+
+
+
+```
