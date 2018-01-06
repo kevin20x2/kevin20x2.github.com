@@ -1,15 +1,115 @@
-<p>﻿&mdash;
-layout: post
-title: &ldquo;new_start&rdquo;
-date: 2018-01-05 22:15:16 +0800
-comments: true</p>
 
-<h2>categories: 杂</h2>
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>new_start  | ZVINK&#8217;s garden</title>
 
-<p>今天心血来潮想把断更两年多的blog 给捡起来，发现我以前折腾过的东西果然都忘记了。
+<meta name="author" content="ZVINK"> 
+
+<meta name="description" content="今天心血来潮想把断更两年多的blog 给捡起来，发现我以前折腾过的东西果然都忘记了。
+包括markdown，octpress 这里还是简单说一下捡起来的过程吧。 首先得去安装 ruby ，试过多个版本，最后还是用的1.9.3 的installer。 按照之前的老教程上的 1
+2
+3
+gem &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="ZVINK's garden" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">ZVINK&#8217;s garden</a></h1>
+<h4>try</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:kevin20x2.github.io">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">New_start</h2>
+	<div class="entry-content"><p>今天心血来潮想把断更两年多的blog 给捡起来，发现我以前折腾过的东西果然都忘记了。
 包括markdown，octpress <br/>
-这里还是简单说一下捡起来的过程吧。<br/>
-首先得去安装 ruby ，试过多个版本，最后还是用的1.9.3 的installer。</p>
+这里还是简单说一下捡起来的过程吧。</p>
+
+<!--more-->
+
+
+<p>首先得去安装 ruby ，试过多个版本，最后还是用的1.9.3 的installer。</p>
 
 <p>按照之前的老教程上的</p>
 
@@ -74,3 +174,105 @@ comments: true</p>
 
 <p>然后关于blog，以后大概不怎么会发<strong>题解</strong>了，毕竟已经退役很久了<br/>
 可能也就是记录一些有点价值的东西，嗯，这次折腾只花了一晚上加一早上，还不算特别浪费时间。</p>
+
+<h2>add</h2>
+
+<p>发现之前其实一直都没搞懂octpress的结构 <br/>
+github 上的仓库是有两个分支的： master 和source 。<br/>
+master上放的其实是本地的 _deploy文件夹，也就是运行blog的文件。</p>
+
+<p>而source 则是包含了整个blog 运行机制的分支。<br/>
+每次rake deploy 更新的是master 分支，然后push origin source 实际上是将本地写好的markdown 等内容同步。</p>
+
+<h2>add again</h2>
+
+<p>发现 blog的markdown 文件需要修改成 utf 不带 BOM格式的，不然会出现octpress无法识别blog 头然后格式错误的问题。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-01-05T22:15:16+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/za/'>杂</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2018/01/05/new-start/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2018
+
+    ZVINK
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'kevin20x2';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://kevin20x2.github.io/blog/2018/01/05/new-start/';
+        var disqus_url = 'http://kevin20x2.github.io/blog/2018/01/05/new-start/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>
