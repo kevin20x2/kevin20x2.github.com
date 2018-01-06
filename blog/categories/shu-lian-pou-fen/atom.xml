@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: 树链剖分 | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/shu-lian-pou-fen/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[codeforces555E]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/07/13/codeforces555E/"/>
+    <updated>2015-07-13T14:09:39+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/07/13/codeforces555E</id>
+    <content type="html"><![CDATA[<p><a href="http://codeforces.com/problemset/problem/555/E">E. Case of Computer Network</a></p>
+
+<!--more-->
+
+
+<p>题意：
+给你n个点的无向图，给你q个查询(每个查询包含一个起点和一个终点)，需要你确定每一条边的方向，使得每个查询都满足能够用这条边的方向从起点到终点。然后点和边和查询的数量都可以达到2*10<sup>5</sup>个。</p>
+
+<p>首先假设一个集合中的点能够以一个确定的方案相互到达的话，那么这个集合就可以看做一个点。首先要找到这些集合。这里tarjan算法是算有向图的强连通分量的，但是这里初始图是无向图。这里通过前向星建图，然后标记边。找到点的集合，重新建图。</p>
+
+<p>化简之后的图是一颗树或者森林。考虑一颗树的状况。对树进行树链剖分，然后用几个状态表示一个集合点的状况。
+这里我用:<br/>
+0 表示 错误。
+1 表示 全部方向不确定(没有被修改过)<br/>
+2 表示 全部向上<br/>
+3 表示 部分向上<br/>
+4 表示 全部向下<br/>
+5 表示 部分向下<br/>
+初始状态下 线段树的每一个点初始化为 1
+然后有 <br/>
+0 + x = 0  <br/>
+1 + 1 = 1  <br/>
+1 + 2 = 3<br/>
+1 + 3 = 3<br/>
+1 + 4 = 1
+等等运算关系，每次查询的时候若是满足条件，则将一条链全部置2 或者 4. <br/>
+不满足条件的时候直接输出结果。 <br/>
+写的时候简直痛苦。。</p>
+
+<pre><code class="cpp">/*
+ *File:  310e.cpp
+ *Date : 2015-07-11 20:26:30
+ */
+#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cmath&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+#include&lt;stack&gt;
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+const int maxn = 200050;
+struct seg
+{
+    int v,to ;
+
+}edge[maxn&lt;&lt;1],edge2[maxn&lt;&lt;1];
+int n,m,q;
+bool vis[maxn&lt;&lt;1];
+int head[maxn],tot;
+int head2[maxn],tot2;
+int dfn[maxn],low[maxn],dfn_clock;
+bool instack[maxn];
+stack &lt;int&gt; s;
+int color[maxn],color_num;
+void addedge(int u,int v)
+{
+    edge[tot].v = v;
+    edge[tot].to = head[u];
+    head[u] = tot++;
+}
+void addedge2(int u,int v)
+{
+    edge2[tot2].v = v;
+    edge2[tot2].to = head2[u];
+    head2[u] = tot2++;
+}
+void dfs(int x)
+{
+    dfn[x] = low[x] =  ++dfn_clock;
+    s.push(x);
+    instack[x] = 1;
+    for(int i = head[x];~i;i = edge[i].to) if(!vis[i])
+    {
+        vis[i] = vis[i^1] = 1;
+        int v = edge[i].v;
+        if(!instack[v])
+        {
+            dfs(v);
+            low[x] = min(low[x],low[v]);
+        } else {
+            low[x] = min(low[x],dfn[v]);
+        }
+    }
+    if(low[x] == dfn[x])
+    {
+        color_num++;
+        while(s.top()!=x)
+        {
+            color[s.top()] = color_num;
+            s.pop();
+        }
+        color[s.top()] = color_num;
+        s.pop();
+    }
+}
+void re_map()
+{
+    memset(vis,0,sizeof vis);
+    tot2 = 0;
+    memset(head2,-1,sizeof head2);
+    for(int i = 1;i&lt;=n;i++)
+    {
+        for(int j = head[i];~j;j=edge[j].to) if(!vis[j])
+        {
+            vis[j] = vis[j^1] = 1;
+            int v = edge[j].v;
+            if(color[i] != color[v])
+            {
+                addedge2(color[i],color[v]);
+                addedge2(color[v],color[i]);
+            }
+        }
+    }
+}
+int fa[maxn],top[maxn],son[maxn],dep[maxn],num[maxn],pos[maxn];
+int tree[maxn&lt;&lt;2];
+int col[maxn&lt;&lt;2];
+int cnt;
+void dfs2(int x,int pre,int d)
+{
+    num[x] = 1;
+    dep[x] = d;
+    fa[x] = pre;
+    for(int i = head2[x];~i;i = edge2[i].to)
+    {
+        int y = edge2[i].v;
+        if(y != pre)
+        {
+            dfs2(y,x,d+1);
+            num[x] += num[y];
+            if(son[x] ==-1 || num[x] &gt; num[son[x]] ) son[x] = y;
+        }
+    }
+}
+void build(int x,int tp)
+{
+    pos[x] = cnt++; top[x] = tp;
+    if(son[x] != -1) build(son[x],top[x]);
+    else return ;
+    for(int i = head2[x];~i;i = edge2[i].to)
+    {
+        int y = edge2[i].v;
+        if(y != fa[x] &amp;&amp; y != son[x])
+            build(y,y);
+    }
+}
+int count(int l,int r)
+{
+    if(l&gt;r) swap(l,r);
+    if(l == 0) { 
+        return 0;
+    } 
+    if(l == 1)
+    {
+        if(r == 2 || r == 4)
+        {
+            return l+r;
+        }
+        else if(r == 3 || r == 5)
+        {
+            return r;
+        }
+        else return 1;
+
+    }
+    if( l == 2 || l == 3)
+    {
+        if(r == 2)
+        {
+            return 2;
+        }else if(r == 3)
+        {
+            return 3;
+        }
+        else return 0;
+    }
+    if( l == 4 || l == 5)
+    {
+        if(r == 4)
+        {
+            return 4;
+        }else if(r == 5)
+        {
+            return 5;
+        }
+    }
+
+}
+void push_up(int rt)
+{
+    tree[rt] = count(tree[rt&lt;&lt;1],tree[rt&lt;&lt;1|1]);
+}
+void push_down(int rt)
+{
+    if(col[rt] != -1)
+    {
+        tree[rt&lt;&lt;1] = tree[rt&lt;&lt;1|1] = col[rt];
+        col[rt&lt;&lt;1] = col[rt&lt;&lt;1|1] = col[rt];
+        col[rt] = -1;
+    }
+}
+void build_tree(int rt,int l,int r)
+{
+    int mid = (l+r)&gt;&gt;1;
+    col[rt] = -1;
+    if(l == r)
+    {
+        tree[rt] = 1;
+        return ;
+    }
+    build_tree(rt&lt;&lt;1,l,mid);
+    build_tree(rt&lt;&lt;1|1,mid+1,r);
+    push_up(rt);
+}
+void update(int L,int R,int m,int rt,int l,int r)
+{
+    if(L&lt;=l &amp;&amp; r&lt;=R)
+    {
+        tree[rt] = m;
+        col[rt] = m;
+        return ;
+    }
+    push_down(rt);
+    int mid = (l+r) &gt;&gt;1;
+    if(L&lt;=mid) update(L,R,m,rt&lt;&lt;1,l,mid);
+    if(R&gt;mid) update(L,R,m,rt&lt;&lt;1|1,mid+1,r);
+    push_up(rt);
+}
+int query(int L,int R,int rt,int l,int r)
+{
+    if(L&lt;=l &amp;&amp; r&lt;=R)
+    {
+        //printf("**%d %d %d\n",l,r,tree[rt]);
+        return tree[rt];
+    }
+    push_down(rt);
+    int mid = (l+r) &gt;&gt;1;
+    int ans = 0;
+    int first = 1 ;
+    if(L&lt;=mid) {
+        first = 0;
+        ans = query(L,R,rt&lt;&lt;1,l,mid);
+    }
+    if(R&gt;mid) {
+        if(first)
+            ans = query(L,R,rt&lt;&lt;1|1,mid+1,r);
+        else ans = count(ans,query(L,R,rt&lt;&lt;1|1,mid+1,r));
+    }
+//  printf("**%d %d %d\n",l,r,ans);
+    return ans;
+}
+int find(int x,int y)
+{
+    int f1 = top[x], f2 = top[y];
+    int c1 = 1, c2 = 0;
+    int tmp;
+    while(f1!=f2)
+    {
+        if(x==-1 || y == -1)
+            return -1;
+        if(dep[f1] &lt; dep[f2])
+        {
+            swap(f1,f2); swap(x,y); swap(c1,c2);
+        }
+        tmp = query(pos[f1],pos[x],1,1,cnt-1);
+    //  printf("**%d %d %d \n",f1,x,tmp);
+        if(c1 == 1) {
+            if(tmp == 2) ;
+            else if(tmp == 3 || tmp == 1) update(pos[f1],pos[x],2,1,1,cnt-1);
+            else return -1;
+        }else if(c1 == 0)
+        {
+            if(tmp == 4) ;
+            else if(tmp == 5|| tmp == 1) update(pos[f1],pos[x],4,1,1,cnt-1);
+            else return -1;
+        }
+        x = fa[f1],f1 = top[x];
+    }
+    if(dep[x] &gt; dep[y]) {
+        swap(x,y); swap(c1,c2);
+    }
+    if(x==y) return 1;
+    tmp = query(pos[x]+1,pos[y],1,1,cnt-1);
+    //printf("*%d %d %d \n",x,y,tmp);
+    if(c1 == 1) {
+            if(tmp == 4) ;
+            else if(tmp == 5 || tmp == 1) update(pos[x]+1,pos[y],4,1,1,cnt-1);
+            else return -1;
+    }
+    else if(c1 == 0)
+    {
+        if(tmp == 2) ;
+        else if(tmp == 3|| tmp == 1) update(pos[x]+1,pos[y],2,1,1,cnt-1);
+        else return -1;
+    }
+    return 1;
+}
+void init()
+{
+    memset(head,-1,sizeof head);
+    memset(instack,0,sizeof instack);
+    memset(dfn,0,sizeof dfn);
+    memset(low,0,sizeof low);
+    memset(vis,0,sizeof vis);
+    color_num =  dfn_clock=tot = tot2 = 0;
+    cnt = 1;
+}
+
+
+int main()
+{
+    init();
+    scanf("%d%d%d",&amp;n,&amp;m,&amp;q);
+    int x,y;
+    for(int i =1 ;i&lt;=m;i++)
+    {
+        scanf("%d%d",&amp;x,&amp;y);
+        addedge(x,y);addedge(y,x);
+    }
+    for(int i = 1;i&lt;=n;i++)
+        if(dfn[i] ==0 )dfs(i);
+    re_map();
+
+    /*
+
+    for(int i = 1;i&lt;=n;i++)
+        printf("%d ",color[i]);
+        puts("");
+    for(int i = 1;i&lt;=color_num;i++)
+    {
+        for(int j = head2[i];~j;j=edge2[j].to)
+        {
+            printf("%d %d\n",i,edge2[j].v);
+        }
+    }
+
+    */
+
+
+
+    memset(fa,-1,sizeof fa);
+    memset(num,0,sizeof num);
+    memset(pos,0,sizeof pos);
+    memset(son,-1,sizeof son);
+    cnt = 1;
+    for(int i = 1;i&lt;=color_num;i++)
+        if(fa[i] == -1) {
+            dfs2(i,-1,0);
+            build(i,i);
+        }
+    build_tree(1,1,cnt-1);
+    /*
+
+    for(int i = 1;i&lt;=color_num;i++)
+    {
+        printf("%d %d %d\n",top[i],pos[i],dep[i]);
+    }
+    */
+
+
+
+
+    for(int i = 1;i&lt;=q;i++)
+    {
+        scanf("%d%d",&amp;x,&amp;y);
+    //  printf("color :%d %d\n",color[x],color[y]);
+        if(color[x] == color[y])
+            continue;
+        if(find(color[x],color[y])==-1)
+        {
+            puts("No");
+            return 0;
+        }
+    }
+    puts("Yes");
+
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

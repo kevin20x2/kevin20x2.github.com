@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: Dp | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/dp/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Hdu5261]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/06/08/hdu5261/"/>
+    <updated>2015-06-08T19:48:25+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/06/08/hdu5261</id>
+    <content type="html"><![CDATA[<h3><a href="http://acm.hdu.edu.cn/showproblem.php?pid=5261">蜀道难</a></h3>
+
+<!--more-->
+
+
+<p>百度之星复赛 的题目。
+题目大意是有n座山均匀放置在一个圆上，然后每一座山有一个高度，山顶之间的距离定义为 两个山的高度加上山之间路的距离。
+要求求出两个山峰之间的最大距离，并且输出字典序最小的编号对。n为100000，简单的n<sup>2</sup> 肯定超时。   <br/>
+将山看成点。h[i]表示编号为i的山的高度，我们要求的是 h[i]+h[j]+dist[i,j]的最大距离。 设 j>i.因为在圆上面所以当<br/>
+i>=j-n/2 时 dist[i,j] = (j-i)*R <br/>
+i<j-n/2 时 dist[i,j] = (n+i-j)*R
+可以用优先队列进行优化，对于确定的 j ，我们只需要维护 h[i]+i*R (i<j-n/2)或者 h[i]-i*R (i>=j-n/2)的最大值。<br/>
+这样优化过后， 因为每一个元素进入队列一次 ， 效率为O(n).</p>
+
+<pre><code class="cpp">#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cmath&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+const int maxn = 100050;
+int s[maxn],s2[maxn];
+int l,r;
+int l2,r2;
+int t,n;
+LL R;
+LL a[maxn];
+
+int main()
+{
+    scanf("%d",&amp;t);
+    int cas = 0;
+    while(t--)
+    {
+        scanf("%d%lld",&amp;n,&amp;R);
+        for(int i = 1;i&lt;=n;i++)
+            scanf("%lld",&amp;a[i]);
+        l = r = 0;
+        l2= r2=0;
+        s[r++] = 1;
+        pair &lt;int,int &gt; ans = make_pair(inf,inf);
+        LL res=0;
+        for(int i = 2;i&lt;=n;i++)
+        {
+            if(res&lt;a[s[l]]+a[i] + (i-s[l])*R)
+            {
+                res = a[s[l]] +a[i] +(i-s[l])*R;
+                ans = make_pair(s[l],i);
+            }
+            else if(s[l]&lt;ans.first&amp;&amp;res == a[s[l]]+a[i]+(i-s[l])*R)
+            {
+                ans = make_pair(s[l],i);
+            }
+            while(l&lt;r&amp;&amp;a[i]-i*R &gt;a[s[r-1]]-s[r-1]*R) r--;
+            s[r++] = i;
+            while(l&lt;r&amp;&amp;s[l]&lt;=i-n/2) l++;
+            if(i==n/2+1)
+            {
+                s2[r2++] = 1;
+            }
+
+            if(i&gt;n/2+1)
+            {
+                if(res&lt;a[s2[l2]]+a[i]+(s2[l2]+n-i)*R)
+                {
+                    res = a[s2[l2]] +a[i] +(s2[l2]+n-i)*R;
+                    ans = make_pair(s2[l2],i);
+                }
+                else if(s2[l2]&lt;ans.first&amp;&amp;res==a[s2[l2]]+a[i]+(s2[l2]+n-i)*R)
+                {
+                    ans = make_pair(s2[l2],i);
+                }
+                while(l2&lt;r2&amp;&amp;a[i-n/2]+(i-n/2)*R&gt;a[s2[r2-1]]+s2[r2-1]*R) r2--;
+                s2[r2++] = i-n/2;
+            }
+        }
+        printf("Case #%d:\n",++cas);
+        printf("%d %d\n",ans.first,ans.second);
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Poj3017]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/06/02/poj3017/"/>
+    <updated>2015-06-02T22:19:38+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/06/02/poj3017</id>
+    <content type="html"><![CDATA[<h3><a href="http://poj.org/problem?id=3017">Cut the Sequence</a></h3>
+
+<!--more-->
+
+
+<p>题意是给你一个序列，找出一个连续的划分，使得每部分和小于M ，然后每一部分贡献出最大的值作为该部分的权值，求权值和的最小值。
+数据大小是100000 <br/>
+dp方程很容易想到：<br/>
+dp[i]  = min(dp[j]+ max[j+1,i]);  j&lt;i; <br/>
+然而这个时间复杂度是n<sup>2</sup>的。一般情况是要用一种数据结构来优化，首先容易想到的就是线段树，然而i变化的时候不能保证原来的最大值不变。然后考虑能不能优化状态。
+对于现在的状态dp[now] ，
+设 i>j ，  则此时i和j对应的转化式子为<br/>
+ dp[i]+max[i+1,now] ;<br/>
+ dp[j]+max[j+1,now] ;<br/>
+由于有dp[i]>=dp[j] （显而易见）具有单调性;<br/>
+此时max[i+1,now] &lt;= max[j+1,now];<br/>
+当max[i+1,now] == max[j+1,now]时那么此时的状态就是无效状态。<br/>
+令j=i-1 得到若 a[i]>a[i-1] ,则max[i+1,now] = max[i,now];<br/>
+推广得，若存在 a[i] >=a[j]  j&lt;i那么a[i]为无效状态。<br/>
+所以可以用优先队列进行优化 。</p>
+
+<pre><code class="cpp">#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cmath&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+const int maxn  = 100050;
+int tree[maxn&lt;&lt;2];
+LL a[maxn];
+LL dp[maxn];
+int q[maxn];
+int l,r;
+int n;
+LL m;
+
+int main()
+{
+    scanf("%d%I64d",&amp;n,&amp;m);
+    LL cnt = 0;
+    int k = 0;
+    l = r = 0;
+    dp[0] = 0;
+    for(int i = 1;i&lt;=n;i++)
+    {
+        scanf("%I64d",&amp;a[i]);
+        if(a[i]&gt;m) {
+            printf("-1\n");
+            return 0;
+        }
+        cnt+=a[i];
+        while(cnt&gt;m) cnt-=a[++k]; 
+        while(l&lt;r&amp;&amp;a[i]&gt;=a[q[r-1]]) r--;
+        q[r++] = i;
+        while(l&lt;r&amp;&amp;q[l]&lt;k) l++;
+        dp[i] = 1e12;
+        int tt = k;
+        for(int j =l;j&lt;r;j++){
+    //      printf("%d ",q[j]);
+            dp[i] = min(dp[i],dp[tt]+a[q[j]]);
+            tt = q[j];
+        }
+    //  printf("*%d ",dp[i]);
+    //  printf("\n");
+    }
+
+    printf("%I64d\n",dp[n]);
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HUST F]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/05/16/hust-f/"/>
+    <updated>2015-05-16T21:31:15+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/05/16/hust-f</id>
+    <content type="html"><![CDATA[<h2>F     The trees of HUST</h2>
+
+<h3>Time Limit: 4000/2000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)</h3>
+
+<!--more-->
+
+
+<h3>Description</h3>
+
+<p>As we all know that there are so many trees in HUST, so it is usually called the forest university. They were planted by teachers and students of HUST led by the president Zhu Jiusi.Though the weather of Wuhan in summer is very hot, the temperature of HUST is lower than outside.
+One day,Lily were thinking a problem, image that all trees is in a line,the height of trees is different,she want to know that if she ignore some contiguous trees(these trees have to be consecutive) what the numbers is in the longest increasing sequence of consecutive trees.
+For example, if the heights of trees were, respectively, 5, 3, 4, 9, 2, 8, 6, 7, 1, then by demolishing trees of heights 9, 2, and 8, the longest increasing sequence of consecutive trees is 3, 4, 6, 7.</p>
+
+<h2>Input</h2>
+
+<p>The input contains several test cases. The first line of the input contains a positive integer T≤25, denoting the number of test cases. Then T test cases follow, each conforming to the format described below. The input instance consists of two lines. The first one contains one positive integer n≤2*10<sup>5</sup> denoting the number of trees. The second line contains n positive integers not larger than 10<sup>9</sup> separated by single spaces being the heights of the trees.</p>
+
+<h2>Output</h2>
+
+<p>For each test case print the test case number as “Case #C: H” in one line where C is the test case number, where H is the length of a longest increasing sequence of consecutive trees, achievable by demolishing some consecutive trees or no trees at all.</p>
+
+<h2>Sample Input</h2>
+
+<p>2<br/>
+9<br/>
+5 3 4 9 2 8 6 7 1<br/>
+7 <br/>
+1 2 3 10 4 5 6</p>
+
+<h2>Sample Output</h2>
+
+<p>Case #1: 4<br/>
+Case #2: 6</p>
+
+<p>Source
+Wzb</p>
+
+<p>大意：找一个最长字串，中间只允许一个中断块。</p>
+
+<p>思路： 从前找最长连续子串， 然后再从后找最长连续字串，枚举 位置i 考虑从前后拼接出最长字串。
+数据大小2*10<sup>5</sup>  因此查询的时候需要二分。
+用 f[i]，g[i]分别表示从前和从后面到位置i 的最长字串的长度。
+有f[i] = f[i-1] +1 当  a[i]>a[i-1] .否则 f[i]=1;</p>
+
+<p>同理有g[i];</p>
+
+<p>枚举位置 i  ，我们需要找到 从1到i-1 中最大值满足小于a[i]，且 长度最长的串。
+首先想到的是线段树，然后加了个条件查询表示不会。</p>
+
+<p>此时可以维护一个数组b[i],表示此时 长度为 i 的连续上升段(从f[i]中找) 的最大值(i表示值)(即每段最后的值)的最小值。
+因为是动态构造，所以b[i]的值不会取到i以后的位置 。
+那么此时 让b[i]中的i 尽量大(长度尽量大) 但是b[i] 满足小于 a[i];
+那么要二分出这个结果首先 b[i] 得满足单调递增的特性 。
+仔细想想这个特性是满足的 ， 因为在同一个串中 ，长度为 i 的最长的位置比长度为 i-1的位置的数字要大 。 然后各自取最小值仍然满足这个条件。然后就可以二分logn的查询出来。整个算法复杂度在 nlogn。</p>
+
+<p>对着代码虽然能够分析出来。 但是感觉这个根本自己就不好想啊。。。光证明结论是对的就搞了半天 。 跟上次的题一样， 注意b[i]的构造思路。</p>
+
+<pre><code class="cpp">
+#include&lt;cstdio&gt;
+#include&lt;cstring&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+
+const int N=200010;
+
+int n,a[N],f[N],g[N],b[N];
+
+int l,r,R0,ans;
+
+int main() {
+    int T，Case;
+    scanf("%d",&amp;T);
+    while(T--) {
+        scanf("%d",&amp;n);
+        for(int i=0;i&lt;n;i++)
+            scanf("%d",&amp;a[i]);
+
+        f[0]=1;
+        for(int i=1;i&lt;n;i++)
+            if(a[i]&gt;a[i-1])f[i]=f[i-1]+1;
+            else f[i]=1;
+
+        g[n-1]=1;
+        for(int i=n-2;i&gt;=0;i--)
+            if(a[i]&lt;a[i+1])g[i]=g[i+1]+1;
+            else g[i]=1;
+
+        memset(b,0x3f,sizeof(b));
+        ans=R0=0;
+        for(int i=0;i&lt;n;i++) {
+            l=0;
+            r=R0;
+            while(l&lt;r) {
+                int mid=(l+r+1)&gt;&gt;1;
+                if(a[i]&gt;b[mid])l=mid;
+                else r=mid-1;
+            }
+            R0=max(R0,f[i]);
+            b[f[i]]=min(b[f[i]],a[i]);
+            ans=max(ans,l+g[i]);
+        }
+
+        printf("Case #%d: %d\n",++Case,ans);
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HUST C]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/05/16/hust-c/"/>
+    <updated>2015-05-16T21:08:27+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/05/16/hust-c</id>
+    <content type="html"><![CDATA[<h2>C     Move the books</h2>
+
+<h2>Time Limit: 4000/2000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)</h2>
+
+<!--more-->
+
+
+<h3>Description</h3>
+
+<p>Because our new library was built. there are many books to move from the
+old one to the new one. Because there are so many books, every book has a weight.
+and some of them are so heavy.So the administrator need many volunteers to help him.
+When someone move one book, he costs the same energy.The administrator wants to sort
+the books from the light to the heavy. Xiaoming is one of volunteers, and he is a lazy people.He
+wants to costs the minimum energy. But he can&rsquo;t not find a way. So it&rsquo;s the time to show your
+talent.Help him and tell him the minimum energy he must costs.
+You can move the book as long as you like.</p>
+
+<h2>Input</h2>
+
+<p>The first line of input contains only one integer, T, the number of test cases. Following T blocks, each block describe one test case.
+Each test case there is one integer n (1 &lt;= n &lt;= 100 )denoting the number of books.
+The next line contains n integers a1,a2,&hellip;an (1 &lt;= ai &lt;= 10000)denoting the weight of books.</p>
+
+<h2>Output</h2>
+
+<p>For each test case output one integer denoting the minimum energy Xiaoming must costs.</p>
+
+<h2>Sample Input</h2>
+
+<p>2<br/>
+5<br/>
+2 2 5 3 4<br/>
+2<br/>
+1 5</p>
+
+<h2>Sample Output</h2>
+
+<p>5<br/>
+0</p>
+
+<p>Hint
+In test 1, you can move the books weighted 3 and 4 before 5, which costs 7 energy or you can move
+the books weighted 5 to the last, which costs 5 energy.5 is the minimum.
+In test 2,the books are already sorted.</p>
+
+<p>校赛C题
+大意是将一个乱序串变成一个从小到大的有序串，然后每移动一个位置，需要的花费为移动的数字的大小。然后求最小花费。</p>
+
+<p>思路： 求和最大的最长上升子序列，然后答案等于所有数的和减去这个最大的值。
+证明： 要完成这个操作，则最终总有一个字串保持当前相对位置不变， 剩下位置的数全部需要调整，因为 不变的数需要的是递增的，那么答案自然是求出和最大的最长上升子序列。</p>
+
+<p>现在能分析好，比赛就脑袋就是不开窍。</p>
+
+<p>总之就是太弱了orz</p>
+
+<p>然后是标程：</p>
+
+<pre><code class="cpp">#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+const int maxn = 108;
+
+int dp[maxn], weight[maxn];
+int sums, n;
+int main() {
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+    int test_case;
+    scanf("%d", &amp;test_case);
+    while (test_case--) {
+        scanf("%d", &amp;n);
+        sums = 0;
+        for (int i = 1; i &lt;= n; i++) {
+            scanf("%d", &amp;weight[i]);
+            sums += weight[i];
+        }
+        for (int i = 1; i &lt;= n; i++) {
+            dp[i] = weight[i];
+            for (int j = i - 1; j &gt;= 1; j--) {
+                if (weight[j] &lt;= weight[i]) {
+                    dp[i] = max(dp[i], dp[j] + weight[i]);
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 1; i &lt;= n; i++) {
+            if (dp[i] &gt; ans) {
+                ans = dp[i];
+            }
+        }
+        printf("%d\n", sums - ans);
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Codeforces 507E]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/04/04/codeforces-507e/"/>
+    <updated>2015-04-04T16:51:31+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/04/04/codeforces-507e</id>
+    <content type="html"><![CDATA[<h3><a href="http://acm.hust.edu.cn/vjudge/problem/visitOriginUrl.action?id=108837">B - Breaking Good</a></h3>
+
+<!--more-->
+
+
+<h3>Description</h3>
+
+<p>Breaking Good is a new video game which a lot of gamers want to have. There is a certain level in the game that is really difficult even for experienced gamers.</p>
+
+<p>Walter William, the main character of the game, wants to join a gang called Los Hermanos (The Brothers). The gang controls the whole country which consists of n cities with m bidirectional roads connecting them. There is no road is connecting a city to itself and for any two cities there is at most one road between them. The country is connected, in the other words, it is possible to reach any city from any other city using the given roads.</p>
+
+<p>The roads aren&rsquo;t all working. There are some roads which need some more work to be performed to be completely functioning.</p>
+
+<p>The gang is going to rob a bank! The bank is located in city 1. As usual, the hardest part is to escape to their headquarters where the police can&rsquo;t get them. The gang&rsquo;s headquarters is in city n. To gain the gang&rsquo;s trust, Walter is in charge of this operation, so he came up with a smart plan.</p>
+
+<p>First of all the path which they are going to use on their way back from city 1 to their headquarters n must be as short as possible, since it is important to finish operation as fast as possible.</p>
+
+<p>Then, gang has to blow up all other roads in country that don&rsquo;t lay on this path, in order to prevent any police reinforcements. In case of non-working road, they don&rsquo;t have to blow up it as it is already malfunctional.</p>
+
+<p>If the chosen path has some roads that doesn&rsquo;t work they&rsquo;ll have to repair those roads before the operation.</p>
+
+<p>Walter discovered that there was a lot of paths that satisfied the condition of being shortest possible so he decided to choose among them a path that minimizes the total number of affected roads (both roads that have to be blown up and roads to be repaired).</p>
+
+<p>Can you help Walter complete his task and gain the gang&rsquo;s trust?</p>
+
+<h3>Input</h3>
+
+<p>The first line of input contains two integers n, m (2 ≤ n ≤ 105, ), the number of cities and number of roads respectively.</p>
+
+<p>In following m lines there are descriptions of roads. Each description consists of three integers x, y, z (1 ≤ x, y ≤ n, ) meaning that there is a road connecting cities number x and y. If z = 1, this road is working, otherwise it is not.</p>
+
+<h3>Output</h3>
+
+<p>In the first line output one integer k, the minimum possible number of roads affected by gang.</p>
+
+<p>In the following k lines output three integers describing roads that should be affected. Each line should contain three integers x, y, z (1 ≤ x, y ≤ n, ), cities connected by a road and the new state of a road. z = 1 indicates that the road between cities x and y should be repaired and z = 0 means that road should be blown up.</p>
+
+<p>You may output roads in any order. Each affected road should appear exactly once. You may output cities connected by a single road in any order. If you output a road, it&rsquo;s original state should be different from z.</p>
+
+<p>After performing all operations accroding to your plan, there should remain working only roads lying on some certain shortest past between city 1 and n.</p>
+
+<p>If there are multiple optimal answers output any.</p>
+
+<h2>Sample Input</h2>
+
+<h3>Input</h3>
+
+<p>2 1<br/>
+1 2 0</p>
+
+<h3>Output</h3>
+
+<p>1<br/>
+1 2 1</p>
+
+<h3>Input</h3>
+
+<p>4 4<br/>
+1 2 1<br/>
+1 3 0<br/>
+2 3 1<br/>
+3 4 1</p>
+
+<h3>Output</h3>
+
+<p>3<br/>
+1 2 0<br/>
+1 3 1<br/>
+2 3 0</p>
+
+<h3>Input</h3>
+
+<p>8 9<br/>
+1 2 0<br/>
+8 3 0<br/>
+2 3 1<br/>
+1 4 1<br/>
+8 7 0<br/>
+1 5 1<br/>
+4 6 1<br/>
+5 7 0<br/>
+6 8 0</p>
+
+<h3>Output</h3>
+
+<p>3<br/>
+2 3 0<br/>
+1 5 0<br/>
+6 8 1</p>
+
+<p>题意是一个公路网络可以看做无向图，要找到从点1到点n的最短路径，然后其他的路如果是能工作的就要炸掉， 这条最短路上的如果有路不能工作就要修好，然后问总共炸掉和修好的路最少有多少条，并且输出来。</p>
+
+<p>首先单点最短路 用spfa 或者Dijkstra 可以很快的找出来，用两个数组d1和dn分别表示各点到点1和点n的距离<br/>
+，那么如果d1[x]+dn[x] == dist （1和n之间的距离）这个点就在最短路上。剩下的就是经典的k段图问题了。用bfs加上dp可以求解。</p>
+
+<pre><code class="cpp">#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cmath&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+#include&lt;queue&gt;
+#include&lt;map&gt;
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+const int maxn = 100050;
+int d1[maxn];
+int dn[maxn];
+bool inque[maxn];
+vector &lt;pair &lt;int,int&gt; &gt; v[maxn];
+void spfa(int x,int * a)
+{
+    memset(inque,0,sizeof inque);
+    queue &lt;int &gt; q;
+    q.push(x);
+    inque[x] = true;
+    a[x] = 0;
+    while(!q.empty())
+    {
+        int t = q.front();
+        q.pop();
+        for(int i =0;i&lt;v[t].size();i++) if(a[v[t][i].first]&gt;a[t]+1)
+        {
+            a[v[t][i].first] = a[t]+1;
+            if(!inque[v[t][i].first])
+            {
+                inque[v[t][i].first] = true;
+                q.push(v[t][i].first);
+            }
+
+        }
+        inque[t] = false;
+    }
+}
+int n,m;
+int dp[maxn];
+int vis[maxn];
+pair &lt;int,int&gt; head[maxn];
+vector &lt;pair &lt;pair &lt;int ,int &gt;,int &gt; &gt; edge;
+map &lt;pair &lt;int ,int&gt; ,int &gt; mp;
+
+int main()
+{
+    int x,y,z;
+    for(int i = 1;i&lt;=n;i++)
+        v[i].clear();
+    edge.clear();
+    scanf("%d%d",&amp;n,&amp;m);
+    int sum=0;
+    for(int i = 0;i&lt;m;i++)
+    {
+        scanf("%d%d%d",&amp;x,&amp;y,&amp;z);
+        sum+= z;
+        v[x].push_back(make_pair(y,z));
+        v[y].push_back(make_pair(x,z));
+        edge.push_back(make_pair(make_pair(x,y), z ));
+    }
+    memset(d1,0x3f,sizeof d1);
+    spfa(1,d1);
+    memset(dn,0x3f,sizeof dn);
+    spfa(n,dn);
+    int dist = d1[n];
+    memset(dp, 0,sizeof dp);
+    memset(vis,0x3f ,sizeof vis);
+    queue &lt;int &gt; q;
+    q.push(1);
+    vis[1] = 0;
+    while(!q.empty())
+    {
+        int t = q.front() ; q.pop();
+        for(int i = 0;i&lt;v[t].size();i++) 
+        {
+            int u = v[t][i].first;
+            if(d1[u]+dn[u]==dist&amp;&amp;vis[u]&gt;=vis[t]+1)
+            {
+                vis[u] = vis[t]+1;
+                dp[u] = max(dp[u],dp[t]+v[t][i].second);
+                if(dp[u] == dp[t]+v[t][i].second)
+                {
+                    head[u] = make_pair(t,v[t][i].second);
+                }
+                q.push(u);
+            }
+
+        }
+    }
+
+    printf("%d\n",sum+dist-2*dp[n]);
+    int t = n;
+    int tot = 0;
+    mp.clear();
+    while(t!=1)
+    {
+        mp[make_pair(head[t].first,t)] = tot++;
+        mp[make_pair(t,head[t].first)] = tot++;
+        if(head[t].second==0)
+        {
+            printf("%d %d 1\n",head[t].first,t);
+
+        }
+        t = head[t].first;
+    }
+    for(int i = 0;i&lt;edge.size();i++) if(mp.find(edge[i].first)==mp.end())
+    {
+        if(edge[i].second==1)
+        printf("%d %d 0\n",edge[i].first.first,edge[i].first.second);
+    }
+
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

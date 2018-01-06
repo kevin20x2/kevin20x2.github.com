@@ -1,1 +1,621 @@
-"My Octopress Page is coming soon &hellip;" 
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>ZVINK&#8217;s garden</title>
+  <meta name="author" content="ZVINK">
+
+  
+  <meta name="description" content="﻿&mdash;
+layout: post
+title: &ldquo;new_start&rdquo;
+date: 2018-01-05 22:15:16 +0800
+comments: true categories: 杂 今天心血来潮想把断更两年多的blog 给捡起来， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://kevin20x2.github.io/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="ZVINK's garden" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">ZVINK&#8217;s garden</a></h1>
+  
+    <h2>try</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="kevin20x2.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2018/01/05/new-start/">New Start</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-01-05T00:00:00+08:00'><span class='date'>2018 年1  月 5 日</span> <span class='time'>12:00 am</span></time>
+        
+           | <a href="/blog/2018/01/05/new-start/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2018/01/05/new-start/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>﻿&mdash;
+layout: post
+title: &ldquo;new_start&rdquo;
+date: 2018-01-05 22:15:16 +0800
+comments: true</p>
+
+<h2>categories: 杂</h2>
+
+<p>今天心血来潮想把断更两年多的blog 给捡起来，发现我以前折腾过的东西果然都忘记了。
+包括markdown，octpress <br/>
+这里还是简单说一下捡起来的过程吧。<br/>
+首先得去安装 ruby ，试过多个版本，最后还是用的1.9.3 的installer。</p>
+
+<p>按照之前的老教程上的</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install rdiscount --platform=ruby
+</span><span class='line'>gem install bundler
+</span><span class='line'>bundle install #这一步要在octpress目录下进行</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(这里试过其他版本的ruby ，不知道为什么老是出问题)</p>
+
+<h2>SSL 的问题  参照 <a href="http://blog.csdn.net/zahuopuboss/article/details/53357503">这里</a></h2>
+
+<p>解决方法</p>
+
+<p>下载 <a href="https://curl.haxx.se/ca/cacert.pem">https://curl.haxx.se/ca/cacert.pem</a></p>
+
+<p>把文件cacert.pem放到一个目录下</p>
+
+<p>在cmd窗口设置环境变量</p>
+
+<p>set SSL_CERT_FILE=C:\xxx\cacert.pem</p>
+
+<p>或者通过系统->高级系统设置->环境变量设置SSL_CERT_FILE</p>
+
+<h3>终于将bundle install 成功走完之后</h3>
+
+<p>然后由于octopress 原来的电脑上就有，所以就没有从git上下载，直接拷贝过来。</p>
+
+<p>发现</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake generate</span></code></pre></td></tr></table></div></figure>
+
+
+<p>会出现如下问题</p>
+
+<h4>Liquid Exception: incompatible encoding regexp match (ASCII-8BIT regexp with UTF-8 string) in _layouts/page.html</h4>
+
+<h4>jekyll 2.5.3 | Error:  incompatible encoding regexp match (ASCII-8BIT regexp with UTF-8 string)</h4>
+
+<hr />
+
+<p>不知道是因为这个问题太老了还是什么，网上的回答针对性都不是很强，大概看了一下原理，认为是ruby代码编码的问题 os:为什么之前没碰到 (╯‵□′)╯︵┻━┻<br/>
+于是将octpress 下的plugins 文件下的所有rb代码文件从UTF-8 改成了 UTF-8 with BOM(使用最原始的notepad++)<br/>
+然后在powershell 命令行下重新 rake generate ，结果居然就好了。(汗)<br/>
+剩下的就是</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake new_post["title"] 
+</span><span class='line'>rake generate 
+</span><span class='line'>rake preview 
+</span><span class='line'>rake deploy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这一套流程了</p>
+
+<p>然后关于blog，以后大概不怎么会发<strong>题解</strong>了，毕竟已经退役很久了<br/>
+可能也就是记录一些有点价值的东西，嗯，这次折腾只花了一晚上加一早上，还不算特别浪费时间。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/08/19/hdu5396/">Hdu5396</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-19T00:54:43+08:00'><span class='date'>2015 年8  月 19 日</span> <span class='time'>12:54 am</span></time>
+        
+           | <a href="/blog/2015/08/19/hdu5396/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2015/08/19/hdu5396/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"></div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/08/19/hdu5396/"> 阅读全文 </a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/07/13/codeforces555E/">codeforces555E</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-13T14:09:39+08:00'><span class='date'>2015 年7  月 13 日</span> <span class='time'>2:09 pm</span></time>
+        
+           | <a href="/blog/2015/07/13/codeforces555E/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2015/07/13/codeforces555E/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://codeforces.com/problemset/problem/555/E">E. Case of Computer Network</a></p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/07/13/codeforces555E/"> 阅读全文 </a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/06/08/hdu5261/">Hdu5261</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-06-08T19:48:25+08:00'><span class='date'>2015 年6  月 8 日</span> <span class='time'>7:48 pm</span></time>
+        
+           | <a href="/blog/2015/06/08/hdu5261/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2015/06/08/hdu5261/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3><a href="http://acm.hdu.edu.cn/showproblem.php?pid=5261">蜀道难</a></h3>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/06/08/hdu5261/"> 阅读全文 </a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/06/02/poj3017/">Poj3017</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-06-02T22:19:38+08:00'><span class='date'>2015 年6  月 2 日</span> <span class='time'>10:19 pm</span></time>
+        
+           | <a href="/blog/2015/06/02/poj3017/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2015/06/02/poj3017/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3><a href="http://poj.org/problem?id=3017">Cut the Sequence</a></h3>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/06/02/poj3017/"> 阅读全文 </a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/05/28/poj2411/">Poj2411</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-05-28T16:41:42+08:00'><span class='date'>2015 年5  月 28 日</span> <span class='time'>4:41 pm</span></time>
+        
+           | <a href="/blog/2015/05/28/poj2411/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2015/05/28/poj2411/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://poj.org/problem?id=2411">Mondriaan&rsquo;s Dream</a></p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/05/28/poj2411/"> 阅读全文 </a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/05/28/poj2288/">Poj2288</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-05-28T16:19:00+08:00'><span class='date'>2015 年5  月 28 日</span> <span class='time'>4:19 pm</span></time>
+        
+           | <a href="/blog/2015/05/28/poj2288/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2015/05/28/poj2288/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3><a href="http://poj.org/problem?id=2288">Islands and Bridges</a></h3>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/05/28/poj2288/"> 阅读全文 </a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/05/28/poj1848/">Poj1848</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-05-28T15:53:15+08:00'><span class='date'>2015 年5  月 28 日</span> <span class='time'>3:53 pm</span></time>
+        
+           | <a href="/blog/2015/05/28/poj1848/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2015/05/28/poj1848/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3><a href="http://poj.org/problem?id=1848">Tree</a></h3>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/05/28/poj1848/"> 阅读全文 </a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/05/28/poj1141/">Poj1141</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-05-28T15:43:37+08:00'><span class='date'>2015 年5  月 28 日</span> <span class='time'>3:43 pm</span></time>
+        
+           | <a href="/blog/2015/05/28/poj1141/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2015/05/28/poj1141/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3><a href="http://poj.org/problem?id=1141">Brackets Sequence</a></h3>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/05/28/poj1141/"> 阅读全文 </a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/05/28/poj1947/">Poj1947</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-05-28T15:17:15+08:00'><span class='date'>2015 年5  月 28 日</span> <span class='time'>3:17 pm</span></time>
+        
+           | <a href="/blog/2015/05/28/poj1947/#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io/blog/2015/05/28/poj1947/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2><a href="http://poj.org/problem?id=1947">Rebuilding Roads</a></h2>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/05/28/poj1947/"> 阅读全文 </a>
+    </footer>
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/posts/2">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/05/new-start/">New Start</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/19/hdu5396/">Hdu5396</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/13/codeforces555E/">codeforces555E</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/08/hdu5261/">Hdu5261</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/02/poj3017/">Poj3017</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/codefoces/'>codefoces (1)</a></li>
+<li class='category'><a href='/blog/categories/codeforces/'>codeforces (4)</a></li>
+<li class='category'><a href='/blog/categories/dp/'>dp (9)</a></li>
+<li class='category'><a href='/blog/categories/hdu/'>hdu (2)</a></li>
+<li class='category'><a href='/blog/categories/tarjan缩点/'>tarjan缩点 (1)</a></li>
+<li class='category'><a href='/blog/categories/topsort/'>topsort (1)</a></li>
+<li class='category'><a href='/blog/categories/二分/'>二分 (1)</a></li>
+<li class='category'><a href='/blog/categories/优先队列/'>优先队列 (2)</a></li>
+<li class='category'><a href='/blog/categories/区间dp/'>区间dp (1)</a></li>
+<li class='category'><a href='/blog/categories/想法/'>想法 (1)</a></li>
+<li class='category'><a href='/blog/categories/搜索/'>搜索 (1)</a></li>
+<li class='category'><a href='/blog/categories/搜索dp/'>搜索dp (1)</a></li>
+<li class='category'><a href='/blog/categories/暴力/'>暴力 (1)</a></li>
+<li class='category'><a href='/blog/categories/最短路/'>最短路 (1)</a></li>
+<li class='category'><a href='/blog/categories/杂/'>杂 (3)</a></li>
+<li class='category'><a href='/blog/categories/树状dp/'>树状dp (2)</a></li>
+<li class='category'><a href='/blog/categories/树链剖分/'>树链剖分 (1)</a></li>
+<li class='category'><a href='/blog/categories/状压dp/'>状压dp (1)</a></li>
+<li class='category'><a href='/blog/categories/线段树/'>线段树 (2)</a></li>
+<li class='category'><a href='/blog/categories/背包/'>背包 (1)</a></li>
+<li class='category'><a href='/blog/categories/贪心/'>贪心 (3)</a></li>
+
+  </ul>
+</section>
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - ZVINK -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'kevin20x2';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>HUST F - ZVINK&#8217;s garden</title>
+  <meta name="author" content="ZVINK">
+
+  
+  <meta name="description" content="F The trees of HUST Time Limit: 4000/2000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others) Description As we all know that there are so &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://kevin20x2.github.io/blog/2015/05/16/hust-f/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="ZVINK's garden" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">ZVINK&#8217;s garden</a></h1>
+  
+    <h2>try</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="kevin20x2.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">HUST F</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-05-16T21:31:15+08:00'><span class='date'>2015 年5  月 16 日</span> <span class='time'>9:31 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>F     The trees of HUST</h2>
+
+<h3>Time Limit: 4000/2000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)</h3>
+
+<!--more-->
+
+
+<h3>Description</h3>
+
+<p>As we all know that there are so many trees in HUST, so it is usually called the forest university. They were planted by teachers and students of HUST led by the president Zhu Jiusi.Though the weather of Wuhan in summer is very hot, the temperature of HUST is lower than outside.
+One day,Lily were thinking a problem, image that all trees is in a line,the height of trees is different,she want to know that if she ignore some contiguous trees(these trees have to be consecutive) what the numbers is in the longest increasing sequence of consecutive trees.
+For example, if the heights of trees were, respectively, 5, 3, 4, 9, 2, 8, 6, 7, 1, then by demolishing trees of heights 9, 2, and 8, the longest increasing sequence of consecutive trees is 3, 4, 6, 7.</p>
+
+<h2>Input</h2>
+
+<p>The input contains several test cases. The first line of the input contains a positive integer T≤25, denoting the number of test cases. Then T test cases follow, each conforming to the format described below. The input instance consists of two lines. The first one contains one positive integer n≤2*10<sup>5</sup> denoting the number of trees. The second line contains n positive integers not larger than 10<sup>9</sup> separated by single spaces being the heights of the trees.</p>
+
+<h2>Output</h2>
+
+<p>For each test case print the test case number as “Case #C: H” in one line where C is the test case number, where H is the length of a longest increasing sequence of consecutive trees, achievable by demolishing some consecutive trees or no trees at all.</p>
+
+<h2>Sample Input</h2>
+
+<p>2<br/>
+9<br/>
+5 3 4 9 2 8 6 7 1<br/>
+7 <br/>
+1 2 3 10 4 5 6</p>
+
+<h2>Sample Output</h2>
+
+<p>Case #1: 4<br/>
+Case #2: 6</p>
+
+<p>Source
+Wzb</p>
+
+<p>大意：找一个最长字串，中间只允许一个中断块。</p>
+
+<p>思路： 从前找最长连续子串， 然后再从后找最长连续字串，枚举 位置i 考虑从前后拼接出最长字串。
+数据大小2*10<sup>5</sup>  因此查询的时候需要二分。
+用 f[i]，g[i]分别表示从前和从后面到位置i 的最长字串的长度。
+有f[i] = f[i-1] +1 当  a[i]>a[i-1] .否则 f[i]=1;</p>
+
+<p>同理有g[i];</p>
+
+<p>枚举位置 i  ，我们需要找到 从1到i-1 中最大值满足小于a[i]，且 长度最长的串。
+首先想到的是线段树，然后加了个条件查询表示不会。</p>
+
+<p>此时可以维护一个数组b[i],表示此时 长度为 i 的连续上升段(从f[i]中找) 的最大值(i表示值)(即每段最后的值)的最小值。
+因为是动态构造，所以b[i]的值不会取到i以后的位置 。
+那么此时 让b[i]中的i 尽量大(长度尽量大) 但是b[i] 满足小于 a[i];
+那么要二分出这个结果首先 b[i] 得满足单调递增的特性 。
+仔细想想这个特性是满足的 ， 因为在同一个串中 ，长度为 i 的最长的位置比长度为 i-1的位置的数字要大 。 然后各自取最小值仍然满足这个条件。然后就可以二分logn的查询出来。整个算法复杂度在 nlogn。</p>
+
+<p>对着代码虽然能够分析出来。 但是感觉这个根本自己就不好想啊。。。光证明结论是对的就搞了半天 。 跟上次的题一样， 注意b[i]的构造思路。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include&lt;cstdio&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;cstring&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;algorithm&gt;</span>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">N</span><span class="o">=</span><span class="mi">200010</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">],</span><span class="n">f</span><span class="p">[</span><span class="n">N</span><span class="p">],</span><span class="n">g</span><span class="p">[</span><span class="n">N</span><span class="p">],</span><span class="n">b</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">R0</span><span class="p">,</span><span class="n">ans</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">T</span><span class="err">，</span><span class="n">Case</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">T</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">while</span><span class="p">(</span><span class="n">T</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">else</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>          
+</span><span class='line'>      <span class="n">g</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">--</span><span class="p">)</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">else</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="n">memset</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="mh">0x3f</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">b</span><span class="p">));</span>
+</span><span class='line'>      <span class="n">ans</span><span class="o">=</span><span class="n">R0</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">r</span><span class="o">=</span><span class="n">R0</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">while</span><span class="p">(</span><span class="n">l</span><span class="o">&lt;</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="kt">int</span> <span class="n">mid</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>              <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">b</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span><span class="n">l</span><span class="o">=</span><span class="n">mid</span><span class="p">;</span>
+</span><span class='line'>              <span class="k">else</span> <span class="n">r</span><span class="o">=</span><span class="n">mid</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="n">R0</span><span class="o">=</span><span class="n">max</span><span class="p">(</span><span class="n">R0</span><span class="p">,</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>          <span class="n">b</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span><span class="n">min</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>          <span class="n">ans</span><span class="o">=</span><span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span><span class="n">l</span><span class="o">+</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Case #%d: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="o">++</span><span class="n">Case</span><span class="p">,</span><span class="n">ans</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">ZVINK</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-05-16T21:31:15+08:00'><span class='date'>2015 年5  月 16 日</span> <span class='time'>9:31 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dp/'>dp</a>, <a class='category' href='/blog/categories/er-fen/'>二分</a>, <a class='category' href='/blog/categories/xian-duan-shu/'>线段树</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://kevin20x2.github.io/blog/2015/05/16/hust-f/" data-via="" data-counturl="http://kevin20x2.github.io/blog/2015/05/16/hust-f/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/05/16/hust-c/" title="Previous Post: HUST C">&laquo; HUST C</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/05/17/codeforces-446c/" title="Next Post: codeforces 446C">codeforces 446C &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/05/new-start/">New Start</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/19/hdu5396/">Hdu5396</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/13/codeforces555E/">codeforces555E</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/08/hdu5261/">Hdu5261</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/02/poj3017/">Poj3017</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/codefoces/'>codefoces (1)</a></li>
+<li class='category'><a href='/blog/categories/codeforces/'>codeforces (4)</a></li>
+<li class='category'><a href='/blog/categories/dp/'>dp (9)</a></li>
+<li class='category'><a href='/blog/categories/hdu/'>hdu (2)</a></li>
+<li class='category'><a href='/blog/categories/tarjan缩点/'>tarjan缩点 (1)</a></li>
+<li class='category'><a href='/blog/categories/topsort/'>topsort (1)</a></li>
+<li class='category'><a href='/blog/categories/二分/'>二分 (1)</a></li>
+<li class='category'><a href='/blog/categories/优先队列/'>优先队列 (2)</a></li>
+<li class='category'><a href='/blog/categories/区间dp/'>区间dp (1)</a></li>
+<li class='category'><a href='/blog/categories/想法/'>想法 (1)</a></li>
+<li class='category'><a href='/blog/categories/搜索/'>搜索 (1)</a></li>
+<li class='category'><a href='/blog/categories/搜索dp/'>搜索dp (1)</a></li>
+<li class='category'><a href='/blog/categories/暴力/'>暴力 (1)</a></li>
+<li class='category'><a href='/blog/categories/最短路/'>最短路 (1)</a></li>
+<li class='category'><a href='/blog/categories/杂/'>杂 (3)</a></li>
+<li class='category'><a href='/blog/categories/树状dp/'>树状dp (2)</a></li>
+<li class='category'><a href='/blog/categories/树链剖分/'>树链剖分 (1)</a></li>
+<li class='category'><a href='/blog/categories/状压dp/'>状压dp (1)</a></li>
+<li class='category'><a href='/blog/categories/线段树/'>线段树 (2)</a></li>
+<li class='category'><a href='/blog/categories/背包/'>背包 (1)</a></li>
+<li class='category'><a href='/blog/categories/贪心/'>贪心 (3)</a></li>
+
+  </ul>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - ZVINK -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'kevin20x2';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://kevin20x2.github.io/blog/2015/05/16/hust-f/';
+        var disqus_url = 'http://kevin20x2.github.io/blog/2015/05/16/hust-f/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

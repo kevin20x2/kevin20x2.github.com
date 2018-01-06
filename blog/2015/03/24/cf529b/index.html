@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>CF529B - ZVINK&#8217;s garden</title>
+  <meta name="author" content="ZVINK">
+
+  
+  <meta name="description" content="B. Group Photo 2 (online mirror version) Many years have passed, and n friends met at a party again. Technologies have leaped forward since the last &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://kevin20x2.github.io/blog/2015/03/24/cf529b/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="ZVINK's garden" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">ZVINK&#8217;s garden</a></h1>
+  
+    <h2>try</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="kevin20x2.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">CF529B</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-03-24T20:39:42+08:00'><span class='date'>2015 年3  月 24 日</span> <span class='time'>8:39 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2><a href="http://codeforces.com/problemset/problem/529/B">B. Group Photo 2 (online mirror version)</a></h2>
+
+<!--more-->
+
+
+<p>Many years have passed, and n friends met at a party again. Technologies have leaped forward since the last meeting, cameras with timer appeared and now it is not obligatory for one of the friends to stand with a camera, and, thus, being absent on the photo.</p>
+
+<p>Simply speaking, the process of photographing can be described as follows. Each friend occupies a rectangle of pixels on the photo: the i-th of them in a standing state occupies a wi pixels wide and a hi pixels high rectangle. But also, each person can lie down for the photo, and then he will occupy a hi pixels wide and a wi pixels high rectangle.</p>
+
+<p>The total photo will have size W × H, where W is the total width of all the people rectangles, and H is the maximum of the heights. The friends want to determine what minimum area the group photo can they obtain if no more than n / 2 of them can lie on the ground (it would be strange if more than n / 2 gentlemen lie on the ground together, isn&rsquo;t it?..)</p>
+
+<p>Help them to achieve this goal.</p>
+
+<h3>Input</h3>
+
+<p>The first line contains integer n (1 ≤ n ≤ 1000) — the number of friends.</p>
+
+<p>The next n lines have two integers wi, hi (1 ≤ wi, hi ≤ 1000) each, representing the size of the rectangle, corresponding to the i-th friend.</p>
+
+<h3>Output</h3>
+
+<p>Print a single integer equal to the minimum possible area of the photo containing all friends if no more than n / 2 of them can lie on the ground.</p>
+
+<h3>Sample test(s)</h3>
+
+<h3>input</h3>
+
+<p>3<br/>
+10 1<br/>
+20 2<br/>
+30 3</p>
+
+<h3>output</h3>
+
+<p>180</p>
+
+<h3>input</h3>
+
+<p>3<br/>
+3 1<br/>
+2 2<br/>
+4 3</p>
+
+<h3>output</h3>
+
+<p>21</p>
+
+<h3>input</h3>
+
+<p>1<br/>
+5 10</p>
+
+<h3>output</h3>
+
+<p>50</p>
+
+<p>题目大意： n个长方形 ，排成一排 ， 总占面积 为 宽w 的和 高h的最大值 组成的长方形。
+即∑w * max(h) 。<br/>
+现在可调换不超过 n/2个 长方形的 长和宽<br/>
+使得上式取最小值</p>
+
+<p>n只有1000 因此可以枚举 作为 最大的 高h的值 。<br/>
+对于每个h 看能否满足条件 ，即其他的高比h小， 并且调换的个数不超过n/2。 <br/>
+要求得最小值则需要 w和h调换之后 最高的h不变 而 调换过后的 w比原来的小 。 <br/>
+若w-h>0 则此时应该在不超过2/n的基础上尽量调换 <br/>
+若 w-h&lt;0 则此时不要调换。<br/>
+因此按照 w-h 来排序。</p>
+
+<p>复杂度 n<sup>2</sup></p>
+
+<p>code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include&lt;cstdio&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;cstring&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;cmath&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;vector&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;algorithm&gt;</span>
+</span><span class='line'><span class="k">typedef</span>  <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#define clr(x) memset((x),0,sizeof(x))</span>
+</span><span class='line'><span class="cp">#define inf 0x3f3f3f3f</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'><span class="k">struct</span> <span class="n">seg</span><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="n">a</span><span class="p">[</span><span class="mi">1050</span><span class="p">];</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">seg</span> <span class="n">a</span><span class="p">,</span><span class="n">seg</span> <span class="n">b</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">a</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span><span class="n">b</span><span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">b</span><span class="p">.</span><span class="n">h</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+</span><span class='line'><span class="kt">bool</span> <span class="n">vis</span><span class="p">[</span><span class="mi">1050</span><span class="p">];</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="o">+</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">cmp</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">inf</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">t</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="n">t</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">;</span><span class="n">t</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="kt">int</span> <span class="n">h</span><span class="p">;</span>
+</span><span class='line'>            <span class="kt">int</span> <span class="n">w</span> <span class="p">;</span>
+</span><span class='line'>            <span class="n">memset</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span> <span class="n">vis</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">t</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="n">h</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">w</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">h</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">w</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>            <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="k">if</span><span class="p">(</span><span class="n">j</span><span class="o">!=</span><span class="n">i</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="o">&gt;</span><span class="n">h</span> <span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="o">&lt;=</span><span class="n">h</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="n">vis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">w</span><span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="o">&gt;</span><span class="n">h</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="o">&gt;</span><span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>                    <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">count</span><span class="o">&gt;</span> <span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>           <span class="c1">// printf(&quot;%d \n&quot;,count);</span>
+</span><span class='line'>            <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">count</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">flag</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="o">&lt;=</span><span class="n">h</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">num</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">// 尽量调换 w和h的情况   </span>
+</span><span class='line'>                    <span class="p">{</span>
+</span><span class='line'>                        <span class="n">w</span><span class="o">+=</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
+</span><span class='line'>                        <span class="n">num</span><span class="o">--</span><span class="p">;</span>
+</span><span class='line'>                    <span class="p">}</span>
+</span><span class='line'>                    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="n">w</span><span class="o">+=</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>                <span class="n">ans</span> <span class="o">=</span><span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span><span class="n">w</span><span class="o">*</span><span class="n">h</span><span class="p">);</span>
+</span><span class='line'>                <span class="c1">//printf(&quot;*%d\n&quot;,w*h);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">ZVINK</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-03-24T20:39:42+08:00'><span class='date'>2015 年3  月 24 日</span> <span class='time'>8:39 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/codeforces/'>codeforces</a>, <a class='category' href='/blog/categories/bao-li/'>暴力</a>, <a class='category' href='/blog/categories/tan-xin/'>贪心</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://kevin20x2.github.io/blog/2015/03/24/cf529b/" data-via="" data-counturl="http://kevin20x2.github.io/blog/2015/03/24/cf529b/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/03/24/cf527d/" title="Previous Post: CF527D">&laquo; CF527D</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/03/31/hdu4857/" title="Next Post: hdu4857">hdu4857 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/05/new-start/">New Start</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/19/hdu5396/">Hdu5396</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/13/codeforces555E/">codeforces555E</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/08/hdu5261/">Hdu5261</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/02/poj3017/">Poj3017</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/codefoces/'>codefoces (1)</a></li>
+<li class='category'><a href='/blog/categories/codeforces/'>codeforces (4)</a></li>
+<li class='category'><a href='/blog/categories/dp/'>dp (9)</a></li>
+<li class='category'><a href='/blog/categories/hdu/'>hdu (2)</a></li>
+<li class='category'><a href='/blog/categories/tarjan缩点/'>tarjan缩点 (1)</a></li>
+<li class='category'><a href='/blog/categories/topsort/'>topsort (1)</a></li>
+<li class='category'><a href='/blog/categories/二分/'>二分 (1)</a></li>
+<li class='category'><a href='/blog/categories/优先队列/'>优先队列 (2)</a></li>
+<li class='category'><a href='/blog/categories/区间dp/'>区间dp (1)</a></li>
+<li class='category'><a href='/blog/categories/想法/'>想法 (1)</a></li>
+<li class='category'><a href='/blog/categories/搜索/'>搜索 (1)</a></li>
+<li class='category'><a href='/blog/categories/搜索dp/'>搜索dp (1)</a></li>
+<li class='category'><a href='/blog/categories/暴力/'>暴力 (1)</a></li>
+<li class='category'><a href='/blog/categories/最短路/'>最短路 (1)</a></li>
+<li class='category'><a href='/blog/categories/杂/'>杂 (3)</a></li>
+<li class='category'><a href='/blog/categories/树状dp/'>树状dp (2)</a></li>
+<li class='category'><a href='/blog/categories/树链剖分/'>树链剖分 (1)</a></li>
+<li class='category'><a href='/blog/categories/状压dp/'>状压dp (1)</a></li>
+<li class='category'><a href='/blog/categories/线段树/'>线段树 (2)</a></li>
+<li class='category'><a href='/blog/categories/背包/'>背包 (1)</a></li>
+<li class='category'><a href='/blog/categories/贪心/'>贪心 (3)</a></li>
+
+  </ul>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - ZVINK -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'kevin20x2';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://kevin20x2.github.io/blog/2015/03/24/cf529b/';
+        var disqus_url = 'http://kevin20x2.github.io/blog/2015/03/24/cf529b/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

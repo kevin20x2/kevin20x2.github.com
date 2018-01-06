@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: 线段树 | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/xian-duan-shu/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Codeforces 446C]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/05/17/codeforces-446c/"/>
+    <updated>2015-05-17T00:04:38+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/05/17/codeforces-446c</id>
+    <content type="html"><![CDATA[<!--more-->
+
+
+<h2>C. DZY Loves Fibonacci Numbers</h2>
+
+<p>time limit per test4 seconds
+memory limit per test256 megabytes
+inputstandard input
+outputstandard output
+In mathematical terms, the sequence Fn of Fibonacci numbers is defined by the recurrence relation</p>
+
+<p>F1 = 1; F2 = 1; Fn = Fn - 1 + Fn - 2 (n > 2).
+DZY loves Fibonacci numbers very much. Today DZY gives you an array consisting of n integers: a1, a2, &hellip;, an. Moreover, there are m queries, each query has one of the two types:</p>
+
+<p>Format of the query &ldquo;1 l r&rdquo;. In reply to the query, you need to add Fi - l + 1 to each element ai, where l ≤ i ≤ r.
+Format of the query &ldquo;2 l r&rdquo;. In reply to the query you should output the value of  modulo 1000000009 (109 + 9).
+Help DZY reply to all the queries.</p>
+
+<h2>Input</h2>
+
+<p>The first line of the input contains two integers n and m (1 ≤ n, m ≤ 300000). The second line contains n integers a1, a2, &hellip;, an (1 ≤ ai ≤ 109) — initial array a.</p>
+
+<p>Then, m lines follow. A single line describes a single query in the format given in the statement. It is guaranteed that for each query inequality 1 ≤ l ≤ r ≤ n holds.</p>
+
+<h2>Output</h2>
+
+<p>For each query of the second type, print the value of the sum on a single line.</p>
+
+<h2>Sample test(s)</h2>
+
+<h2>input</h2>
+
+<p>4 4<br/>
+1 2 3 4<br/>
+1 1 4<br/>
+2 1 4 <br/>
+1 2 4<br/>
+2 1 3</p>
+
+<h2>output</h2>
+
+<p>17<br/>
+12</p>
+
+<h2>Note</h2>
+
+<p>After the first query, a = [2, 3, 5, 7].</p>
+
+<p>For the second query, sum = 2 + 3 + 5 + 7 = 17.</p>
+
+<p>After the third query, a = [2, 4, 6, 9].</p>
+
+<p>For the fourth query, sum = 2 + 4 + 6 = 12.</p>
+
+<p>先膜拜一下神牛。orz</p>
+
+<p>很明显的区间更新线段树，问题是快速求得由两个斐波拉切数 得到的后面的各序列的值 和 区间的和。</p>
+
+<p>然后就有4个数组：
+f1[i],f2[i],s1[i],s2[i];</p>
+
+<p>初始化如下：
+<code>cpp
+    f1[0] = 1; f1[1] = 0;s1[0] = 1;s1[1] = 1;
+    f2[0] = 0; f2[1] = 1;s2[0] = 0 ;s2[1] =1;
+    for(int i =2;i&lt;maxn;i++)
+    {
+        f1[i]= (f1[i-1]+f1[i-2])%mod;
+        f2[i] = (f2[i-1] + f2[i-2])%mod;
+        s1[i] = (s1[i-1] + f1[i])%mod;
+        s2[i] = (s2[i-1] + f2[i])%mod;
+    }
+</code></p>
+
+<p>这4个数组就是专门用来处理斐波拉切数列的。
+     (p)<em>f1[n]+(q)</em>f2[n]
+得到的是以p，q为开头，距离p长度为n的数列上的值。
+     p<em>s1[len]+s2[len]</em>q
+得到的是以p，q为开头，长度为len 的数列各项和 。
+然后用两个懒惰标记数组 来处理线段树， 一个存p，一个存q。</p>
+
+<p>校赛看了一下没做。。各种orz
+&#8220;`cpp
+/<em>
+ </em>File:  FF.C.cpp
+ <em>Date : 2015-05-16 22:11:23
+ </em>/</p>
+
+<h1>include<cstdio></h1>
+
+<h1>include<iostream></h1>
+
+<h1>include<cstring></h1>
+
+<h1>include<cmath></h1>
+
+<h1>include<vector></h1>
+
+<h1>include<algorithm></h1>
+
+<p>typedef  long long LL;</p>
+
+<h1>define clr(x) memset((x),0,sizeof(x))</h1>
+
+<h1>define inf 0x3f3f3f3f</h1>
+
+<p>using namespace std;
+const int mod = 1000000009;
+const int maxn = 300010;</p>
+
+<h1>define calc(p,q,n) (((p)<em>f1[n]+(q)</em>f2[n])%mod)</h1>
+
+<p>LL sum[maxn&lt;&lt;2];
+LL add1[maxn&lt;&lt;2],add2[maxn&lt;&lt;2];
+LL f1[maxn],f2[maxn],s1[maxn],s2[maxn];
+LL a[maxn];
+int n,m;
+void upd(int rt,int len ,LL p,LL q)
+{
+    add1[rt] = (add1[rt]+p)%mod;
+    add2[rt] = (add2[rt]+q)%mod;
+    sum[rt] = (sum[rt]+p<em>s1[len]+s2[len]</em>q)%mod;
+}
+void build(int rt,int l,int r)
+{
+    if(l==r)
+    {
+        sum[rt] = a[l];
+        add1[rt] =add2[rt]= 0;
+        return ;
+    }
+    int m = (l+r)>>1;
+    build(rt&lt;&lt;1,l,m);
+    build(rt&lt;&lt;1|1,m+1,r);
+    sum[rt] = (sum[rt&lt;&lt;1] + sum[rt&lt;&lt;1|1])%mod;
+}
+void push_down(int rt,int l,int r)
+{
+    int m = (l+r)>>1;
+    upd(rt&lt;&lt;1,m-l,add1[rt],add2[rt]);
+    upd(rt&lt;&lt;1|1,r-m-1,calc(add1[rt],add2[rt],m+1-l),calc(add1[rt],add2[rt],m+2-l));
+    add1[rt] = add2[rt] = 0;</p>
+
+<p>}
+void update(int rt,int l,int r ,int L,int R,LL p,LL q)
+{
+    if(l>=L&amp;&amp;R>=r)
+    {
+        upd(rt,r-l,calc(p,q,l-L),calc(p,q,l-L+1));
+        return;
+    }
+    int m = (l+r)>>1;
+    push_down(rt,l,r);
+    if(L&lt;=m) update(rt&lt;&lt;1,l,m,L,R,p,q);
+    if(R>m) update(rt&lt;&lt;1|1,m+1,r,L,R,p,q);
+    sum[rt] = (sum[rt&lt;&lt;1]+sum[rt&lt;&lt;1|1])%mod;
+}
+LL query(int rt,int l,int r,int L,int R)
+{
+    if(L&lt;=l&amp;&amp;R>=r)
+    {
+        return sum[rt];
+    }
+    int m = (l+r)>>1;
+    push_down(rt,l,r);
+    LL ans = 0;
+    if(L&lt;=m)  ans += query(rt&lt;&lt;1,l,m,L,R);
+    if(R>m) ans += query(rt&lt;&lt;1|1,m+1,r,L,R);
+    sum[rt] = (sum[rt&lt;&lt;1]+sum[rt&lt;&lt;1|1])%mod;
+    return ans %mod;
+}</p>
+
+<p>int main()
+{
+    f1[0] = 1; f1[1] = 0;s1[0] = 1;s1[1] = 1;
+    f2[0] = 0; f2[1] = 1;s2[0] = 0 ;s2[1] =1;
+    for(int i =2;i&lt;maxn;i++)
+    {
+        f1[i]= (f1[i-1]+f1[i-2])%mod;
+        f2[i] = (f2[i-1] + f2[i-2])%mod;
+        s1[i] = (s1[i-1] + f1[i])%mod;
+        s2[i] = (s2[i-1] + f2[i])%mod;
+    }
+    scanf(&ldquo;%d%d&rdquo;,&amp;n,&amp;m);
+    for(int i =1;i&lt;=n;i++)
+    {
+        scanf(&ldquo;%d&rdquo;,&amp;a[i]);
+    }
+    build(1,1,n);
+    int x,y,z;
+    for(int i =1;i&lt;=m;i++)
+    {
+        scanf(&ldquo;%d%d%d&rdquo;,&amp;x,&amp;y,&amp;z);
+        if(x==1)
+        {
+            update(1,1,n,y,z,1,1);
+        }
+        else {
+            printf(&ldquo;%I64d\n&rdquo;,query(1,1,n,y,z));
+        }
+    }
+    return 0;
+}</p>
+
+<p>&#8220;`</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HUST F]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/05/16/hust-f/"/>
+    <updated>2015-05-16T21:31:15+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/05/16/hust-f</id>
+    <content type="html"><![CDATA[<h2>F     The trees of HUST</h2>
+
+<h3>Time Limit: 4000/2000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)</h3>
+
+<!--more-->
+
+
+<h3>Description</h3>
+
+<p>As we all know that there are so many trees in HUST, so it is usually called the forest university. They were planted by teachers and students of HUST led by the president Zhu Jiusi.Though the weather of Wuhan in summer is very hot, the temperature of HUST is lower than outside.
+One day,Lily were thinking a problem, image that all trees is in a line,the height of trees is different,she want to know that if she ignore some contiguous trees(these trees have to be consecutive) what the numbers is in the longest increasing sequence of consecutive trees.
+For example, if the heights of trees were, respectively, 5, 3, 4, 9, 2, 8, 6, 7, 1, then by demolishing trees of heights 9, 2, and 8, the longest increasing sequence of consecutive trees is 3, 4, 6, 7.</p>
+
+<h2>Input</h2>
+
+<p>The input contains several test cases. The first line of the input contains a positive integer T≤25, denoting the number of test cases. Then T test cases follow, each conforming to the format described below. The input instance consists of two lines. The first one contains one positive integer n≤2*10<sup>5</sup> denoting the number of trees. The second line contains n positive integers not larger than 10<sup>9</sup> separated by single spaces being the heights of the trees.</p>
+
+<h2>Output</h2>
+
+<p>For each test case print the test case number as “Case #C: H” in one line where C is the test case number, where H is the length of a longest increasing sequence of consecutive trees, achievable by demolishing some consecutive trees or no trees at all.</p>
+
+<h2>Sample Input</h2>
+
+<p>2<br/>
+9<br/>
+5 3 4 9 2 8 6 7 1<br/>
+7 <br/>
+1 2 3 10 4 5 6</p>
+
+<h2>Sample Output</h2>
+
+<p>Case #1: 4<br/>
+Case #2: 6</p>
+
+<p>Source
+Wzb</p>
+
+<p>大意：找一个最长字串，中间只允许一个中断块。</p>
+
+<p>思路： 从前找最长连续子串， 然后再从后找最长连续字串，枚举 位置i 考虑从前后拼接出最长字串。
+数据大小2*10<sup>5</sup>  因此查询的时候需要二分。
+用 f[i]，g[i]分别表示从前和从后面到位置i 的最长字串的长度。
+有f[i] = f[i-1] +1 当  a[i]>a[i-1] .否则 f[i]=1;</p>
+
+<p>同理有g[i];</p>
+
+<p>枚举位置 i  ，我们需要找到 从1到i-1 中最大值满足小于a[i]，且 长度最长的串。
+首先想到的是线段树，然后加了个条件查询表示不会。</p>
+
+<p>此时可以维护一个数组b[i],表示此时 长度为 i 的连续上升段(从f[i]中找) 的最大值(i表示值)(即每段最后的值)的最小值。
+因为是动态构造，所以b[i]的值不会取到i以后的位置 。
+那么此时 让b[i]中的i 尽量大(长度尽量大) 但是b[i] 满足小于 a[i];
+那么要二分出这个结果首先 b[i] 得满足单调递增的特性 。
+仔细想想这个特性是满足的 ， 因为在同一个串中 ，长度为 i 的最长的位置比长度为 i-1的位置的数字要大 。 然后各自取最小值仍然满足这个条件。然后就可以二分logn的查询出来。整个算法复杂度在 nlogn。</p>
+
+<p>对着代码虽然能够分析出来。 但是感觉这个根本自己就不好想啊。。。光证明结论是对的就搞了半天 。 跟上次的题一样， 注意b[i]的构造思路。</p>
+
+<pre><code class="cpp">
+#include&lt;cstdio&gt;
+#include&lt;cstring&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+
+const int N=200010;
+
+int n,a[N],f[N],g[N],b[N];
+
+int l,r,R0,ans;
+
+int main() {
+    int T，Case;
+    scanf("%d",&amp;T);
+    while(T--) {
+        scanf("%d",&amp;n);
+        for(int i=0;i&lt;n;i++)
+            scanf("%d",&amp;a[i]);
+
+        f[0]=1;
+        for(int i=1;i&lt;n;i++)
+            if(a[i]&gt;a[i-1])f[i]=f[i-1]+1;
+            else f[i]=1;
+
+        g[n-1]=1;
+        for(int i=n-2;i&gt;=0;i--)
+            if(a[i]&lt;a[i+1])g[i]=g[i+1]+1;
+            else g[i]=1;
+
+        memset(b,0x3f,sizeof(b));
+        ans=R0=0;
+        for(int i=0;i&lt;n;i++) {
+            l=0;
+            r=R0;
+            while(l&lt;r) {
+                int mid=(l+r+1)&gt;&gt;1;
+                if(a[i]&gt;b[mid])l=mid;
+                else r=mid-1;
+            }
+            R0=max(R0,f[i]);
+            b[f[i]]=min(b[f[i]],a[i]);
+            ans=max(ans,l+g[i]);
+        }
+
+        printf("Case #%d: %d\n",++Case,ans);
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

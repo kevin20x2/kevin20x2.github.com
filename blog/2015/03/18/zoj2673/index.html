@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>ZOJ2673 - ZVINK&#8217;s garden</title>
+  <meta name="author" content="ZVINK">
+
+  
+  <meta name="description" content="Hexagon and Rhombic Dominoes A regular hexagon with side length n is divided into 6n2 unit triangles. Your task is to cover it with rhombic dominoes &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://kevin20x2.github.io/blog/2015/03/18/zoj2673/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="ZVINK's garden" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">ZVINK&#8217;s garden</a></h1>
+  
+    <h2>try</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="kevin20x2.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">ZOJ2673</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-03-18T22:03:49+08:00'><span class='date'>2015 年3  月 18 日</span> <span class='time'>10:03 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://kevin20x2.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2><a href="http://acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=2673">Hexagon and Rhombic Dominoes</a></h2>
+
+<!--more-->
+
+
+<p>A regular hexagon with side length n is divided into 6n2 unit triangles.</p>
+
+<p><img src="http://acm.zju.edu.cn/onlinejudge/showImage.do?name=0000%2F2673%2FDP1.gif" alt="1" /></p>
+
+<p>Your task is to cover it with rhombic dominoes &mdash; pieces composed of two unit triangles sharing a side.</p>
+
+<p><img src="http://acm.zju.edu.cn/onlinejudge/showImage.do?name=0000%2F2673%2FDP2.gif" alt="2" /></p>
+
+<p>Each domino must be placed in such a way, that it covers exactly two unit triangles. No triangle must be covered with more than one domino.</p>
+
+<p>Count the number of ways to do so. For example there are two ways to cover a hexagon with side length~1, they are shown on the picture.</p>
+
+<p><img src="http://acm.zju.edu.cn/onlinejudge/showImage.do?name=0000%2F2673%2FDP3.gif" alt="3" /></p>
+
+<p><strong>Input</strong></p>
+
+<p>Eace re several test cases in the input. Each case contains n ( 1 &lt;= n &lt;= 7 ). There is an empty line between each case.
+Output</p>
+
+<p><strong>Output</strong> <br/>
+the number of ways to cover hexagon with rombic dominoes. There should be an empty line between each case.
+Example</p>
+
+<p>Input
+1<br/>
+2<br/>
+Output<br/>
+2<br/>
+20</p>
+
+<p><strong>题意</strong><br/>
+由6n<sup>2</sup>个三角形组成的正6边形 ，分成 2个三角形组成的菱形 ，一共有多少种分法<br/>
+类似的拼图形的题目一般都是搜索加dp。因为 n 最大为 7 若用 0和1表示每个三角形是否被填充
+最大的状态 有 2<sup>2*7</sup> 那么多 。然后从上到下，最多7层。（因为图形是对称的，所以只算一半）。<br/>
+假设上一层倒着放的三角形都已经被填满，上一层没有被放的正着放的三角形在这一层就会被这一层对应位置的倒着的三角形结合。 上一层放了 则 可以和这一层的左边或者右边的三角形结合。（晕）</p>
+
+<p>dp[i][j] =∑dp[i-1][m]  满足m状态能转换成j状态。</p>
+
+<p>初始化有看不见的第0层全部放满。</p>
+
+<p>结果则是最后一层没有放满的平方和。∑dp[n][m]*dp[n][m]</p>
+
+<p>代码</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include&lt;cstdio&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;cstring&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;cmath&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;vector&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;algorithm&gt;</span>
+</span><span class='line'><span class="k">typedef</span>  <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#define clr(x) memset((x),0,sizeof(x))</span>
+</span><span class='line'><span class="cp">#define inf 0x3f3f3f3f</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'><span class="n">LL</span> <span class="n">dp</span><span class="p">[</span><span class="mi">10</span><span class="p">][</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">16</span><span class="p">];</span>
+</span><span class='line'><span class="kt">bool</span> <span class="n">vis</span><span class="p">[</span><span class="mi">10</span><span class="p">][</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">16</span><span class="p">];</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">no</span><span class="p">;</span>
+</span><span class='line'><span class="n">vector</span> <span class="o">&lt;</span><span class="kt">int</span> <span class="o">&gt;</span> <span class="n">re</span><span class="p">;</span>
+</span><span class='line'><span class="kt">bool</span> <span class="n">revis</span><span class="p">[</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">16</span><span class="p">];</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">dep</span><span class="p">,</span><span class="kt">int</span> <span class="n">st</span><span class="p">,</span><span class="kt">int</span> <span class="n">nest</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">dep</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="n">no</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">revis</span><span class="p">[</span><span class="n">nest</span><span class="p">])</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">revis</span><span class="p">[</span><span class="n">nest</span><span class="p">]</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">re</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nest</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">no</span><span class="p">][</span><span class="n">nest</span><span class="p">])</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">vis</span><span class="p">[</span><span class="n">no</span><span class="p">][</span><span class="n">nest</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">dp</span><span class="p">[</span><span class="n">no</span><span class="p">][</span><span class="n">nest</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">no</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">st</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="c1">//dp[no][nest] ++;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">((</span><span class="n">st</span><span class="o">&amp;</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">dep</span><span class="p">))</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">dfs</span><span class="p">(</span><span class="n">dep</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">st</span><span class="p">,</span><span class="n">nest</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">((</span><span class="n">nest</span><span class="o">&amp;</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">dep</span><span class="p">))</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">dfs</span><span class="p">(</span><span class="n">dep</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">st</span><span class="p">,</span><span class="n">nest</span><span class="o">|</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">dep</span><span class="p">));</span>
+</span><span class='line'>        <span class="n">dfs</span><span class="p">(</span><span class="n">dep</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">st</span><span class="p">,</span><span class="n">nest</span><span class="o">|</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">dep</span><span class="o">+</span><span class="mi">1</span><span class="p">)));</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">cas</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="o">~</span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">no</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">memset</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span> <span class="n">dp</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">re</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span><span class='line'>        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">n</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,((</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">n</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">no</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">vector</span> <span class="o">&lt;</span><span class="kt">int</span> <span class="o">&gt;</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">re</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span><span class='line'>            <span class="n">memset</span><span class="p">(</span><span class="n">revis</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span> <span class="n">revis</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="n">j</span> <span class="o">&lt;</span><span class="n">tmp</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>              <span class="c1">//  printf(&quot;%d*%d &quot;,dp[no-1][tmp[j]],tmp[j]);</span>
+</span><span class='line'>                <span class="n">memset</span><span class="p">(</span><span class="n">vis</span><span class="p">[</span><span class="n">no</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span> <span class="n">vis</span><span class="p">[</span><span class="n">no</span><span class="p">]);</span>
+</span><span class='line'>                <span class="n">dfs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">tmp</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="c1">//printf(&quot;\n&quot;);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">LL</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">re</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="c1">//printf(&quot;%d*%d &quot;,dp[n][re[i]],re[i]);</span>
+</span><span class='line'>            <span class="n">ans</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">re</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">*</span><span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">re</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="c1">//printf(&quot;\n%d\n&quot;,ans);</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">cas</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">cas</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span><span class="k">else</span> <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">ans</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">ZVINK</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-03-18T22:03:49+08:00'><span class='date'>2015 年3  月 18 日</span> <span class='time'>10:03 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dp/'>dp</a>, <a class='category' href='/blog/categories/sou-suo/'>搜索</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://kevin20x2.github.io/blog/2015/03/18/zoj2673/" data-via="" data-counturl="http://kevin20x2.github.io/blog/2015/03/18/zoj2673/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/03/18/zoj2672/" title="Previous Post: ZOJ2672">&laquo; ZOJ2672</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/03/22/zoj3369/" title="Next Post: ZOJ3369">ZOJ3369 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/05/new-start/">New Start</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/19/hdu5396/">Hdu5396</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/13/codeforces555E/">codeforces555E</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/08/hdu5261/">Hdu5261</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/02/poj3017/">Poj3017</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/codefoces/'>codefoces (1)</a></li>
+<li class='category'><a href='/blog/categories/codeforces/'>codeforces (4)</a></li>
+<li class='category'><a href='/blog/categories/dp/'>dp (9)</a></li>
+<li class='category'><a href='/blog/categories/hdu/'>hdu (2)</a></li>
+<li class='category'><a href='/blog/categories/tarjan缩点/'>tarjan缩点 (1)</a></li>
+<li class='category'><a href='/blog/categories/topsort/'>topsort (1)</a></li>
+<li class='category'><a href='/blog/categories/二分/'>二分 (1)</a></li>
+<li class='category'><a href='/blog/categories/优先队列/'>优先队列 (2)</a></li>
+<li class='category'><a href='/blog/categories/区间dp/'>区间dp (1)</a></li>
+<li class='category'><a href='/blog/categories/想法/'>想法 (1)</a></li>
+<li class='category'><a href='/blog/categories/搜索/'>搜索 (1)</a></li>
+<li class='category'><a href='/blog/categories/搜索dp/'>搜索dp (1)</a></li>
+<li class='category'><a href='/blog/categories/暴力/'>暴力 (1)</a></li>
+<li class='category'><a href='/blog/categories/最短路/'>最短路 (1)</a></li>
+<li class='category'><a href='/blog/categories/杂/'>杂 (3)</a></li>
+<li class='category'><a href='/blog/categories/树状dp/'>树状dp (2)</a></li>
+<li class='category'><a href='/blog/categories/树链剖分/'>树链剖分 (1)</a></li>
+<li class='category'><a href='/blog/categories/状压dp/'>状压dp (1)</a></li>
+<li class='category'><a href='/blog/categories/线段树/'>线段树 (2)</a></li>
+<li class='category'><a href='/blog/categories/背包/'>背包 (1)</a></li>
+<li class='category'><a href='/blog/categories/贪心/'>贪心 (3)</a></li>
+
+  </ul>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - ZVINK -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'kevin20x2';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://kevin20x2.github.io/blog/2015/03/18/zoj2673/';
+        var disqus_url = 'http://kevin20x2.github.io/blog/2015/03/18/zoj2673/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

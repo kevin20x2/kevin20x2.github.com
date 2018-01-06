@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: 杂 | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/za/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Hdu4858]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/03/31/hdu4858/"/>
+    <updated>2015-03-31T21:39:56+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/03/31/hdu4858</id>
+    <content type="html"><![CDATA[<h2><a href="http://acm.hdu.edu.cn/showproblem.php?pid=4858">项目管理</a></h2>
+
+<!--more-->
+
+
+<p>Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 32768/32768 K (Java/Others)
+Total Submission(s): 1521    Accepted Submission(s): 556</p>
+
+<h3>Problem Description</h3>
+
+<p>我们建造了一个大项目！这个项目有n个节点，用很多边连接起来，并且这个项目是连通的！
+两个节点间可能有多条边，不过一条边的两端必然是不同的节点。
+每个节点都有一个能量值。</p>
+
+<p>现在我们要编写一个项目管理软件，这个软件呢有两个操作：
+1.给某个项目的能量值加上一个特定值。
+2.询问跟一个项目相邻的项目的能量值之和。（如果有多条边就算多次，比如a和b有2条边，那么询问a的时候b的权值算2次）。</p>
+
+<h3>Input</h3>
+
+<p>第一行一个整数T(1 &lt;= T &lt;= 3),表示测试数据的个数。
+然后对于每个测试数据，第一行有两个整数n(1 &lt;= n &lt;= 100000)和m(1 &lt;= m &lt;= n + 10)，分别表示点数和边数。</p>
+
+<p>然后m行，每行两个数a和b，表示a和b之间有一条边。
+然后一个整数Q。</p>
+
+<p>然后Q行，每行第一个数cmd表示操作类型。如果cmd为0，那么接下来两个数u v表示给项目u的能量值加上v(0 &lt;= v &lt;= 100)。
+如果cmd为1，那么接下来一个数u表示询问u相邻的项目的能量值之和。</p>
+
+<p>所有点从1到n标号。</p>
+
+<h3>Output</h3>
+
+<p>对每个询问，输出一行表示答案。</p>
+
+<h3>Sample Input</h3>
+
+<p>1<br/>
+3 2<br/>
+1 2<br/>
+1 3<br/>
+6<br/>
+0 1 15<br/>
+0 3 4 <br/>
+1 1<br/>
+1 3 <br/>
+0 2 33<br/>
+1 2</p>
+
+<h3>Sample Output</h3>
+
+<p>4<br/>
+15<br/>
+15</p>
+
+<h4>Author</h4>
+
+<p>CLJ</p>
+
+<h4>Source</h4>
+
+<p>BestCoder Round #1</p>
+
+<p>直接模拟就行了， 会超时的原因是卡了输入和输出， 这个时候又要用挂了orz</p>
+
+<pre><code class="cpp">#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cmath&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+vector &lt;int &gt; v[100010];
+int ans [100010];
+int n,m;
+void read2(int &amp; x)
+{
+      char c;
+    bool neg=false;
+    while(((c=getchar())&lt;'0'||c&gt;'9')&amp;&amp;c!='-');
+    if(c=='-')
+    {
+        neg=true;
+        while((c=getchar())&lt;'0'||c&gt;'9');
+    }
+    x=c-'0';
+    while(c=getchar(),c&gt;='0'&amp;&amp;c&lt;='9') x=x*10+c-'0';
+    if(neg) x=-x;
+}
+void out(int a)
+{
+    if(a&gt;9)
+        out(a/10);
+    putchar(a%10+'0');
+}
+
+int main()
+{
+    int t ;
+    scanf("%d",&amp;t);
+    int x,y,z;
+    while(t--)
+    {
+        scanf("%d%d",&amp;n,&amp;m);
+        for(int i =1;i&lt;=n;i++)
+            v[i].clear();
+        for(int i =1;i&lt;=m;i++)
+        {
+            read2(x);read2(y);
+            v[x].push_back(y);
+            v[y].push_back(x);
+        }
+        int q;
+        memset(ans,0,sizeof ans);
+        scanf("%d",&amp;q);
+        while(q--)
+        {
+            read2(x);
+            if(x==0)
+            {
+                read2(y);read2(z);
+                for(int i = 0;i&lt;v[y].size();i++)
+                {
+                    ans[v[y][i]] += z;
+                }
+
+            }
+            else 
+            {
+                read2(y);
+                out(ans[y]);
+                putchar('\n');
+
+            }
+
+        }
+
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hdu4857]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/03/31/hdu4857/"/>
+    <updated>2015-03-31T21:30:22+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/03/31/hdu4857</id>
+    <content type="html"><![CDATA[<!--more-->
+
+
+<h2><a href="http://acm.hdu.edu.cn/showproblem.php?pid=4857">逃生</a></h2>
+
+<h3>Problem Description</h3>
+
+<p>糟糕的事情发生啦，现在大家都忙着逃命。但是逃命的通道很窄，大家只能排成一行。</p>
+
+<p>现在有n个人，从1标号到n。同时有一些奇怪的约束条件，每个都形如：a必须在b之前。
+同时，社会是不平等的，这些人有的穷有的富。1号最富，2号第二富，以此类推。有钱人就贿赂负责人，所以他们有一些好处。</p>
+
+<p>负责人现在可以安排大家排队的顺序，由于收了好处，所以他要让1号尽量靠前，如果此时还有多种情况，就再让2号尽量靠前，如果还有多种情况，就让3号尽量靠前，以此类推。</p>
+
+<p>那么你就要安排大家的顺序。我们保证一定有解。</p>
+
+<h3>Input</h3>
+
+<p>第一行一个整数T(1 &lt;= T &lt;= 5),表示测试数据的个数。
+然后对于每个测试数据，第一行有两个整数n(1 &lt;= n &lt;= 30000)和m(1 &lt;= m &lt;= 100000)，分别表示人数和约束的个数。</p>
+
+<p>然后m行，每行两个整数a和b，表示有一个约束a号必须在b号之前。a和b必然不同。</p>
+
+<h3>Output</h3>
+
+<p>对每个测试数据，输出一行排队的顺序，用空格隔开。</p>
+
+<h3>Sample Input</h3>
+
+<p>1<br/>
+5 10<br/>
+3 5<br/>
+1 4<br/>
+2 5<br/>
+1 2<br/>
+3 4<br/>
+1 4<br/>
+2 3<br/>
+1 5<br/>
+3 5<br/>
+1 2</p>
+
+<h3>Sample Output</h3>
+
+<p>1 2 3 4 5</p>
+
+<h4>Author</h4>
+
+<p>CLJ</p>
+
+<h4>Source</h4>
+
+<p>BestCoder Round #1</p>
+
+<p>拓扑排序加优先队列 ， 放在hdu上的测试 丧心病狂的卡了时间 用输入挂解决，再就是题目中要求编号小的尽量放前面，因此是逆序建图，然后优先队列先处理大的。</p>
+
+<pre><code class="cpp">#include&lt;cstdio&gt;
+#include&lt;cstring&gt;
+#include&lt;cmath&gt;
+#include&lt;iostream&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;queue&gt;
+const int maxn=30010;
+using namespace std;
+
+vector&lt;int&gt; e[maxn];
+int n,m,in[maxn],ans[maxn],cnt;
+
+struct cmp
+{
+  bool operator ()(int &amp;a,int &amp;b){
+    return a&lt;b;//最大值优先
+  }
+};
+void read2(int &amp;x)
+{
+    char c;
+    bool neg = false;
+    while(((c=getchar())&lt;'0'||c&gt;'9')&amp;&amp;c!='-');
+    if(c=='-')
+    {
+        neg = true;
+        while((c=getchar())&lt;'0'||c&gt;'9');
+    }
+    x= c-'0';
+    while(c=getchar(),c&gt;='0'&amp;&amp;c&lt;='9') x= x*10+c-'0';
+    if(neg) x=-x;
+}
+
+void topo()
+{
+  priority_queue&lt;int,vector&lt;int&gt;,cmp&gt; q;
+  for(int i=1;i&lt;=n;i++)
+    if(in[i]==0) q.push(i);
+  int flag=0;
+  int x,i;
+  while(!q.empty())
+  {
+    x=q.top();
+    q.pop();
+    ans[++cnt]=x;
+    for(i=0;i&lt;e[x].size();i++)
+    {
+      in[e[x][i]]--;
+      if(in[e[x][i]]==0)
+        q.push(e[x][i]);
+    }
+  }
+}
+
+int main()
+{
+  int t,a,b,i;
+  scanf("%d",&amp;t);
+  while(t--)
+  {
+    scanf("%d%d",&amp;n,&amp;m);
+    for(i=0;i&lt;=n;i++)
+      e[i].clear();
+    memset(in,0,sizeof in);
+    while(m--)
+    {
+      read2(a);read2(b);
+      e[b].push_back(a);
+      in[a]++;
+    }
+    cnt=0;
+    topo();
+    printf("%d",ans[cnt]);
+    for(i=cnt-1;i&gt;0;i--)
+      printf(" %d",ans[i]);
+    puts("");
+  }
+  return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[折腾了好久]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/03/17/zhe-teng-liao-hao-jiu/"/>
+    <updated>2015-03-17T15:26:14+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/03/17/zhe-teng-liao-hao-jiu</id>
+    <content type="html"><![CDATA[<p>翔在github上搞了一个blog ，然后我也就闲的蛋疼也想搞一个了。</p>
+
+<h2>然后真的就是蛋疼了。</h2>
+
+<p>写这篇blog简直也是蛋疼的一部分。</p>
+
+<!--more-->
+
+
+<p><strong>首先我不会markdown</strong></p>
+
+<p>还好有markdownpad 要不然每一次都要rake preview一次简直蛋疼。</p>
+
+<p>嘛，将就着写吧。</p>
+
+<hr />
+
+<p>作为一个抄袭作品简直失败</p>
+
+<p>因为抄袭的对象用的是mac【默默鄙视一下</p>
+
+<p>然后给的教程不能用，然后只能在网上找<a href="http://shanewfx.github.io/blog/2012/02/16/bulid-blog-by-octopress/">教程</a>了</p>
+
+<p>还好之前有用git的经历。</p>
+
+<p>然后就是各种问题了，编码问题我用的是<em>Jekyll 2.5.3</em> ， 把config.yml和post的markdown文件改成utf-8编码之后算是好歹能用中文了。</p>
+
+<h4>西卡西</h4>
+
+<p>因为要把终端编码改成 utf-8 导致终端不能输中文了。（不能调出输入法）</p>
+
+<h4>但是可以从其他地方粘贴啊</h4>
+
+<p>我觉得问题好像就这样解决了，但是我错了，比如这篇blog名字叫 &ldquo;折腾了好久&rdquo; 本来名字是叫 &ldquo;折腾了一下午&#8221;的</p>
+
+<p>为毛要换名字 ？</p>
+
+<h4>因为 rake new_post[&ldquo;折腾了一下午&rdquo;] 会报错 但是rake new_post[&ldquo;折腾了好久&rdquo;] 就没问题</h4>
+
+<h3>WTF！！</h3>
+
+<p>在次，github上的仓库名称必须得是username.github.com天真的我还以为可以随便起名字，然后差不多就在原地打转了，算起来一共折腾了大半天。</p>
+
+<p>然后我这个blog暂时还只是兴趣产物，目测过不了多久就会断更(汗)</p>
+
+<p>然后内容大概会放一下题解吧。</p>
+
+<p>最后嘛，反正blog的各种东西还不太清楚，貌似现在还没评论功能。慢慢搞咯 <em>(:з」∠)</em></p>
+
+<h2>更新</h2>
+
+<p>第一篇文章上传成功 ，第二篇题解就跪了(汗)<br/>
+rake generate 的时候warning 没解决<br/>
+各种百度发现是加了代码的锅。<br/>
+Jekyll 默认的代码高亮的插件是 pygments 一个python插件
+这个不知道为啥不能正常工作 ，然后我就换成了另一个 rouge<br/>
+详细教程在 <a href="http://jekyll-windows.juthilo.com/3-syntax-highlighting/"><strong>这里</strong></a><br/>
+看来还有各种问题要解决Orz</p>
+
+<h3>3月22号更新</h3>
+
+<p>今天尝试加上一篇blog zoj3369 <br/>
+reke generate
+妈个鸡居然报错了 。</p>
+
+<h4>jekyll 2.5.3 | Error:  undefined method `[]&lsquo; for nil:NilClass</h4>
+
+<p>百度谷歌各种 发现说这是个高亮插件的错误，但是我已经把插件换成了rouge而且成功上传了两篇文章 。这么说只能是这篇新博客的问题。
+然后我把它剪切了出去<br/>
+rake generate<br/>
+<strong>成功了</strong><br/>
+我真是 (╯‵□′)╯︵┻━┻︵┻━┻</p>
+
+<p>然后把新文件稍微改了一下
+把其中的 50*50*50*50
+改成了  50\*50\*50\*50
+似乎就成功了。已经无力吐槽了，下次注意。</p>
+
+<h3>3月23日更新</h3>
+
+<p>尝试加上了侧边的分类栏<br/>
+之后在每篇文章categoris: 上面加上分类标签就好了
+具体见 <a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">这里</a></p>
+]]></content>
+  </entry>
+  
+</feed>

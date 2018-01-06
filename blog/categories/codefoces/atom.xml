@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: Codefoces | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/codefoces/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Codeforces 446C]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/05/17/codeforces-446c/"/>
+    <updated>2015-05-17T00:04:38+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/05/17/codeforces-446c</id>
+    <content type="html"><![CDATA[<!--more-->
+
+
+<h2>C. DZY Loves Fibonacci Numbers</h2>
+
+<p>time limit per test4 seconds
+memory limit per test256 megabytes
+inputstandard input
+outputstandard output
+In mathematical terms, the sequence Fn of Fibonacci numbers is defined by the recurrence relation</p>
+
+<p>F1 = 1; F2 = 1; Fn = Fn - 1 + Fn - 2 (n > 2).
+DZY loves Fibonacci numbers very much. Today DZY gives you an array consisting of n integers: a1, a2, &hellip;, an. Moreover, there are m queries, each query has one of the two types:</p>
+
+<p>Format of the query &ldquo;1 l r&rdquo;. In reply to the query, you need to add Fi - l + 1 to each element ai, where l ≤ i ≤ r.
+Format of the query &ldquo;2 l r&rdquo;. In reply to the query you should output the value of  modulo 1000000009 (109 + 9).
+Help DZY reply to all the queries.</p>
+
+<h2>Input</h2>
+
+<p>The first line of the input contains two integers n and m (1 ≤ n, m ≤ 300000). The second line contains n integers a1, a2, &hellip;, an (1 ≤ ai ≤ 109) — initial array a.</p>
+
+<p>Then, m lines follow. A single line describes a single query in the format given in the statement. It is guaranteed that for each query inequality 1 ≤ l ≤ r ≤ n holds.</p>
+
+<h2>Output</h2>
+
+<p>For each query of the second type, print the value of the sum on a single line.</p>
+
+<h2>Sample test(s)</h2>
+
+<h2>input</h2>
+
+<p>4 4<br/>
+1 2 3 4<br/>
+1 1 4<br/>
+2 1 4 <br/>
+1 2 4<br/>
+2 1 3</p>
+
+<h2>output</h2>
+
+<p>17<br/>
+12</p>
+
+<h2>Note</h2>
+
+<p>After the first query, a = [2, 3, 5, 7].</p>
+
+<p>For the second query, sum = 2 + 3 + 5 + 7 = 17.</p>
+
+<p>After the third query, a = [2, 4, 6, 9].</p>
+
+<p>For the fourth query, sum = 2 + 4 + 6 = 12.</p>
+
+<p>先膜拜一下神牛。orz</p>
+
+<p>很明显的区间更新线段树，问题是快速求得由两个斐波拉切数 得到的后面的各序列的值 和 区间的和。</p>
+
+<p>然后就有4个数组：
+f1[i],f2[i],s1[i],s2[i];</p>
+
+<p>初始化如下：
+<code>cpp
+    f1[0] = 1; f1[1] = 0;s1[0] = 1;s1[1] = 1;
+    f2[0] = 0; f2[1] = 1;s2[0] = 0 ;s2[1] =1;
+    for(int i =2;i&lt;maxn;i++)
+    {
+        f1[i]= (f1[i-1]+f1[i-2])%mod;
+        f2[i] = (f2[i-1] + f2[i-2])%mod;
+        s1[i] = (s1[i-1] + f1[i])%mod;
+        s2[i] = (s2[i-1] + f2[i])%mod;
+    }
+</code></p>
+
+<p>这4个数组就是专门用来处理斐波拉切数列的。
+     (p)<em>f1[n]+(q)</em>f2[n]
+得到的是以p，q为开头，距离p长度为n的数列上的值。
+     p<em>s1[len]+s2[len]</em>q
+得到的是以p，q为开头，长度为len 的数列各项和 。
+然后用两个懒惰标记数组 来处理线段树， 一个存p，一个存q。</p>
+
+<p>校赛看了一下没做。。各种orz
+&#8220;`cpp
+/<em>
+ </em>File:  FF.C.cpp
+ <em>Date : 2015-05-16 22:11:23
+ </em>/</p>
+
+<h1>include<cstdio></h1>
+
+<h1>include<iostream></h1>
+
+<h1>include<cstring></h1>
+
+<h1>include<cmath></h1>
+
+<h1>include<vector></h1>
+
+<h1>include<algorithm></h1>
+
+<p>typedef  long long LL;</p>
+
+<h1>define clr(x) memset((x),0,sizeof(x))</h1>
+
+<h1>define inf 0x3f3f3f3f</h1>
+
+<p>using namespace std;
+const int mod = 1000000009;
+const int maxn = 300010;</p>
+
+<h1>define calc(p,q,n) (((p)<em>f1[n]+(q)</em>f2[n])%mod)</h1>
+
+<p>LL sum[maxn&lt;&lt;2];
+LL add1[maxn&lt;&lt;2],add2[maxn&lt;&lt;2];
+LL f1[maxn],f2[maxn],s1[maxn],s2[maxn];
+LL a[maxn];
+int n,m;
+void upd(int rt,int len ,LL p,LL q)
+{
+    add1[rt] = (add1[rt]+p)%mod;
+    add2[rt] = (add2[rt]+q)%mod;
+    sum[rt] = (sum[rt]+p<em>s1[len]+s2[len]</em>q)%mod;
+}
+void build(int rt,int l,int r)
+{
+    if(l==r)
+    {
+        sum[rt] = a[l];
+        add1[rt] =add2[rt]= 0;
+        return ;
+    }
+    int m = (l+r)>>1;
+    build(rt&lt;&lt;1,l,m);
+    build(rt&lt;&lt;1|1,m+1,r);
+    sum[rt] = (sum[rt&lt;&lt;1] + sum[rt&lt;&lt;1|1])%mod;
+}
+void push_down(int rt,int l,int r)
+{
+    int m = (l+r)>>1;
+    upd(rt&lt;&lt;1,m-l,add1[rt],add2[rt]);
+    upd(rt&lt;&lt;1|1,r-m-1,calc(add1[rt],add2[rt],m+1-l),calc(add1[rt],add2[rt],m+2-l));
+    add1[rt] = add2[rt] = 0;</p>
+
+<p>}
+void update(int rt,int l,int r ,int L,int R,LL p,LL q)
+{
+    if(l>=L&amp;&amp;R>=r)
+    {
+        upd(rt,r-l,calc(p,q,l-L),calc(p,q,l-L+1));
+        return;
+    }
+    int m = (l+r)>>1;
+    push_down(rt,l,r);
+    if(L&lt;=m) update(rt&lt;&lt;1,l,m,L,R,p,q);
+    if(R>m) update(rt&lt;&lt;1|1,m+1,r,L,R,p,q);
+    sum[rt] = (sum[rt&lt;&lt;1]+sum[rt&lt;&lt;1|1])%mod;
+}
+LL query(int rt,int l,int r,int L,int R)
+{
+    if(L&lt;=l&amp;&amp;R>=r)
+    {
+        return sum[rt];
+    }
+    int m = (l+r)>>1;
+    push_down(rt,l,r);
+    LL ans = 0;
+    if(L&lt;=m)  ans += query(rt&lt;&lt;1,l,m,L,R);
+    if(R>m) ans += query(rt&lt;&lt;1|1,m+1,r,L,R);
+    sum[rt] = (sum[rt&lt;&lt;1]+sum[rt&lt;&lt;1|1])%mod;
+    return ans %mod;
+}</p>
+
+<p>int main()
+{
+    f1[0] = 1; f1[1] = 0;s1[0] = 1;s1[1] = 1;
+    f2[0] = 0; f2[1] = 1;s2[0] = 0 ;s2[1] =1;
+    for(int i =2;i&lt;maxn;i++)
+    {
+        f1[i]= (f1[i-1]+f1[i-2])%mod;
+        f2[i] = (f2[i-1] + f2[i-2])%mod;
+        s1[i] = (s1[i-1] + f1[i])%mod;
+        s2[i] = (s2[i-1] + f2[i])%mod;
+    }
+    scanf(&ldquo;%d%d&rdquo;,&amp;n,&amp;m);
+    for(int i =1;i&lt;=n;i++)
+    {
+        scanf(&ldquo;%d&rdquo;,&amp;a[i]);
+    }
+    build(1,1,n);
+    int x,y,z;
+    for(int i =1;i&lt;=m;i++)
+    {
+        scanf(&ldquo;%d%d%d&rdquo;,&amp;x,&amp;y,&amp;z);
+        if(x==1)
+        {
+            update(1,1,n,y,z,1,1);
+        }
+        else {
+            printf(&ldquo;%I64d\n&rdquo;,query(1,1,n,y,z));
+        }
+    }
+    return 0;
+}</p>
+
+<p>&#8220;`</p>
+]]></content>
+  </entry>
+  
+</feed>

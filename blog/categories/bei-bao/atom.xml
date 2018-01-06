@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: 背包 | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/bei-bao/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Poj1947]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/05/28/poj1947/"/>
+    <updated>2015-05-28T15:17:15+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/05/28/poj1947</id>
+    <content type="html"><![CDATA[<h2><a href="http://poj.org/problem?id=1947">Rebuilding Roads</a></h2>
+
+<!--more-->
+
+
+<p>题意是给你一颗树你可以通过切掉数的若干条边，然后要得到一个节点数为p的子树。问你最少切掉多少条边。</p>
+
+<p>首先当然是将无根树变成有根树，然后如果某个子树的大小刚好等于P的话这样最少就切一次。特殊情况是n=p，这时输出0。</p>
+
+<p>其他情况就要进行dp了。
+最容易想到的状态就是dp[i][j] 表示以节点i为根的子树变成j个节点需要切掉的最小边数。</p>
+
+<p>然而状态转移方程不好写。因为每个节点有若干个子节点，你需要保证所有子节点的和刚好等于j，这就涉及到分配的问题，尝试的交了一次，TLE。</p>
+
+<p>后来看别人代码才知道这里可以对节点i的所有子节点进行一次01 背包。
+先回顾一下01 背包：</p>
+
+<h3>dp[i][j] = min(dp[i-1][j],dp[i-1][j-v[i]]+w[i]);</h3>
+
+<p>是枚举当前的物品取或者不取的状态。
+这里也是枚举当前的边删或者不删。
+方程为</p>
+
+<h3>dp[i][x][m] = min(dp[i-1][x][m]+1,dp[i-1][x][m-k]+dp[last][son][k];</h3>
+
+<p>这里用3维方便理解，i表示现在在第i个子节点，last表示当前子节点对应状态的最后的值。
+考虑到单调性将i去掉，得</p>
+
+<h3>dp[x][m] = min(dp[x][m]+1,dp[x][m-k]+dp[son][k]);</h3>
+
+<p>由于是树状dp 因此在算当前节点的时候，所有子节点的状态结果已经算出来。</p>
+
+<p>现在的问题就是怎么初始化。</p>
+
+<p>想想01背包的最初的状态为最开始什么都没装dp[0][0] = 0;</p>
+
+<p>这里还没枚举第一个子节点时，也需要将根算进去，因此初始化 dp[x][1] = 0;</p>
+
+<p>听说还有一种将数转化成2叉树的优化方法，有时间补上。</p>
+
+<p>真是弱的不能看啊orz</p>
+
+<pre><code class="cpp">#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cmath&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+const int maxn = 161;
+vector &lt;int&gt; v[maxn];
+int dp[maxn][maxn];
+int num[maxn];
+int n,m;
+void dfs2(int x,int fa)
+{
+    for(int i = 0;i&lt;v[x].size();i++) if(v[x][i]!=fa)
+    {
+        dfs2(v[x][i],x);
+        num[x] += num[v[x][i]];
+    }
+    ++num[x] ;
+}
+void dfs(int x,int fa)
+{
+    if(num[x]==1)
+    {
+        dp[x][1] = 0;
+        return ;
+    }
+    dp[x][1] = 0;
+    for(int i = 0;i&lt;v[x].size();i++)if(v[x][i]!=fa){
+        dfs(v[x][i],x);
+        for(int j = num[x];j&gt;=0;j--){
+            int tt = min(num[v[x][i]],j);
+            dp[x][j]+=1;
+            for(int k = 1;k&lt;=tt;k++)
+            {
+                dp[x][j] = min(dp[x][j],dp[v[x][i]][k]+dp[x][j-k]);
+            }
+            //printf("%d %d %d\n",x,j,dp[x][j]);
+        }
+    }
+}
+
+int main()
+{
+    scanf("%d%d",&amp;n,&amp;m);
+    int x ,y;
+    memset(dp,0x3f,sizeof dp);
+    memset(num,0,sizeof num);
+    for(int i = 1;i&lt;n;i++)
+    {
+        scanf("%d%d",&amp;x,&amp;y);
+        v[x].push_back(y);
+        v[y].push_back(x);
+    }
+    int ans =inf;
+    dfs2(1,0);
+    dfs(1,0);
+    for(int i = 2;i&lt;=n;i++)
+    {
+        if(num[i]==m){
+            puts("1");
+            return 0;
+        }
+    }
+    ans = dp[1][m];
+    printf("%d\n",ans);
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

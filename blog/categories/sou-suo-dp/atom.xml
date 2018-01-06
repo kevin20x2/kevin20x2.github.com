@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: 搜索dp | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/sou-suo-dp/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Poj2411]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/05/28/poj2411/"/>
+    <updated>2015-05-28T16:41:42+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/05/28/poj2411</id>
+    <content type="html"><![CDATA[<p><a href="http://poj.org/problem?id=2411">Mondriaan&rsquo;s Dream</a></p>
+
+<!--more-->
+
+
+<p>题意很简单，用2 * 1的砖铺满n * m的地方有多少种方法，经典的搜索+dp的问题。</p>
+
+<pre><code class="cpp">/*
+ *File:  2411.cpp
+ *Date : 2015-05-19 23:43:40
+ */
+#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cmath&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+LL dp[12][1&lt;&lt;11];
+vector &lt;int &gt; v[12];
+bool inque[12][1&lt;&lt;11];
+int n,m;
+int res;
+int now;
+void dfs(int l,int st)
+{
+    if(l&gt;m) return ; 
+    if(l==m)
+    {
+        dp[now+1][st] += dp[now][res];
+        if(!inque[now+1][st])
+        {
+            inque[now+1][st] = 1;
+            v[now+1].push_back(st);
+        }
+        return ;
+    }
+    if((res&amp;(1&lt;&lt;l))==0&amp;&amp;(res&amp;(1&lt;&lt;(l+1)))==0)
+    {
+        dfs(l+2,st);
+    }
+    if((res&amp;(1&lt;&lt;l)))
+    {
+        dfs(l+1,st);
+    }
+    else {
+        dfs(l+1,st|(1&lt;&lt;l));
+    }
+
+}
+
+int main()
+{
+    while(~scanf("%d%d",&amp;n,&amp;m)&amp;&amp;n*m)
+    {
+        memset(dp,0,sizeof dp);
+        memset(inque,0,sizeof inque);
+        dp[0][0] = 1;
+        for(int i =0;i&lt;=n;i++)
+            v[i].clear();
+        v[0].push_back(0);
+        for(int i = 1;i&lt;=n;i++)
+        {
+            for(int j = 0 ;j&lt;v[i-1].size();j++)
+            {
+                res = v[i-1][j];
+                now = i-1;
+                dfs(0,0);
+               // printf("%d %d %d\n",i,j,dp[i][j]);
+            }
+        }
+        printf("%lld\n",dp[n][0]);
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

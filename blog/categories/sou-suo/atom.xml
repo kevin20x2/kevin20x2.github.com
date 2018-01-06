@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: 搜索 | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/sou-suo/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ZOJ2673]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/03/18/zoj2673/"/>
+    <updated>2015-03-18T22:03:49+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/03/18/zoj2673</id>
+    <content type="html"><![CDATA[<h2><a href="http://acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=2673">Hexagon and Rhombic Dominoes</a></h2>
+
+<!--more-->
+
+
+<p>A regular hexagon with side length n is divided into 6n2 unit triangles.</p>
+
+<p><img src="http://acm.zju.edu.cn/onlinejudge/showImage.do?name=0000%2F2673%2FDP1.gif" alt="1" /></p>
+
+<p>Your task is to cover it with rhombic dominoes &mdash; pieces composed of two unit triangles sharing a side.</p>
+
+<p><img src="http://acm.zju.edu.cn/onlinejudge/showImage.do?name=0000%2F2673%2FDP2.gif" alt="2" /></p>
+
+<p>Each domino must be placed in such a way, that it covers exactly two unit triangles. No triangle must be covered with more than one domino.</p>
+
+<p>Count the number of ways to do so. For example there are two ways to cover a hexagon with side length~1, they are shown on the picture.</p>
+
+<p><img src="http://acm.zju.edu.cn/onlinejudge/showImage.do?name=0000%2F2673%2FDP3.gif" alt="3" /></p>
+
+<p><strong>Input</strong></p>
+
+<p>Eace re several test cases in the input. Each case contains n ( 1 &lt;= n &lt;= 7 ). There is an empty line between each case.
+Output</p>
+
+<p><strong>Output</strong> <br/>
+the number of ways to cover hexagon with rombic dominoes. There should be an empty line between each case.
+Example</p>
+
+<p>Input
+1<br/>
+2<br/>
+Output<br/>
+2<br/>
+20</p>
+
+<p><strong>题意</strong><br/>
+由6n<sup>2</sup>个三角形组成的正6边形 ，分成 2个三角形组成的菱形 ，一共有多少种分法<br/>
+类似的拼图形的题目一般都是搜索加dp。因为 n 最大为 7 若用 0和1表示每个三角形是否被填充
+最大的状态 有 2<sup>2*7</sup> 那么多 。然后从上到下，最多7层。（因为图形是对称的，所以只算一半）。<br/>
+假设上一层倒着放的三角形都已经被填满，上一层没有被放的正着放的三角形在这一层就会被这一层对应位置的倒着的三角形结合。 上一层放了 则 可以和这一层的左边或者右边的三角形结合。（晕）</p>
+
+<p>dp[i][j] =∑dp[i-1][m]  满足m状态能转换成j状态。</p>
+
+<p>初始化有看不见的第0层全部放满。</p>
+
+<p>结果则是最后一层没有放满的平方和。∑dp[n][m]*dp[n][m]</p>
+
+<p>代码<br/>
+&#8220;`cpp</p>
+
+<h1>include<cstdio></h1>
+
+<h1>include<iostream></h1>
+
+<h1>include<cstring></h1>
+
+<h1>include<cmath></h1>
+
+<h1>include<vector></h1>
+
+<h1>include<algorithm></h1>
+
+<p>typedef  long long LL;</p>
+
+<h1>define clr(x) memset((x),0,sizeof(x))</h1>
+
+<h1>define inf 0x3f3f3f3f</h1>
+
+<p>using namespace std;
+LL dp[10][1&lt;&lt;16];
+bool vis[10][1&lt;&lt;16];
+int n;
+int no;
+vector <int > re;
+bool revis[1&lt;&lt;16];
+void dfs(int dep,int st,int nest)
+{
+    if(dep>(n+no-2))
+    {
+        if(!revis[nest])
+        {
+            revis[nest] =1;
+            re.push_back(nest);
+        }
+        if(!vis[no][nest])
+        {
+            vis[no][nest]=1;
+            dp[no][nest] += dp[no-1][st];
+        }
+        //dp[no][nest] ++;
+        return ;
+    }
+    if((st&amp;(1&lt;&lt;dep))==0)
+    {
+        dfs(dep+1,st,nest);
+    }else {
+        if((nest&amp;(1&lt;&lt;dep))==0)
+        dfs(dep+1,st,nest|(1&lt;&lt;dep));
+        dfs(dep+1,st,nest|(1&lt;&lt;(dep+1)));
+    }</p>
+
+<p>}</p>
+
+<p>int main()
+{
+    int cas = 1;
+    while(~scanf(&ldquo;%d&rdquo;,&amp;n))
+    {
+        no = 1;
+        memset(dp,0,sizeof dp);
+        re.clear();
+        dp[0][(1&lt;&lt;n)-1] =1;
+        dfs(0,((1&lt;&lt;n)-1),0);
+        for(int i =2;i&lt;=n;i++)
+        {
+            no = i;
+            vector <int > tmp = re;
+            re.clear();
+            memset(revis,0,sizeof revis);
+            for(int j = 0;j &lt;tmp.size();j++)
+            {
+              //  printf(&ldquo;%d<em>%d &rdquo;,dp[no-1][tmp[j]],tmp[j]);
+                memset(vis[no],0,sizeof vis[no]);
+                dfs(0,tmp[j],0);
+            }
+            //printf(&ldquo;\n&rdquo;);
+        }
+        LL ans = 0;
+        for(int i=0;i&lt;re.size();i++)
+        {
+            //printf(&ldquo;%d</em>%d &rdquo;,dp[n][re[i]],re[i]);
+            ans += dp[n][re[i]]*dp[n][re[i]];
+        }
+        //printf(&ldquo;\n%d\n&rdquo;,ans);
+        if(cas) {
+            cas =0;
+        }else cout&lt;&lt;endl;
+        cout&lt;&lt;ans&lt;&lt;endl;
+    }
+    return 0;
+}</p>
+
+<p>&#8220;`</p>
+]]></content>
+  </entry>
+  
+</feed>

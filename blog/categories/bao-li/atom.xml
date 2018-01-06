@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: 暴力 | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/bao-li/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CF529B]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/03/24/cf529b/"/>
+    <updated>2015-03-24T20:39:42+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/03/24/cf529b</id>
+    <content type="html"><![CDATA[<h2><a href="http://codeforces.com/problemset/problem/529/B">B. Group Photo 2 (online mirror version)</a></h2>
+
+<!--more-->
+
+
+<p>Many years have passed, and n friends met at a party again. Technologies have leaped forward since the last meeting, cameras with timer appeared and now it is not obligatory for one of the friends to stand with a camera, and, thus, being absent on the photo.</p>
+
+<p>Simply speaking, the process of photographing can be described as follows. Each friend occupies a rectangle of pixels on the photo: the i-th of them in a standing state occupies a wi pixels wide and a hi pixels high rectangle. But also, each person can lie down for the photo, and then he will occupy a hi pixels wide and a wi pixels high rectangle.</p>
+
+<p>The total photo will have size W × H, where W is the total width of all the people rectangles, and H is the maximum of the heights. The friends want to determine what minimum area the group photo can they obtain if no more than n / 2 of them can lie on the ground (it would be strange if more than n / 2 gentlemen lie on the ground together, isn&rsquo;t it?..)</p>
+
+<p>Help them to achieve this goal.</p>
+
+<h3>Input</h3>
+
+<p>The first line contains integer n (1 ≤ n ≤ 1000) — the number of friends.</p>
+
+<p>The next n lines have two integers wi, hi (1 ≤ wi, hi ≤ 1000) each, representing the size of the rectangle, corresponding to the i-th friend.</p>
+
+<h3>Output</h3>
+
+<p>Print a single integer equal to the minimum possible area of the photo containing all friends if no more than n / 2 of them can lie on the ground.</p>
+
+<h3>Sample test(s)</h3>
+
+<h3>input</h3>
+
+<p>3<br/>
+10 1<br/>
+20 2<br/>
+30 3</p>
+
+<h3>output</h3>
+
+<p>180</p>
+
+<h3>input</h3>
+
+<p>3<br/>
+3 1<br/>
+2 2<br/>
+4 3</p>
+
+<h3>output</h3>
+
+<p>21</p>
+
+<h3>input</h3>
+
+<p>1<br/>
+5 10</p>
+
+<h3>output</h3>
+
+<p>50</p>
+
+<p>题目大意： n个长方形 ，排成一排 ， 总占面积 为 宽w 的和 高h的最大值 组成的长方形。
+即∑w * max(h) 。<br/>
+现在可调换不超过 n/2个 长方形的 长和宽<br/>
+使得上式取最小值</p>
+
+<p>n只有1000 因此可以枚举 作为 最大的 高h的值 。<br/>
+对于每个h 看能否满足条件 ，即其他的高比h小， 并且调换的个数不超过n/2。 <br/>
+要求得最小值则需要 w和h调换之后 最高的h不变 而 调换过后的 w比原来的小 。 <br/>
+若w-h>0 则此时应该在不超过2/n的基础上尽量调换 <br/>
+若 w-h&lt;0 则此时不要调换。<br/>
+因此按照 w-h 来排序。</p>
+
+<p>复杂度 n<sup>2</sup></p>
+
+<p>code:
+&#8220;`cpp</p>
+
+<h1>include<cstdio></h1>
+
+<h1>include<iostream></h1>
+
+<h1>include<cstring></h1>
+
+<h1>include<cmath></h1>
+
+<h1>include<vector></h1>
+
+<h1>include<algorithm></h1>
+
+<p>typedef  long long LL;</p>
+
+<h1>define clr(x) memset((x),0,sizeof(x))</h1>
+
+<h1>define inf 0x3f3f3f3f</h1>
+
+<p>using namespace std;
+struct seg{
+    int w,h;
+}a[1050];
+int cmp(seg a,seg b)
+{
+    return a.w-a.h>b.w-b.h;
+}
+int n;
+bool vis[1050];
+int main()
+{
+    scanf(&ldquo;%d&rdquo;,&amp;n);
+    for(int i =1;i&lt;=n;i++)
+    {
+        scanf(&ldquo;%d%d&rdquo;,&amp;a[i].w,&amp;a[i].h);
+    }
+    sort(a+1,a+n+1,cmp);
+    int ans = inf;
+    for(int i =1;i&lt;=n;i++)
+    {
+        for(int t= 0;t&lt;2;t++)
+        {
+            int h;
+            int w ;
+            memset(vis,0,sizeof vis);
+            vis[i] = 1;
+            if(t==0)
+            {
+                h = a[i].h;
+                w = a[i].w;
+            }
+            else {
+                h = a[i].w;
+                w = a[i].h;
+            }
+            int count =t;
+            bool flag = 0;
+            for(int j=1;j&lt;=n;j++) if(j!=i)
+            {
+                if(a[j].h>h &amp;&amp;a[j].w&lt;=h)
+                {
+                    vis[j] = 1;
+                    w+= a[j].h;
+                    count++;
+                }
+                if(a[j].h>h&amp;&amp;a[j].w>h) {
+                    flag = 1;
+                    break;
+                }
+            }
+            if(count> n/2) flag = 1;
+           // printf(&ldquo;%d \n&rdquo;,count);
+            int num = n/2-count;
+            if(!flag)
+            {
+                for(int j = 1;j&lt;=n;j++)
+                {
+                    if(!vis[j]&amp;&amp;a[j].w&lt;=h&amp;&amp;a[j].w-a[j].h>0&amp;&amp;num>0)  // 尽量调换 w和h的情况 <br/>
+                    {
+                        w+=a[j].h;
+                        num&ndash;;
+                    }
+                    else if(!vis[j]) w+=a[j].w;
+                }
+                ans =min(ans,w<em>h);
+                //printf(&ldquo;</em>%d\n&rdquo;,w*h);
+            }
+        }
+    }
+    printf(&ldquo;%d\n&rdquo;,ans);</p>
+
+<pre><code>return 0;
+</code></pre>
+
+<p>}</p>
+
+<p>&#8220;`</p>
+]]></content>
+  </entry>
+  
+</feed>

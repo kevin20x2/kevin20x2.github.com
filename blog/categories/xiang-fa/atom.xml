@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类: 想法 | ZVINK's garden]]></title>
+  <link href="http://kevin20x2.github.io/blog/categories/xiang-fa/atom.xml" rel="self"/>
+  <link href="http://kevin20x2.github.io/"/>
+  <updated>2018-01-06T12:28:14+08:00</updated>
+  <id>http://kevin20x2.github.io/</id>
+  <author>
+    <name><![CDATA[ZVINK]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ZOJ3365]]></title>
+    <link href="http://kevin20x2.github.io/blog/2015/03/22/zoj3365/"/>
+    <updated>2015-03-22T23:21:57+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2015/03/22/zoj3365</id>
+    <content type="html"><![CDATA[<h2><a href="http://acm.hust.edu.cn/vjudge/problem/visitOriginUrl.action?id=13580">Integer Numbers</a></h2>
+
+<!--more-->
+
+
+<h2>Description</h2>
+
+<p>The boy likes numbers. He has a sheet of paper. He have written a sequence of consecutive integer numbers on the sheet. The boy likes them.</p>
+
+<p>But then the girl came. The girl is cruel. She changed some of the numbers.</p>
+
+<p>The boy is disappointed. He cries. He does not like all these random numbers. He likes consecutive numbers. He really likes them. But his numbers are not consecutive any more. The boy is disappointed. He cries.</p>
+
+<p>Help the boy. He can change some numbers. He would not like to change many of them. He would like to change as few as possible. He cannot change their order. He would like the numbers to be consecutive again. Help the boy.</p>
+
+<h2>Input</h2>
+
+<p>The first line of the input file contains n &mdash; the number of numbers in the sequence (1 ≤ n ≤ 50000). The next line contains the sequence itself &mdash; integer numbers not exceeding 109 by their absolute values.</p>
+
+<p>There are multiple cases. Process to the end of file.</p>
+
+<h2>Output</h2>
+
+<p>Output the minimal number of numbers that the boy must change. After that output the sequence after the change.</p>
+
+<h3>Sample Input</h3>
+
+<p>6<br/>
+5 4 5 2 1 8</p>
+
+<h3>Sample Output</h3>
+
+<p>3<br/>
+3 4 5 6 7 8</p>
+
+<p>这题想清楚比较简单， 其实就是记录a[i]-i中出现最多次数的值。
+因为值有 10<sup>9</sup> 那么大所以也不能简单的用数组存。 这个时候可以用mp</p>
+
+<p>自己写了一个麻烦的用数组的。
+先给别人的简单代码吧。
+map 的用法都没搞清楚我真是Orz</p>
+
+<pre><code class="cpp">
+#include&lt;bits/stdc++.h&gt;
+
+#define in freopen("solve_in.txt", "r", stdin);
+using namespace std;
+typedef long long LL;
+typedef map&lt;LL, int&gt; mapCount;
+typedef long long LL;
+
+const int maxn = 50000 + 10;
+LL a[maxn], b[maxn];
+mapCount mc;
+int main() {
+//    in
+    int n;
+    while (scanf("%d", &amp;n) == 1) {
+        mc.clear();
+        for (int i = 1; i &lt;= n; i++) {
+            scanf("%lld", a+i);
+        }
+        int mx = 0, id;
+        for (int i = 1; i &lt;= n; i++) {
+            b[i] = a[i] - i;
+            if (++mc[b[i]] &gt; mx) {
+                mx = mc[b[i]];
+                id = i;
+            }
+        }
+        printf("%d\n", n - mx);
+        for (int i = 1; i &lt;= n; i++) {
+            printf("%lld%c", a[id] - (id - i), i == n ? '\n' : ' ');
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+<pre><code class="cpp  ">/*
+ *File:  d.cpp
+ *Date : 2015-03-22 12:45:32
+ */
+#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cmath&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+#include&lt;set&gt;
+typedef  long long LL;
+
+#define clr(x) memset((x),0,sizeof(x))
+#define inf 0x3f3f3f3f
+
+using namespace std;
+
+int a[50050];
+int b[50050];
+int num[50050];
+int v[50050];
+int n;
+
+int main()
+{
+
+    while(~scanf("%d",&amp;n))
+    {
+        memset(num,0,sizeof(num));
+        for(int i = 0;i&lt;n;i++)
+        {
+            scanf("%d",&amp;a[i]);
+            b[i] =a[i]-i;
+        }
+        sort(b,b+n);
+        int tot =0;
+        int now = b[0];
+        v[0] = b[0];
+        for(int i = 0;i&lt;n;i++)
+        {
+            if(b[i]==now)
+            {
+                num[tot]++;
+            }
+            else{
+                num[++tot]++;
+                v[tot] = b[i];
+                now = b[i];
+            }
+
+        }
+        int maxn = 0;
+        int res = -1;
+        int pos = -1;
+        for(int i =0 ;i&lt;=tot;i++)
+        {
+            if(num[i]&gt;maxn)
+            {
+                maxn = num[i];
+                res = v[i];
+            }
+        }
+        for(int i =0;i&lt;n;i++)
+        {
+            if(res == a[i]-i)
+            {
+                pos= i;
+                break;
+            }
+        }
+        printf("%d\n",n-maxn);
+        int ans = a[pos]-pos;
+        int first = 1;
+        for(int i =0;i&lt;n;i++)
+        {
+            if(first)
+            {
+                printf("%d",ans+i);
+                first = 0;
+            }else printf(" %d",ans+i);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
