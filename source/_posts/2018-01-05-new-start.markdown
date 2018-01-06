@@ -1,0 +1,66 @@
+﻿---
+layout: post
+title: "new_start"
+date: 2018-01-05 22:15:16 +0800
+comments: true
+categories: 杂
+---
+
+
+今天心血来潮想把断更两年多的blog 给捡起来，发现我以前折腾过的东西果然都忘记了。
+包括markdown，octpress   
+这里还是简单说一下捡起来的过程吧。  
+首先得去安装 ruby ，试过多个版本，最后还是用的1.9.3 的installer。  
+
+按照之前的老教程上的
+```
+gem install rdiscount --platform=ruby
+gem install bundler
+bundle install #这一步要在octpress目录下进行
+```
+
+(这里试过其他版本的ruby ，不知道为什么老是出问题)  
+## SSL 的问题  参照 [这里](http://blog.csdn.net/zahuopuboss/article/details/53357503)
+解决方法
+
+下载 https://curl.haxx.se/ca/cacert.pem
+
+把文件cacert.pem放到一个目录下
+
+在cmd窗口设置环境变量
+
+set SSL_CERT_FILE=C:\xxx\cacert.pem
+
+或者通过系统->高级系统设置->环境变量设置SSL_CERT_FILE
+
+
+
+
+
+### 终于将bundle install 成功走完之后
+然后由于octopress 原来的电脑上就有，所以就没有从git上下载，直接拷贝过来。
+
+发现 
+
+```
+rake generate
+```
+会出现如下问题
+#### Liquid Exception: incompatible encoding regexp match (ASCII-8BIT regexp with UTF-8 string) in _layouts/page.html
+#### jekyll 2.5.3 | Error:  incompatible encoding regexp match (ASCII-8BIT regexp with UTF-8 string)
+
+---
+不知道是因为这个问题太老了还是什么，网上的回答针对性都不是很强，大概看了一下原理，认为是ruby代码编码的问题 os:为什么之前没碰到 (╯‵□′)╯︵┻━┻  
+于是将octpress 下的plugins 文件下的所有rb代码文件从UTF-8 改成了 UTF-8 with BOM(使用最原始的notepad++)  
+然后在powershell 命令行下重新 rake generate ，结果居然就好了。(汗)  
+剩下的就是 
+```
+rake new_post["title"] 
+rake generate 
+rake preview 
+rake deploy
+```
+这一套流程了 
+
+然后关于blog，以后大概不怎么会发**题解**了，毕竟已经退役很久了  
+可能也就是记录一些有点价值的东西，嗯，这次折腾只花了一晚上加一早上，还不算特别浪费时间。  
