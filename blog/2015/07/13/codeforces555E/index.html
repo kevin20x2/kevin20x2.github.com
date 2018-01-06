@@ -1,94 +1,105 @@
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!DOCTYPE HTML>
+<html>
 <head>
-  <meta charset="utf-8">
-  <title>codeforces555E - ZVINK&#8217;s garden</title>
-  <meta name="author" content="ZVINK">
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>codeforces555E  | ZVINK&#8217;s garden</title>
 
-  
-  <meta name="description" content="E. Case of Computer Network 题意：
-给你n个点的无向图，给你q个查询(每个查询包含一个起点和一个终点)，需要你确定每一条边的方向，使得每个查询都满足能够用这条边的方向从起点到终点。然后点和边和查询的数量都可以达到2*105个。 &hellip;">
-  
+<meta name="author" content="ZVINK"> 
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="E. Case of Computer Network 题意：
+给你n个点的无向图，给你q个查询(每个查询包含一个起点和一个终点)，需要你确定每一条边的方向，使得每个查询都满足能够用这条边的方向从起点到终点。然后点和边和查询的数量都可以达到2*105个。 &hellip;"> <meta name="keywords" content="">
 
-  
-  <link rel="canonical" href="http://kevin20x2.github.io/blog/2015/07/13/codeforces555E/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="ZVINK's garden" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+	<link href="/atom.xml" rel="alternate" title="ZVINK's garden" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
 
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
 </head>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">ZVINK&#8217;s garden</a></h1>
-  
-    <h2>try</h2>
-  
-</hgroup>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">ZVINK&#8217;s garden</a></h1>
+<h4>try</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:kevin20x2.github.io">
+			</form>
+		</div>
+	</div>
+</nav>
+
 
 </header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="kevin20x2.github.io">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
-    
-      <h1 class="entry-title">codeforces555E</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-07-13T14:09:39+08:00'><span class='date'>2015 年7  月 13 日</span> <span class='time'>2:09 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://kevin20x2.github.io">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p><a href="http://codeforces.com/problemset/problem/555/E">E. Case of Computer Network</a></p>
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">codeforces555E</h2>
+	<div class="entry-content"><p><a href="http://codeforces.com/problemset/problem/555/E">E. Case of Computer Network</a></p>
 
 <!--more-->
 
@@ -834,126 +845,69 @@
 </div>
 
 
-  <footer>
-    <p class="meta">
-      
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
   
 
-<span class="byline author vcard">Posted by <span class="fn">ZVINK</span></span>
 
-      
+<time datetime="2015-07-13T14:09:39+08:00" pubdate data-updated="true"></time></div>
+	
 
+<div class="tags">
 
+	<a class='category' href='/blog/categories/tarjansuo-dian/'>tarjan缩点</a>, <a class='category' href='/blog/categories/shu-lian-pou-fen/'>树链剖分</a>
 
-
-<time class='entry-date' datetime='2015-07-13T14:09:39+08:00'><span class='date'>2015 年7  月 13 日</span> <span class='time'>2:09 pm</span></time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/tarjansuo-dian/'>tarjan缩点</a>, <a class='category' href='/blog/categories/shu-lian-pou-fen/'>树链剖分</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://kevin20x2.github.io/blog/2015/07/13/codeforces555E/" data-via="" data-counturl="http://kevin20x2.github.io/blog/2015/07/13/codeforces555E/" >Tweet</a>
-  
-  
-  
 </div>
 
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2015/06/08/hdu5261/" title="Previous Post: hdu5261">&laquo; hdu5261</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2015/08/19/hdu5396/" title="Next Post: hdu5396">hdu5396 &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
 
-  <section>
-    <h1>Comments</h1>
+	
+		<span class="comments"><a href="/blog/2015/07/13/codeforces555E/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
     <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  </section>
-
+</section>
 </div>
+	<footer id="footer" class="inner">Copyright &copy; 2018
 
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2018/01/05/new-start/">New Start</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/08/19/hdu5396/">Hdu5396</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/13/codeforces555E/">codeforces555E</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/08/hdu5261/">Hdu5261</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/02/poj3017/">Poj3017</a>
-      </li>
-    
-  </ul>
-</section>
-<section>
-  <h1>Categories</h1>
-  <ul id="categories">
-    <li class='category'><a href='/blog/categories/codefoces/'>codefoces (1)</a></li>
-<li class='category'><a href='/blog/categories/codeforces/'>codeforces (4)</a></li>
-<li class='category'><a href='/blog/categories/dp/'>dp (9)</a></li>
-<li class='category'><a href='/blog/categories/hdu/'>hdu (2)</a></li>
-<li class='category'><a href='/blog/categories/tarjan缩点/'>tarjan缩点 (1)</a></li>
-<li class='category'><a href='/blog/categories/topsort/'>topsort (1)</a></li>
-<li class='category'><a href='/blog/categories/二分/'>二分 (1)</a></li>
-<li class='category'><a href='/blog/categories/优先队列/'>优先队列 (2)</a></li>
-<li class='category'><a href='/blog/categories/区间dp/'>区间dp (1)</a></li>
-<li class='category'><a href='/blog/categories/想法/'>想法 (1)</a></li>
-<li class='category'><a href='/blog/categories/搜索/'>搜索 (1)</a></li>
-<li class='category'><a href='/blog/categories/搜索dp/'>搜索dp (1)</a></li>
-<li class='category'><a href='/blog/categories/暴力/'>暴力 (1)</a></li>
-<li class='category'><a href='/blog/categories/最短路/'>最短路 (1)</a></li>
-<li class='category'><a href='/blog/categories/杂/'>杂 (3)</a></li>
-<li class='category'><a href='/blog/categories/树状dp/'>树状dp (2)</a></li>
-<li class='category'><a href='/blog/categories/树链剖分/'>树链剖分 (1)</a></li>
-<li class='category'><a href='/blog/categories/状压dp/'>状压dp (1)</a></li>
-<li class='category'><a href='/blog/categories/线段树/'>线段树 (2)</a></li>
-<li class='category'><a href='/blog/categories/背包/'>背包 (1)</a></li>
-<li class='category'><a href='/blog/categories/贪心/'>贪心 (3)</a></li>
+    ZVINK
 
-  </ul>
-</section>
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2018 - ZVINK -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
+<br>
+Powered by Octopress.
 </footer>
-  
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
 
 <script type="text/javascript">
       var disqus_shortname = 'kevin20x2';
@@ -970,22 +924,6 @@
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
 
 
 
