@@ -1,0 +1,103 @@
+---
+layout: post
+title: "SCNN"
+date: 2018-01-06 14:27:42 +0800
+comments: true
+categories: 
+---
+
+## PT-IS-CP-dense dataflow
+#### 以平面分割 - 固定输入(图像不动，过滤器的weights 流动) - 笛卡儿积 - 密集  数据流动
+
+<!--more-->
+
+## K/Kc →C →W → H → Kc → R → S
+
+将输出通道分成 K/Kc 组
+
+在 最外层循环的每次迭代下, 会要求weight buffer 重新填充，并且存放临时和的buffer 清除和重新计算。  
+但是 input buffer里面的内容是充分重利用的。  
+
+## CP:
+每次从输入中取向量 I ，从weights 中取向量 F. 
+然后放到 FxI 个multiplier 中完成full 笛卡尔积 。  
+#### 两个好处 ：
+1. 每个权重重复利用了 I次，每个input 重用了F次。
+1. 每个乘积不需要额外的数据读取和计算。
+
+## PT：
+将一个通道的WxH的输入特征图分割成 更小的 Wt x Ht ,以**C x Wt x Ht**此为单位分配到每个PE上。 
+
+## data halos:
+Input halos 比 **C x Wt x Ht** 稍大，input halos 会在相邻的PE间复制，output 每个PE私有。  
+output halos 比 **Kc x Wt x Ht** 稍大，当前存放值是不完整的 **临时和**(partial sums) ,并且要与临近的PE相加。在每次计算输出通道组之后。  
+
+PT-IS-CP-dense 采用的是output halos 
+
+
+每个PE 的伪代码
+```
+BUFFER wt_buf[C][Kc*R*S/F][F];
+BUFFER in_buf[C][Wt*Ht/I][I];
+BUFFER acc_buf[Kc][Wt+R-1][Ht+S-1];
+BUFFER out_buf[K/Kc][Kc*Wt*Ht];
+ for k' = 0 to K/Kc-1
+{
+    for c = 0 to C-1
+        for a = 0 to (Wt*Ht/I)-1
+        {
+            in[0:I-1] = in_buf[c][a][0:I-1];
+            for w = 0 to (Kc*R*S/F)-1
+            {
+            wt[0:F-1] = wt_buf[c][w][0:F-1];
+            parallel_for (i = 0 to I-1) x (f = 0 to F-1)
+            {
+            k = Kcoord(w,f);
+            x = Xcoord(a,i,w,f);
+            y = Ycoord(a,i,w,f);
+            acc_buf[k][x][y] += in[i]*wt[f];
+            }
+        }
+}
+out_buf[k'][0:Kc*Wt*Ht-1] =
+acc_buf[0:Kc-1][0:Wt-1][0:Ht-1];
+}
+
+```
+
+## PT-IS-CP-sparse:
+
+压缩weights 和input ，
+weights : 每 **Kc x R x S** 压缩进一个block  
+inputs ： 每 **Wt x Ht** 压缩进一个block   
+
+计算时：   
+F 非零值以及其坐标 。  
+I 非零值以及其坐标 。  
+output 以非压缩的形式给出 大小 ： **Kc x Wt x Ht**。 
+
+对应到伪代码 ：  acc_buf 的结果也是压缩的，包括FxI的值和坐标、 但是 out_buf 不变。  
+
+
+![PE](../images/PE.png)  
+
+
+当上一层的输出能够作为下一层的输入时 ，IRAM 和ORAM会在逻辑上交换， 通过改变计算顺序的方式。  
+A accumulator buffers ，大小为**2xFxI** 这样能够最大化减少hash 冲突 
+
+## PPU （post-processing unit）的功能
+1. 与临近的PE交换partial sums (why?)
+1. 对结果进行 非线性激活(ReLU , pooling,dropout ..)
+1. 将结果 **压缩** ， 写入ORAM   
+  
+除了halo交换之外，其他的操作都限制在PE内。  
+
+
+![Compression](../images/compress.png)
+
+## 压缩方式 ：
+上面存的是按顺序的非零元素  
+下面  第一个值是非零元素的个数；
+剩下的值是每个非零元素前面有多少个0 .
+(该值由四个位组成，因此每个元素前面最多有15个值"为0")  
+
