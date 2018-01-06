@@ -7,6 +7,7 @@ categories: tarjan缩点 树链剖分
 ---
 [E. Case of Computer Network](http://codeforces.com/problemset/problem/555/E)
 
+
 <!--more-->
 题意：
 给你n个点的无向图，给你q个查询(每个查询包含一个起点和一个终点)，需要你确定每一条边的方向，使得每个查询都满足能够用这条边的方向从起点到终点。然后点和边和查询的数量都可以达到2*10^5个。

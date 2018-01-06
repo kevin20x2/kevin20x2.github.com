@@ -1,15 +1,15 @@
-﻿---
+---   
 layout: post
 title: "new_start"
 date: 2018-01-05 22:15:16 +0800
 comments: true
 categories: 杂
----
-
-
+---  
 今天心血来潮想把断更两年多的blog 给捡起来，发现我以前折腾过的东西果然都忘记了。
 包括markdown，octpress   
 这里还是简单说一下捡起来的过程吧。  
+
+<!--more-->
 首先得去安装 ruby ，试过多个版本，最后还是用的1.9.3 的installer。  
 
 按照之前的老教程上的
@@ -64,3 +64,15 @@ rake deploy
 
 然后关于blog，以后大概不怎么会发**题解**了，毕竟已经退役很久了  
 可能也就是记录一些有点价值的东西，嗯，这次折腾只花了一晚上加一早上，还不算特别浪费时间。  
+
+## add
+发现之前其实一直都没搞懂octpress的结构   
+github 上的仓库是有两个分支的： master 和source 。  
+master上放的其实是本地的 _deploy文件夹，也就是运行blog的文件。
+
+而source 则是包含了整个blog 运行机制的分支。  
+每次rake deploy 更新的是master 分支，然后push origin source 实际上是将本地写好的markdown 等内容同步。
+
+## add again
+
+发现 blog的markdown 文件需要修改成 utf 不带 BOM格式的，不然会出现octpress无法识别blog 头然后格式错误的问题。
