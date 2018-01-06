@@ -4,7 +4,7 @@
   <title><![CDATA[ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-06T16:07:02+08:00</updated>
+  <updated>2018-01-06T16:27:26+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -124,7 +124,7 @@ output 以非压缩的形式给出 大小 ： <strong>Kc x Wt x Ht</strong>。</
 
 <p>对应到伪代码 ：  acc_buf 的结果也是压缩的，包括FxI的值和坐标、 但是 out_buf 不变。</p>
 
-<p><img src="../images/PE.png" alt="PE" /></p>
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/source/source/images/PE.png?raw=true" alt="PE" /></p>
 
 <p>当上一层的输出能够作为下一层的输入时 ，IRAM 和ORAM会在逻辑上交换， 通过改变计算顺序的方式。<br/>
 A accumulator buffers ，大小为<strong>2xFxI</strong> 这样能够最大化减少hash 冲突</p>
@@ -140,7 +140,7 @@ A accumulator buffers ，大小为<strong>2xFxI</strong> 这样能够最大化�
 
 <p>除了halo交换之外，其他的操作都限制在PE内。</p>
 
-<p><img src="../images/compress.png" alt="Compression" /></p>
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/source/source/images/compress.png?raw=true" alt="Compression" /></p>
 
 <h2>压缩方式 ：</h2>
 
