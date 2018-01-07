@@ -4,7 +4,7 @@
   <title><![CDATA[分类:  cnn | ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/blog/categories/cnn/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-07T19:50:01+08:00</updated>
+  <updated>2018-01-07T19:53:33+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -47,7 +47,7 @@
 
 <p>使用SC的一个很大的好处是乘法的计算变得非常容易，如果采用[-1,1]的表示方式，可以用异或门简单的得到出乘法结果。</p>
 
-<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/source/source/images/XOR.png?raw=true" alt="xor" /></p>
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/XOR.png?raw=true" alt="xor" /></p>
 
 <p>但是代价是加法变得更加复杂,文中提到了4种计算SC中加法的方法</p>
 
@@ -63,7 +63,7 @@
 
 <p>用Mux 计算加法稍微有点不好理解，因为数据表示方法就是基于概率论的，该方法也只是概率上相加。</p>
 
-<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/source/source/images/MUX.png?raw=true" alt="MUX" /></p>
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/MUX.png?raw=true" alt="MUX" /></p>
 
 <p>如图所示: Ai ,Bi 是输入流，Ci是输出流，Si是一个随机值 <br/>
 对于Si的要求是MUX的每个输入通道的概率加起来的值等于1.即这里 Si每次的值要么是0，要么是1，为0的时候Ci = Ai ，为1 的时候 Ci = Bi。<br/>
@@ -73,13 +73,13 @@
 </code>
 这个时候就会发现这种方式跟传统的计算方式有很大的不同，基于CPU 和GPU 的传统方式虽然也是描述概率问题，但是其本身的计算过程跟概率是没有关系的，也就是对于相同的输入数据，运行多少次结果应该都是不变的。</p>
 
-<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/source/source/images/APC.png?raw=true" alt="APC" /></p>
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/APC.png?raw=true" alt="APC" /></p>
 
 <p>APC 正如其名 ，是并行的的计数器， 可以直接统计n个输入中，有多少个0 .假设其输入通道的个数为n，那么每次得到bit 为 $$log_2 n$$  .</p>
 
 <p>至于激活层，文中选择了tanh ，因为这是最容易实现的一种方法。</p>
 
-<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/source/source/images/tanh.png?raw=true" alt="tanh" /></p>
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/tanh.png?raw=true" alt="tanh" /></p>
 
 <p>如图所示，有限状态机(FSM)一位位的读取数据，当当前位为1的时候转移到下一个状态，否则返回到前一个状态，然后当前状态在前K/2的时候输出1，否则输出 0.<br/>
 这样就将 输出的就是
