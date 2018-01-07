@@ -101,7 +101,25 @@ $(document).ready(
 
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">SC-DCNN</h2>
-	<div class="entry-content"><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<div class="entry-content"><!-- mathjax config similar to math.stackexchange -->
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+        inlineMath: [ ['$', '$'] ],
+        displayMath: [ ['$$', '$$']],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 
 <p>SC-DCNN : ASPLOS 2017</p>
@@ -160,16 +178,14 @@ $(document).ready(
 
 <p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/APC.png?raw=true" alt="APC" /></p>
 
-<p>APC 正如其名 ，是并行的的计数器， 可以直接统计n个输入中，有多少个0 .假设其输入通道的个数为n，那么每次得到bit 为 $$log_2 n$$  .</p>
+<p>APC 正如其名 ，是并行的的计数器， 可以直接统计n个输入中，有多少个0 .假设其输入通道的个数为n，那么每次得到bit 为 $log_2 n$  .</p>
 
 <p>至于激活层，文中选择了tanh ，因为这是最容易实现的一种方法。</p>
 
 <p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/tanh.png?raw=true" alt="tanh" /></p>
 
 <p>如图所示，有限状态机(FSM)一位位的读取数据，当当前位为1的时候转移到下一个状态，否则返回到前一个状态，然后当前状态在前K/2的时候输出1，否则输出 0.<br/>
-这样就将 输出的就是
-$$tanh(k/2*x)$$
-(具体原理没有深究)</p>
+这样就将 输出的就是 $tanh(k/2*x)$ (具体原理没有深究)</p>
 
 <p>文中还提出了一种计算最大池化的方法，这里不细讲 。</p>
 
