@@ -1,0 +1,82 @@
+---
+layout: post
+title: "SC-DCNN"
+date: 2018-01-07 15:41:20 +0800
+comments: true
+categories: CNN
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+SC-DCNN : ASPLOS 2017
+## Stochastic Computing (SC) : 
+
+<!--more-->
+感觉是一个很有趣的 **数据表示方法**  
+其数字是基于概率表示的比如 ：
+
+```
+1011011101
+```   
+令该字节流表示[0,1] 中的浮点值
+这个字节流中有10个bit ，然后其中有7个值为1 ，其中值为1的概率为0.7  即:   
+
+### P(X = 1) = 7/10 = 0.7
+
+如果要让其表示 [-1,1] 之间的浮点值则因为 
+
+### P(x = 1) = (0.4 + 1 )/2 =7/10 
+
+因此该字节流表示 0.4。  
+
+使用SC的一个很大的好处是乘法的计算变得非常容易，如果采用[-1,1]的表示方式，可以用异或门简单的得到出乘法结果。  
+
+![xor](https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/XOR.png?raw=true)
+
+但是代价是加法变得更加复杂,文中提到了4种计算SC中加法的方法   
+
+1. 用或门来计算  
+2. 用Mux 单元计算
+3. 用Approximate parallel counter(APC) 来进行计算
+4. 还有用两行表示法来计算的方法   
+
+文中从理论和实验将1和4 排除，最终的实现方法只用了Mux 和APC 两种。
+
+用Mux 计算加法稍微有点不好理解，因为数据表示方法就是基于概率论的，该方法也只是概率上相加。   
+
+![MUX](https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/MUX.png?raw=true)
+
+如图所示: Ai ,Bi 是输入流，Ci是输出流，Si是一个随机值   
+对于Si的要求是MUX的每个输入通道的概率加起来的值等于1.即这里 Si每次的值要么是0，要么是1，为0的时候Ci = Ai ，为1 的时候 Ci = Bi。  
+ 这里当然取 P(Si = 0) = P( Si = 1) = 0.5 。假设一个数字的长度为n，那么在n个周期之后，输出的序列值C就是 1/2 的(A + B) 的和。这个结论可以由概率论得到 .
+ ```
+    c = 2P(C = 1 ) -1 = 2(1/2P(A = 1)+1/2P(B = 1)) - 1 = 1/2 (a + b) 
+ ```
+这个时候就会发现这种方式跟传统的计算方式有很大的不同，基于CPU 和GPU 的传统方式虽然也是描述概率问题，但是其本身的计算过程跟概率是没有关系的，也就是对于相同的输入数据，运行多少次结果应该都是不变的。   
+
+
+
+![APC](https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/APC.png?raw=true)
+
+APC 正如其名 ，是并行的的计数器， 可以直接统计n个输入中，有多少个0 .假设其输入通道的个数为n，那么每次得到bit 为 $$log_2 n$$  .
+
+
+至于激活层，文中选择了tanh ，因为这是最容易实现的一种方法。
+
+![tanh](https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/tanh.png?raw=true) 
+
+如图所示，有限状态机(FSM)一位位的读取数据，当当前位为1的时候转移到下一个状态，否则返回到前一个状态，然后当前状态在前K/2的时候输出1，否则输出 0.  
+这样就将 输出的就是 
+$$tanh(k/2*x)$$
+(具体原理没有深究)  
+
+
+文中还提出了一种计算最大池化的方法，这里不细讲 。 
+
+
+最后是实验结果，这种用硬件+ 概率的方式 在准确度上应该是比不过CPU和GPU这种精确计算的方式的。  
+其重点在于能耗上面，只能说这种方式能耗跟其他的方式基本上都不在一个量级上，论文中只实现了简单的Lenet-5 .   
+**提到了一个比较重要的说法是，虽然小网络精确度没有传统方法高，但是随着数据变多，网络变复杂，这种基于概率的方法准确度反而会上升**。   
+
+
+

@@ -79,7 +79,7 @@ output 以非压缩的形式给出 大小 ： **Kc x Wt x Ht**。
 对应到伪代码 ：  acc_buf 的结果也是压缩的，包括FxI的值和坐标、 但是 out_buf 不变。  
 
 
-![PE](../images/PE.png)  
+![PE](https://github.com/kevin20x2/kevin20x2.github.com/blob/source/source/images/PE.png?raw=true)  
 
 
 当上一层的输出能够作为下一层的输入时 ，IRAM 和ORAM会在逻辑上交换， 通过改变计算顺序的方式。  
@@ -93,7 +93,7 @@ A accumulator buffers ，大小为**2xFxI** 这样能够最大化减少hash 冲�
 除了halo交换之外，其他的操作都限制在PE内。  
 
 
-![Compression](../images/compress.png)
+![Compression](https://github.com/kevin20x2/kevin20x2.github.com/blob/source/source/images/compress.png?raw=true)
 
 ## 压缩方式 ：
 上面存的是按顺序的非零元素  
