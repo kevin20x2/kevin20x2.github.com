@@ -4,7 +4,7 @@
   <title><![CDATA[ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-07T20:18:27+08:00</updated>
+  <updated>2018-01-10T15:40:32+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -12,6 +12,129 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Scalpel]]></title>
+    <link href="http://kevin20x2.github.io/blog/2018/01/10/scalpel/"/>
+    <updated>2018-01-10T12:10:05+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2018/01/10/scalpel</id>
+    <content type="html"><![CDATA[<!-- mathjax config similar to math.stackexchange -->
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+        inlineMath: [ ['$', '$'] ],
+        displayMath: [ ['$$', '$$']],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+<!--more-->
+
+
+<h3>SCALPEL对于硬件平台的分类</h3>
+
+<ul>
+<li>低并行性硬件平台 (微控制器， ARM)</li>
+<li>高并行性硬件平台 (CPU，DRAM 系统)</li>
+<li>中等并行性硬件平台  (GPU)</li>
+</ul>
+
+
+<p>对于低并行性硬件，采用</p>
+
+<h2><strong>SIMD-aware weight pruning</strong></h2>
+
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/SIMD_aware_pruning.png?raw=true" alt="" /></p>
+
+<p>要点:<br/>
+* 对权重进行分组 ，根据SIMD的宽度来分组 (Cortex-M4 分成2组)
+* 裁剪权重，根据每一组的均方根来裁剪， 当均方根小于某一个阈值就裁剪掉。(给的例子上数据存储方式采用 CSR 方式) <br/>
+* <strong>训练方式</strong>(这个跟我们以前做的有很大不同) : 每裁剪完一层就开始重训练，直到DNN 不能保持原有的准确度。<br/>
+* <strong>流程</strong>： SIMD-aware 权重裁剪一层一层的工作，最开始会计算每一层的的运行时间。 然后从运行时间最高的一层开始裁剪，每一次裁剪过后，将该层的运行时间更新。裁剪过后进行重训练，如果DNN没有丢失准确度，进行下一次迭代，即，重新选择最慢的一层进行裁剪。<br/>
+*  关于dropout率的调整 : 将dropout 看作对于神经元的采样，对于层 $i$ ,$C_i$ 是连接的数量， $C_io$ 是原始网络， $C_ir$是remaining 网络的连接。</p>
+
+<p>$$D_r = D_o\sqrt{ {\frac{C_ir}{C_io}} } $$<br/>
+$D_o$ 是原始的dropout 率，$D_r$ 是裁剪过后的调整的dropout率。</p>
+
+<ul>
+<li>采用修改的CSR 格式，包括三个1D 数组 ，$A&#8217;,IA&#8217;,JA&#8217;$ .<br/>
+$A&#8217;$ 中以原始顺序存放了所有非零权重组。<br/>
+$IA&#8217;$ 记录了$A&#8217;$ 中每一行第一组非零 权重的编号 。
+$JA&#8217;$ 记录了 $A&#8217;$中每一组的列数编号。</li>
+</ul>
+
+
+<h3>总结：</h3>
+
+<p>SIMD-aware 权重裁剪 在低并行平台上 同时减少了模型大小和 运行时间，每个权重组使用同一个列编号戏剧性的减少了$JA&#8217;$的存储量。 对于计算，使用一个SIMD指令同时load 多个连续的input 能减少计算指令个数。 <br/>
+实验表明，
+基本裁剪到60%左右，速度就比原始的要快。(具体实验对比不细说)</p>
+
+<h2>Node Pruning</h2>
+
+<p>Node Pruning 主要针对 GPU 平台 ， <br/>
+将全连接层的<strong>一个神经元</strong> 和 卷积层的 一个 <strong>特征图</strong>  看作一个node 。<br/>
+删除掉nodes只会减少每一层的大小，但是不会影响网络中的稀疏程度。因此删掉一个node不会影响 计算速度 (说白了就是结构化裁剪)</p>
+
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/Mask_layer.png?raw=true" alt="" /></p>
+
+<h4>流程:</h4>
+
+<ul>
+<li>给除了input 和 output layer 之外的层添加 mask layer 。<br/>
+图中给一个全连接层加上了mask layer 。A 中的每一个node 在输出结果之前需要通过mask layer $A&#8217;$ ，每一个node 有两个参数 : $\alpha$ 和 $\beta$ , $\alpha$ 是 布尔变量，取值为0或1 ， $\beta$ 是0到1之间的浮点值。令数组
+$Y$ 和 $Y&#8217;$为 origin layer和mask layer 的输出，有:</li>
+</ul>
+
+
+<p>$$ y&#8217;_i = \alpha_i * y_i$$</p>
+
+<p>当 $\alpha_i$被设为0的时候 ，相关node 就相当于是被裁剪掉了。<br/>
+* 重训练mask layer ，$\alpha$ 和 $\beta$ 都被初始化为1.</p>
+
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/update_alpha.png?raw=true" alt="update_aplha" /><br/>
+T 是所有mask layer 都维护的一个阈值 ，$\epsilon$ 是一个比较小的值，为了防止$\alpha$ 会不停从0到1切换，$\beta_i$ 通过反向传播更新，并且被裁剪到 [0,1] 范围 。</p>
+
+<ul>
+<li>使用L1 正则化来控制裁剪的node 的数量。 对于每一个mask layer ，每一个参数 $\beta_i$ 的惩罚值可以这样计算 。</li>
+</ul>
+
+
+<p>$$R_{i,L1} = \lambda |\beta_i| = \lambda \beta_i$$</p>
+
+<p>$\lambda$ 是weight decay (正则化长度) ，它让 $\beta_i$ 接近0.如果与之相关的节点不重要，$\beta_i$ 就会变得比阈值 T 要小，然后就会被暂时 remove。 因为有后来发现 被 remove 的节点比较重要的这种状况，所以mask layer 的参数仍然参与重训练。 T 在node pruning 中是固定值，因此提高 $\lambda$ 会导致更多的节点被裁剪。</p>
+
+<ul>
+<li>在训练完 mask layer 之后 ， L1 正则化的weight decay会增加，这样在下一次迭代的时候，就会裁剪掉更多的node 。 如此重复，直到DNN 的准确度不能恢复。</li>
+<li>node pruning 的最后一步是删除掉 masked nodes ，不相关的数据都删除掉，最后能得到一个裁剪之后的DNN .</li>
+</ul>
+
+
+<h2>Combined Pruning</h2>
+
+<p>对于像是CPU 架构的平台，可以结合SIMD-aware weight pruning 和 Node Pruning 。 这里将DNN的batch size 设置为1. <br/>
+   在CPU 平台上， Scalpel 对于全连接层采取 SIMD-aware weight pruning ，对于 卷积层采取 node pruning 。</p>
+
+<h2>结论</h2>
+
+<p>On the microcontroller, CPU and GPU, Scalpel achieves
+mean speedups of 3.54x, 2.61x, and 1.25x while reducing the model
+sizes by 88%, 82%, and 53%.</p>
+
+<p>感觉这个思路非常的赞啊！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SC-DCNN]]></title>
@@ -4351,171 +4474,6 @@ Total Submission(s): 1521    Accepted Submission(s): 556</p>
 </span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CF527D]]></title>
-    <link href="http://kevin20x2.github.io/blog/2015/03/24/cf527d/"/>
-    <updated>2015-03-24T17:02:36+08:00</updated>
-    <id>http://kevin20x2.github.io/blog/2015/03/24/cf527d</id>
-    <content type="html"><![CDATA[<h3><a href="http://codeforces.com/contest/527/problem/D">D. Clique Problem</a></h3>
-
-<!--more-->
-
-
-<p>The clique problem is one of the most well-known NP-complete problems. Under some simplification it can be formulated as follows. Consider an undirected graph G. It is required to find a subset of vertices C of the maximum size such that any two of them are connected by an edge in graph G. Sounds simple, doesn&rsquo;t it? Nobody yet knows an algorithm that finds a solution to this problem in polynomial time of the size of the graph. However, as with many other NP-complete problems, the clique problem is easier if you consider a specific type of a graph.</p>
-
-<p>Consider n distinct points on a line. Let the i-th point have the coordinate xi and weight wi. Let&rsquo;s form graph G, whose vertices are these points and edges connect exactly the pairs of points (i, j), such that the distance between them is not less than the sum of their weights, or more formally: |xi - xj| ≥ wi + wj.</p>
-
-<p>Find the size of the maximum clique in such graph.</p>
-
-<h3>Input</h3>
-
-<p>The first line contains the integer n (1 ≤ n ≤ 200 000) — the number of points.</p>
-
-<p>Each of the next n lines contains two numbers xi, wi (0 ≤ xi ≤ 109, 1 ≤ wi ≤ 109) — the coordinate and the weight of a point. All xi are different.</p>
-
-<h3>Output</h3>
-
-<p>Print a single number — the number of vertexes in the maximum clique of the given graph.</p>
-
-<h3>Sample test(s)</h3>
-
-<h3>input</h3>
-
-<p>4<br/>
-2 3<br/>
-3 1<br/>
-6 1<br/>
-0 2</p>
-
-<h3>output</h3>
-
-<p>3</p>
-
-<p>n个点每个点有两个属性 x和w ，需要找出这样一个点的集合，每两个点满足 |xi - xj| ≥ wi + wj.<br/>
-问最大的集合里面有多少个点。<br/>
-这个题真是想复杂了。<br/>
-本来想着按x 来排序的 ，因为考虑到如果按x+w 来排序会出现 后面的值x x小于前面x的情况。<br/>
-后来发现这种情况是不可能出现的<br/>
-因为要同时满足下面3个条件的点是不可能出现的</p>
-
-<p>1.xi+wi &lt; xj+wj
-2.xi> xj
-3.xi-wi > xj+wj<br/>
-所以就简单了，按照 x+w排序 然后记录x+w的最大值 能往集合里面插（xj-wj>=maxn）就往里面插<br/>
-因为 这次不插下次插的话 再插的 x+w的最大值比这一次要大，后面的结果就有可能变小。<br/>
-满足贪心的原理。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include&lt;cstdio&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;iostream&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;cstring&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;cmath&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;vector&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;algorithm&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;queue&gt;</span>
-</span><span class='line'><span class="k">typedef</span>  <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#define clr(x) memset((x),0,sizeof(x))</span>
-</span><span class='line'><span class="cp">#define inf 0x3f3f3f3f</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span><span class='line'><span class="k">struct</span> <span class="n">seg</span><span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">w</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">seg</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">w</span><span class="p">)</span><span class="o">:</span><span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">w</span><span class="p">(</span><span class="n">w</span><span class="p">){};</span>
-</span><span class='line'>    <span class="n">seg</span><span class="p">(){};</span>
-</span><span class='line'>    <span class="k">friend</span> <span class="kt">bool</span> <span class="k">operator</span> <span class="o">&lt;</span><span class="p">(</span><span class="n">seg</span> <span class="n">a</span><span class="p">,</span><span class="n">seg</span> <span class="n">b</span><span class="p">){</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">w</span><span class="o">&lt;</span><span class="n">b</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">};</span>
-</span><span class='line'><span class="p">}</span><span class="n">a</span><span class="p">[</span><span class="mi">200050</span><span class="p">];</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
-</span><span class='line'><span class="kt">int</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">seg</span> <span class="n">a</span><span class="p">,</span><span class="n">seg</span> <span class="n">b</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">w</span><span class="o">&lt;</span><span class="n">b</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">;</span>
-</span><span class='line'>        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span> <span class="o">=</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="o">+</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">cmp</span><span class="p">);</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="o">&gt;=</span><span class="n">t</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>            <span class="n">ans</span> <span class="o">++</span><span class="p">;</span>
-</span><span class='line'>            <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
