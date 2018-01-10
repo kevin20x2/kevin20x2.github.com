@@ -1,0 +1,99 @@
+---
+layout: post
+title: "Scalpel"
+date: 2018-01-10 12:10:05 +0800
+comments: true
+categories: CNN weight_pruning ISCA2017
+---
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+        inlineMath: [ ['$', '$'] ],
+        displayMath: [ ['$$', '$$']],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--more-->
+
+### SCALPEL对于硬件平台的分类  
+
+* 低并行性硬件平台 (微控制器， ARM)
+* 高并行性硬件平台 (CPU，DRAM 系统)
+* 中等并行性硬件平台  (GPU) 
+
+对于低并行性硬件，采用
+## **SIMD-aware weight pruning**   
+
+![](https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/SIMD_aware_pruning.png?raw=true)
+
+要点:  
+* 对权重进行分组 ，根据SIMD的宽度来分组 (Cortex-M4 分成2组)
+* 裁剪权重，根据每一组的均方根来裁剪， 当均方根小于某一个阈值就裁剪掉。(给的例子上数据存储方式采用 CSR 方式)   
+* **训练方式**(这个跟我们以前做的有很大不同) : 每裁剪完一层就开始重训练，直到DNN 不能保持原有的准确度。  
+* **流程**： SIMD-aware 权重裁剪一层一层的工作，最开始会计算每一层的的运行时间。 然后从运行时间最高的一层开始裁剪，每一次裁剪过后，将该层的运行时间更新。裁剪过后进行重训练，如果DNN没有丢失准确度，进行下一次迭代，即，重新选择最慢的一层进行裁剪。  
+*  关于dropout率的调整 : 将dropout 看作对于神经元的采样，对于层 $i$ ,$C_i$ 是连接的数量， $C_io$ 是原始网络， $C_ir$是remaining 网络的连接。  
+
+$$D_r = D_o\sqrt{ {\frac{C_ir}{C_io}} } $$  
+$D_o$ 是原始的dropout 率，$D_r$ 是裁剪过后的调整的dropout率。  
+
+* 采用修改的CSR 格式，包括三个1D 数组 ，$A',IA',JA'$ .  
+$A'$ 中以原始顺序存放了所有非零权重组。  
+$IA'$ 记录了$A'$ 中每一行第一组非零 权重的编号 。
+$JA'$ 记录了 $A'$中每一组的列数编号。   
+
+### 总结：  
+SIMD-aware 权重裁剪 在低并行平台上 同时减少了模型大小和 运行时间，每个权重组使用同一个列编号戏剧性的减少了$JA'$的存储量。 对于计算，使用一个SIMD指令同时load 多个连续的input 能减少计算指令个数。   
+实验表明，
+基本裁剪到60%左右，速度就比原始的要快。(具体实验对比不细说)  
+
+
+## Node Pruning  
+Node Pruning 主要针对 GPU 平台 ，   
+将全连接层的**一个神经元** 和 卷积层的 一个 **特征图**  看作一个node 。  
+删除掉nodes只会减少每一层的大小，但是不会影响网络中的稀疏程度。因此删掉一个node不会影响 计算速度 (说白了就是结构化裁剪)  
+
+![](https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/Mask_layer.png?raw=true)
+
+#### 流程:  
+* 给除了input 和 output layer 之外的层添加 mask layer 。  
+图中给一个全连接层加上了mask layer 。A 中的每一个node 在输出结果之前需要通过mask layer $A'$ ，每一个node 有两个参数 : $\alpha$ 和 $\beta$ , $\alpha$ 是 布尔变量，取值为0或1 ， $\beta$ 是0到1之间的浮点值。令数组
+$Y$ 和 $Y'$为 origin layer和mask layer 的输出，有: 
+
+$$ y'_i = \alpha_i * y_i$$ 
+
+当 $\alpha_i$被设为0的时候 ，相关node 就相当于是被裁剪掉了。  
+* 重训练mask layer ，$\alpha$ 和 $\beta$ 都被初始化为1.
+
+![update_aplha](https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/update_alpha.png?raw=true)  
+T 是所有mask layer 都维护的一个阈值 ，$\epsilon$ 是一个比较小的值，为了防止$\alpha$ 会不停从0到1切换，$\beta_i$ 通过反向传播更新，并且被裁剪到 [0,1] 范围 。  
+  
+* 使用L1 正则化来控制裁剪的node 的数量。 对于每一个mask layer ，每一个参数 $\beta_i$ 的惩罚值可以这样计算 。 
+
+$$R_{i,L1} = \lambda |\beta_i| = \lambda \beta_i$$ 
+
+$\lambda$ 是weight decay (正则化长度) ，它让 $\beta_i$ 接近0.如果与之相关的节点不重要，$\beta_i$ 就会变得比阈值 T 要小，然后就会被暂时 remove。 因为有后来发现 被 remove 的节点比较重要的这种状况，所以mask layer 的参数仍然参与重训练。 T 在node pruning 中是固定值，因此提高 $\lambda$ 会导致更多的节点被裁剪。   
+
+* 在训练完 mask layer 之后 ， L1 正则化的weight decay会增加，这样在下一次迭代的时候，就会裁剪掉更多的node 。 如此重复，直到DNN 的准确度不能恢复。  
+* node pruning 的最后一步是删除掉 masked nodes ，不相关的数据都删除掉，最后能得到一个裁剪之后的DNN .
+
+
+## Combined Pruning 
+对于像是CPU 架构的平台，可以结合SIMD-aware weight pruning 和 Node Pruning 。 这里将DNN的batch size 设置为1.   
+   在CPU 平台上， Scalpel 对于全连接层采取 SIMD-aware weight pruning ，对于 卷积层采取 node pruning 。 
+
+## 结论 
+On the microcontroller, CPU and GPU, Scalpel achieves
+mean speedups of 3.54x, 2.61x, and 1.25x while reducing the model
+sizes by 88%, 82%, and 53%.
+
+感觉这个思路非常的赞啊！
+
+
