@@ -4,7 +4,7 @@
   <title><![CDATA[分类:  cnn | ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/blog/categories/cnn/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-10T15:40:32+08:00</updated>
+  <updated>2018-01-10T15:50:25+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -57,22 +57,22 @@ MathJax.Hub.Config({
 
 <p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/SIMD_aware_pruning.png?raw=true" alt="" /></p>
 
-<p>要点:<br/>
-* 对权重进行分组 ，根据SIMD的宽度来分组 (Cortex-M4 分成2组)
-* 裁剪权重，根据每一组的均方根来裁剪， 当均方根小于某一个阈值就裁剪掉。(给的例子上数据存储方式采用 CSR 方式) <br/>
-* <strong>训练方式</strong>(这个跟我们以前做的有很大不同) : 每裁剪完一层就开始重训练，直到DNN 不能保持原有的准确度。<br/>
-* <strong>流程</strong>： SIMD-aware 权重裁剪一层一层的工作，最开始会计算每一层的的运行时间。 然后从运行时间最高的一层开始裁剪，每一次裁剪过后，将该层的运行时间更新。裁剪过后进行重训练，如果DNN没有丢失准确度，进行下一次迭代，即，重新选择最慢的一层进行裁剪。<br/>
-*  关于dropout率的调整 : 将dropout 看作对于神经元的采样，对于层 $i$ ,$C_i$ 是连接的数量， $C_io$ 是原始网络， $C_ir$是remaining 网络的连接。</p>
+<p>要点: <br/>
+1. 对权重进行分组 ，根据SIMD的宽度来分组 (Cortex-M4 分成2组)
+2. 裁剪权重，根据每一组的均方根来裁剪， 当均方根小于某一个阈值就裁剪掉。(给的例子上数据存储方式采用 CSR 方式) <br/>
+3. <strong>训练方式</strong>(这个跟我们以前做的有很大不同) : 每裁剪完一层就开始重训练，直到DNN 不能保持原有的准确度。<br/>
+4. <strong>流程</strong>： SIMD-aware 权重裁剪一层一层的工作，最开始会计算每一层的的运行时间。 然后从运行时间最高的一层开始裁剪，每一次裁剪过后，将该层的运行时间更新。裁剪过后进行重训练，如果DNN没有丢失准确度，进行下一次迭代，即，重新选择最慢的一层进行裁剪。<br/>
+5. 关于dropout率的调整 : 将dropout 看作对于神经元的采样，对于层 $i$ ,$C_i$ 是连接的数量， $C_io$ 是原始网络， $C_ir$是remaining 网络的连接。</p>
 
 <p>$$D_r = D_o\sqrt{ {\frac{C_ir}{C_io}} } $$<br/>
 $D_o$ 是原始的dropout 率，$D_r$ 是裁剪过后的调整的dropout率。</p>
 
-<ul>
+<ol>
 <li>采用修改的CSR 格式，包括三个1D 数组 ，$A&#8217;,IA&#8217;,JA&#8217;$ .<br/>
 $A&#8217;$ 中以原始顺序存放了所有非零权重组。<br/>
 $IA&#8217;$ 记录了$A&#8217;$ 中每一行第一组非零 权重的编号 。
 $JA&#8217;$ 记录了 $A&#8217;$中每一组的列数编号。</li>
-</ul>
+</ol>
 
 
 <h3>总结：</h3>
@@ -100,7 +100,7 @@ $Y$ 和 $Y&#8217;$为 origin layer和mask layer 的输出，有:</li>
 
 <p>$$ y&#8217;_i = \alpha_i * y_i$$</p>
 
-<p>当 $\alpha_i$被设为0的时候 ，相关node 就相当于是被裁剪掉了。<br/>
+<p>当 $\alpha_i$被设为0的时候 ，相关node 就相当于是被裁剪掉了。  <br/>
 * 重训练mask layer ，$\alpha$ 和 $\beta$ 都被初始化为1.</p>
 
 <p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/update_alpha.png?raw=true" alt="update_aplha" /><br/>
