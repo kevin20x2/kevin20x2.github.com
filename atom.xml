@@ -4,7 +4,7 @@
   <title><![CDATA[ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-10T16:35:15+08:00</updated>
+  <updated>2018-01-15T16:19:45+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -12,6 +12,79 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[redhat6.5从零开始离线安装qwt]]></title>
+    <link href="http://kevin20x2.github.io/blog/2018/01/15/redhat6-dot-5-qwl/"/>
+    <updated>2018-01-15T15:34:08+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2018/01/15/redhat6-dot-5-qwl</id>
+    <content type="html"><![CDATA[<p>项目需要不联网安装 QT,Qwt ，于是就开始了折腾之旅。</p>
+
+<!--more-->
+
+
+<p>大致流程如下： <br/>
+* 安装redhat_linux6.5 服务器版
+* 卸载自身的yum，使用离线rpm包重新安装CentOs的yum ，并安装downloadonly插件
+* 使用yum 仅download createrepo库， libGL-devel ，gcc-c++
+* 离线安装 createrepo 库，将下载下来的rpm 包做成本地仓库 。
+* yum 安装 libGL-devel ， 离线安装gcc-c++
+* 安装Qt 5.6
+* 安装qwt 库</p>
+
+<p>redhat 系统的安装是傻瓜式的，不用多说 。</p>
+
+<p>更换CentOs源的方法参照 <a href="http://blog.csdn.net/ggxiaobai/article/details/53507715">http://blog.csdn.net/ggxiaobai/article/details/53507715</a></p>
+
+<p>需要注意的是163的网址现在已经404了，所以wget 用的 <a href="http://vault.centos.org/6.5/os/x86_64/Packages/">http://vault.centos.org/6.5/os/x86_64/Packages/</a></p>
+
+<p>因为后面要用downloadonly 选项，所以需要下载包括4个rpm包: <br/>
+yum-3.2.29-40.el6.centos.noarch.rpm <br/>
+yum-metadata-parser-1.1.2-16.el6.x86_64.rpm<br/>
+yum-plugin-downloadonly-1.1.30-14.el6.noarch.rpm  <br/>
+yum-plugin-fastestmirror-1.1.30-14.el6.noarch.rpm</p>
+
+<p>将其放到同一个文件夹中然后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rpm -aq|grep yum|xargs rpm -e --nodeps #卸载自带yum
+</span><span class='line'>rpm -ivh *.rpm</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完成yum的更换。</p>
+
+<p>接着在有网络的情况下 使用 yum 的 &ndash;downloadonly 选项 下载 createrepo libGL-devel ，gcc-c++ 的相关rpm 包 。</p>
+
+<p>使用离线rpm的形式安装createrepo</p>
+
+<p>参照 <a href="http://blog.csdn.net/lanjianhun/article/details/69360406">http://blog.csdn.net/lanjianhun/article/details/69360406</a> 将本地的rpm 包 配置成软件仓库 。<br/>
+将 /etc/yum.repos.d/CentOS-Media.repo 中的 gpgcheck=1 修改为0 .</p>
+
+<p>然后用 yum install libGL-devel 从本地仓库中安装openGL 。<br/>
+至于g++ ，不知道为什么yum install gcc-c++ 提示找不到该库，此时参照<a href="http://blog.sina.com.cn/s/blog_c22e36090102vt0f.html">http://blog.sina.com.cn/s/blog_c22e36090102vt0f.html</a><br/>
+离线手动安装gcc-c++</p>
+
+<p>两个依赖库安装完成之后，直接傻瓜安装Qt ，运行 qt-opensource-linux-x64-5.6.3.run 即可</p>
+
+<p>然后就是安装 qwt ，</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd qwt-6.1.3  
+</span><span class='line'>qmake #没有配置环境变量的话，加上绝对路径  
+</span><span class='line'>make
+</span><span class='line'>make install </span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>验证安装: <br/>
+用qtcreator  打开 qwt下的example 目录下的任意项目 ，编译运行没有问题即可 。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Scalpel]]></title>
@@ -4249,262 +4322,6 @@ Total Submission(s): 1521    Accepted Submission(s): 556</p>
 </span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CF529B]]></title>
-    <link href="http://kevin20x2.github.io/blog/2015/03/24/cf529b/"/>
-    <updated>2015-03-24T20:39:42+08:00</updated>
-    <id>http://kevin20x2.github.io/blog/2015/03/24/cf529b</id>
-    <content type="html"><![CDATA[<h2><a href="http://codeforces.com/problemset/problem/529/B">B. Group Photo 2 (online mirror version)</a></h2>
-
-<!--more-->
-
-
-<p>Many years have passed, and n friends met at a party again. Technologies have leaped forward since the last meeting, cameras with timer appeared and now it is not obligatory for one of the friends to stand with a camera, and, thus, being absent on the photo.</p>
-
-<p>Simply speaking, the process of photographing can be described as follows. Each friend occupies a rectangle of pixels on the photo: the i-th of them in a standing state occupies a wi pixels wide and a hi pixels high rectangle. But also, each person can lie down for the photo, and then he will occupy a hi pixels wide and a wi pixels high rectangle.</p>
-
-<p>The total photo will have size W × H, where W is the total width of all the people rectangles, and H is the maximum of the heights. The friends want to determine what minimum area the group photo can they obtain if no more than n / 2 of them can lie on the ground (it would be strange if more than n / 2 gentlemen lie on the ground together, isn&rsquo;t it?..)</p>
-
-<p>Help them to achieve this goal.</p>
-
-<h3>Input</h3>
-
-<p>The first line contains integer n (1 ≤ n ≤ 1000) — the number of friends.</p>
-
-<p>The next n lines have two integers wi, hi (1 ≤ wi, hi ≤ 1000) each, representing the size of the rectangle, corresponding to the i-th friend.</p>
-
-<h3>Output</h3>
-
-<p>Print a single integer equal to the minimum possible area of the photo containing all friends if no more than n / 2 of them can lie on the ground.</p>
-
-<h3>Sample test(s)</h3>
-
-<h3>input</h3>
-
-<p>3<br/>
-10 1<br/>
-20 2<br/>
-30 3</p>
-
-<h3>output</h3>
-
-<p>180</p>
-
-<h3>input</h3>
-
-<p>3<br/>
-3 1<br/>
-2 2<br/>
-4 3</p>
-
-<h3>output</h3>
-
-<p>21</p>
-
-<h3>input</h3>
-
-<p>1<br/>
-5 10</p>
-
-<h3>output</h3>
-
-<p>50</p>
-
-<p>题目大意： n个长方形 ，排成一排 ， 总占面积 为 宽w 的和 高h的最大值 组成的长方形。
-即∑w * max(h) 。<br/>
-现在可调换不超过 n/2个 长方形的 长和宽<br/>
-使得上式取最小值</p>
-
-<p>n只有1000 因此可以枚举 作为 最大的 高h的值 。<br/>
-对于每个h 看能否满足条件 ，即其他的高比h小， 并且调换的个数不超过n/2。 <br/>
-要求得最小值则需要 w和h调换之后 最高的h不变 而 调换过后的 w比原来的小 。 <br/>
-若w-h>0 则此时应该在不超过2/n的基础上尽量调换 <br/>
-若 w-h&lt;0 则此时不要调换。<br/>
-因此按照 w-h 来排序。</p>
-
-<p>复杂度 n<sup>2</sup></p>
-
-<p>code:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include&lt;cstdio&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;iostream&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;cstring&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;cmath&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;vector&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;algorithm&gt;</span>
-</span><span class='line'><span class="k">typedef</span>  <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#define clr(x) memset((x),0,sizeof(x))</span>
-</span><span class='line'><span class="cp">#define inf 0x3f3f3f3f</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span><span class='line'><span class="k">struct</span> <span class="n">seg</span><span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span><span class="n">a</span><span class="p">[</span><span class="mi">1050</span><span class="p">];</span>
-</span><span class='line'><span class="kt">int</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">seg</span> <span class="n">a</span><span class="p">,</span><span class="n">seg</span> <span class="n">b</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">a</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span><span class="n">b</span><span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">b</span><span class="p">.</span><span class="n">h</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
-</span><span class='line'><span class="kt">bool</span> <span class="n">vis</span><span class="p">[</span><span class="mi">1050</span><span class="p">];</span>
-</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="o">+</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">cmp</span><span class="p">);</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">inf</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">t</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="n">t</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">;</span><span class="n">t</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>            <span class="kt">int</span> <span class="n">h</span><span class="p">;</span>
-</span><span class='line'>            <span class="kt">int</span> <span class="n">w</span> <span class="p">;</span>
-</span><span class='line'>            <span class="n">memset</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span> <span class="n">vis</span><span class="p">);</span>
-</span><span class='line'>            <span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">t</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>            <span class="p">{</span>
-</span><span class='line'>                <span class="n">h</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
-</span><span class='line'>                <span class="n">w</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>            <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                <span class="n">h</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
-</span><span class='line'>                <span class="n">w</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span><span class="n">t</span><span class="p">;</span>
-</span><span class='line'>            <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="k">if</span><span class="p">(</span><span class="n">j</span><span class="o">!=</span><span class="n">i</span><span class="p">)</span>
-</span><span class='line'>            <span class="p">{</span>
-</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="o">&gt;</span><span class="n">h</span> <span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="o">&lt;=</span><span class="n">h</span><span class="p">)</span>
-</span><span class='line'>                <span class="p">{</span>
-</span><span class='line'>                    <span class="n">vis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>                    <span class="n">w</span><span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
-</span><span class='line'>                    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-</span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="o">&gt;</span><span class="n">h</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="o">&gt;</span><span class="n">h</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                    <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>                    <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">count</span><span class="o">&gt;</span> <span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>           <span class="c1">// printf(&quot;%d \n&quot;,count);</span>
-</span><span class='line'>            <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">count</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">flag</span><span class="p">)</span>
-</span><span class='line'>            <span class="p">{</span>
-</span><span class='line'>                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>                <span class="p">{</span>
-</span><span class='line'>                    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="o">&lt;=</span><span class="n">h</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">num</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">// 尽量调换 w和h的情况   </span>
-</span><span class='line'>                    <span class="p">{</span>
-</span><span class='line'>                        <span class="n">w</span><span class="o">+=</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
-</span><span class='line'>                        <span class="n">num</span><span class="o">--</span><span class="p">;</span>
-</span><span class='line'>                    <span class="p">}</span>
-</span><span class='line'>                    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="n">w</span><span class="o">+=</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
-</span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>                <span class="n">ans</span> <span class="o">=</span><span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span><span class="n">w</span><span class="o">*</span><span class="n">h</span><span class="p">);</span>
-</span><span class='line'>                <span class="c1">//printf(&quot;*%d\n&quot;,w*h);</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
 
 ]]></content>
   </entry>
