@@ -69,3 +69,18 @@ make install
 
 
 
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'location.href', // 可选。默认为 location.href
+  owner: 'kevin20x2',
+  repo: 'blog_comment',
+  oauth: {
+    client_id: '0d172133d26f520041e6',
+    client_secret: '14eef65983bd9d0e16313feaffcf1684fc3713a9',
+  },
+})
+gitment.render('container')
+</script>
