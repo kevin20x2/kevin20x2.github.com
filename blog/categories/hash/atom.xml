@@ -4,7 +4,7 @@
   <title><![CDATA[分类:  hash | ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/blog/categories/hash/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-20T15:44:43+08:00</updated>
+  <updated>2018-01-20T17:45:38+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -23,32 +23,56 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.js" integrity="sha384-ad+n9lzhJjYgO67lARKETJH6WuQVDDlRfj81AJJSswMyMkXTD49wBj5EP004WOY6" crossorigin="anonymous"></script>
 
 
-<script src ="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js"
+<script src ="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js" crossorigin="anonymous"
 ></script>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/contrib/auto-render.min.js" integrity="sha384-EkJr57fExjeMKAZnlVBuoBoX0EJ4BiDPiAd/JyTzIA65ORu4hna7V6aaq4zsUvJ2" crossorigin="anonymous"></script>
 
 
-<script
-src="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.js">
+<script src="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.js" crossorigin="anonymous">
 </script>
-<link rel="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css"
->
-
-<script>
 
 
-<pre><code>let md;
-document.addEventListener("DOMContentLoaded", () =&gt; {
-    const tm = texmath.use(katex);
-    md = markdownit().use(tm);
-   // out.innerHTML = md.render('Euler\'s identity $e^{i\pi}+1=0$ is a beautiful formula.');
-   md.render(document.body);
-})
-</code></pre>
+<p><link rel="stylesheet" href="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css" crossorigin="anonymous"></p>
 
-<p>  </script></p>
+<script
+ src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+<p><link rel="stylesheet" href="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css" crossorigin="anonymous"></p>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    $("code").map(function(){
+   // match = /^\$(.*)\$$/.exec($(this).html());
+   // if (match){
+      //$(this).after("<span class=mathjax_inline>" + match + "</span>");
+      //$(this).hide();
+     // $(this).replaceWith("<span class=hpl_mathjax_inline>" + $(this).html() + "</span>");
+     // MathJax.Hub.Queue(["Typeset",MathJax.Hub,$(this).get(0)]);
+     renderMathInElement(
+           $(this)[0] ,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+   // }
+    });
+    });
+      // document.addEventListener("DOMContentLoaded", function() {
+       
+   // });
+</script>
+
 
 <h1><strong>摘要</strong></h1>
 
@@ -112,28 +136,28 @@ hash stream 用来学习哈希函数，classification stream 被用来挖掘语�
 
 <h3>问题定义</h3>
 
-<p> 给定N 个图像样本 $X = {x<em>{i}}^{N}</em>{i=1} \in \mathbb R^{d \times N}$ ,哈希编码是要学习一个K比特2进制编码集合 $B \in {-1,1}^{K \times N}$,其中第i列的 $b_i \in {-1,1}^K$ 表示第i个样本 $x_i$的2进制编码。</p>
+<p> 给定N 个图像样本 <code>\(X = \{x_{i}\}^{N}_{i=1} \in \mathbb R^{d \times N}\)</code>,哈希编码是要学习一个K比特2进制编码集合 <code>\(B \in \{-1,1\}^{K \times N}\)</code>,其中第i列的 <code>\(b_i \in \{-1,1\}^K\) 表示第i个样本 \(x_i\)</code>的2进制编码。</p>
 
-<p> 2进制编码是由hash 函数 $h(.)$来生成的。哈希函数可以写成 $h(x_i) = [h_1(x_i),&hellip;,h_c(x_i)].$ 对于数据样本$x_i$ ,其hash code 可以表示为 $b_i = h(x_i) = [h_1(x_i),..h_c(x_i)].$，通常来说，哈希化是学习一个哈希函数来将图片样本处理为2进制编码。</p>
+<p> 2进制编码是由hash 函数 (h(.))来生成的。哈希函数可以写成 (h(x_i) = [h_1(x_i),&hellip;,h_c(x_i)].) 对于数据样本(x_i) ,其hash code 可以表示为 (b_i = h(x_i) = [h_1(x_i),..h_c(x_i)].)，通常来说，哈希化是学习一个哈希函数来将图片样本处理为2进制编码。</p>
 
 <h3>相似度衡量 (Similarity meaure)</h3>
 
-<p> 在监督哈希化中，标签信息被表示为 $Y = {y<em>{i}}^{N}</em>{i=1}\in \mathbb R^{c \times N}$ ,其中 $y_i\in{0,1}^c$ 与样本 $x_i$对应，c是分类的个数。 <strong>一个样本可能属于多个分类集合</strong>。<br/>
- 给定 语义标签信息，配对标签信息(pairwise label information)可以写成 : $S = {s<em>{ij}},s</em>{i,j}\in{0,1}$ 。 当$s_{ij}=1$时说明 $x_i$和 $x_j$ 相似，反之等于0时不相似。<br/>
+<p> 在监督哈希化中，标签信息被表示为 <code>$Y = \{y_{i}\}^{N}_{i=1}\in \mathbb R^{c \times N}$</code> ,其中<code>$y_i\in\{0,1\}^c$</code>与样本 <code>$x_i$</code>对应，c是分类的个数。 <strong>一个样本可能属于多个分类集合</strong>。<br/>
+ 给定 语义标签信息，配对标签信息(pairwise label information)可以写成 : <code>$S = \{s_{ij}\},s_{i,j}\in\{0,1\}$</code> 。 当<code>$s_{ij}=1$</code>时说明 <code>$x_i$</code>和 <code>$x_j$</code> 相似，反之等于0时不相似。<br/>
  Hamming 距离 可以由如下公式表示:</p>
 
-<p>$$ dist_{H}(b_i,b_j) = \frac{1}{2}(K -&lt;b_i,b_j> ) $$<br/>
+<p><code>$$ dist_{H}(b_i,b_j) = \frac{1}{2}(K -&lt;b_i,b_j&gt; ) $$</code><br/>
 其中 $&lt;b_i,b_j>$表示 两者的内积。 如果内积很小，那么Hamming距离就很大，反之亦然。因此，不同的hash code 的内积 可以用来标识其相似度。</p>
 
-<p>给定 配对相似度关系 $S={s_{i,j}}$， 其 <strong>最大后验估计</strong>(MAP estimation) 可以表示为 :</p>
+<p>给定 配对相似度关系 <code>$S=\{s_{i,j}\}$</code>， 其 <strong>最大后验估计</strong>(MAP estimation) 可以表示为 :</p>
 
-<p> $$p(B|S) \propto p(S|B)p(B) = \prod<em>{s</em>{ij}\in S}p(s_{ij}|B)p(B) $$</p>
+<p> <code>$$p(B|S) \propto p(S|B)p(B) = \prod_{s_{ij}\in S}p(s_{ij}|B)p(B) $$</code></p>
 
-<p> 其中 p(S|B) 是相似函数，p(B) 是先验分布。对于每一对图像， $p(s<em>{ij}|B)$ 是给定hash code B 的$s</em>{ij}$条件概率,定义如下:</p>
+<p> 其中 p(S|B) 是相似函数，p(B) 是先验分布。对于每一对图像，<code>$p(s_{ij}|B)$</code> 是给定hash code B 的<code>$s_{ij}$</code>条件概率,定义如下:</p>
 
-<p> $$p(s<em>{ij}|B) = \begin{cases} \sigma(\Phi</em>{ij}), s<em>{ij} =1\ 1- \sigma(\Phi</em>{ij}), s_{ij} =0\end{cases} $$</p>
+<p> <code>$$p(s_{ij}|B) = \begin{cases} \sigma(\Phi_{ij}), s_{ij} =1\\ 1- \sigma(\Phi_{ij}), s_{ij} =0\end{cases} $$</code></p>
 
-<p> 其中 $\sigma(x) = 1/(1 + e^{-x})$ 是sigmmoid 激活函数，$\Phi_{ij} = \frac{1}{2}&lt;b_i,b_j>$ 上述公式说明，内积越大，$b_i$和$b_j$ 应该被分类成相似的，反之亦然，因此对于hash code 来说上述公式是reasonable 的。</p>
+<p> 其中 <code>$\sigma(x) = 1/(1 + e^{-x})$</code> 是sigmmoid 激活函数，<code>$\Phi_{ij} = \frac{1}{2}&lt;b_i,b_j&gt;$</code>上述公式说明，内积越大，<code>$b_i$和$b_j$</code> 应该被分类成相似的，反之亦然，因此对于hash code 来说上述公式是reasonable 的。</p>
 
 <hr />
 
@@ -180,7 +204,7 @@ hash stream 用来学习哈希函数，classification stream 被用来挖掘语�
 
 <p>我们首先采用最大似然估计来解这个问题，写出似然函数。假设从袋子中能拿出柠檬饼干的概率为p(我们通过这个概率p来确定是从哪个袋子中拿出来的)，则似然函数可以写作</p>
 
-<p>$$p(2lemon|packet) = p<sup>2</sup>$$</p>
+<p><code>$$p(2lemon|packet) = p^2$$</code></p>
 
 <p>　　</p>
 
@@ -190,7 +214,7 @@ hash stream 用来学习哈希函数，classification stream 被用来挖掘语�
 
 <p>假设拿到袋子1或5的机率都是0.1，拿到2或4的机率都是0.2，拿到3的机率是0.4，那同样上述问题的答案呢？这个时候就变MAP了。我们根据公式</p>
 
-<p>$$MAP = p<sup>2</sup> \times g$$<br/>
+<p><code>$$MAP = p^2 \times g$$</code><br/>
 　　</p>
 
 <p>写出我们的MAP函数。</p>
@@ -206,22 +230,22 @@ hash stream 用来学习哈希函数，classification stream 被用来挖掘语�
 <p>我们采用现有CNN的优势来学习hash function，为了与其他deep hashing methods 相比较，选择 CNN-F 网络架构来作为算法的基本组件。具体来说，我们分别有两个共享权值的CNN来学习hash function，样本对被当作这两个CNN的输入。 CNN 模型有5个卷积层和2两个全连接层。最后一层的神经元g额数等于hash code 的个数。<br/>
 考虑到相似度衡量，以下loss function 被用来学习hash code :</p>
 
-<p>$$J = -log p(S|B) = - \sum<em>{s</em>{ij}\in S} log p(s<em>{ij}|B) = -\sum</em>{s<em>{ij}\in S}(s</em>{ij}\Phi<em>{ij} -log(1+e^{\Phi</em>{ij}}))$$</p>
+<p><code>$$J = -log p(S|B) = - \sum_{s_{ij}\in S} log p(s_{ij}|B) = -\sum_{s_{ij}\in S}(s_{ij}\Phi_{ij} -log(1+e^{\Phi_{ij}}))$$</code></p>
 
 <p>上述公式 使得两个相似样本的Hamming 距离尽可能小，同时使得两个不相似样本的距离尽可能大。</p>
 
 <p>尽管标签对信息被用来学习hash function，但是标签信息并没有被充分利用。大部分之前的工作在两个<strong>多任务学习框架</strong>中利用标签信息。 我们基本假定学习2进制编码对于分类很理想。为直接利用标签信息，我们期望学习的二进制编码对于联合学习的线性分类器是最优的。 <br/>
 我们使用一个简单的线性分类器来给学习完的的2进制编码和标签信息 建模:</p>
 
-<p>$$ Y = W<sup>TB</sup>$$</p>
+<p><code>$$ Y = W^TB$$</code></p>
 
-<p>其中 $W = [w_1,w_2,&hellip;,w_k]$ 是分类器的权重， $Y = [y_1,y_2,&hellip;,y_N]$是实际的标签向量。 loss function 可以写成 :</p>
+<p>其中 <code>$W = [w_1,w_2,...,w_k]$</code> 是分类器的权重， <code>$Y = [y_1,y_2,...,y_N]$</code>是实际的标签向量。 loss function 可以写成 :</p>
 
-<p>$$Q = L(Y,W<sup>Tb</sup>_i) + \lambda \left | W\right |^2_F $$</p>
+<p><code>$$Q = L(Y,W^Tb_i) + \lambda \left \| W\right \|^2_F $$ </code></p>
 
-<p>L 是los function ，$\lambda$是正则化参数， $\left | W\right |_F$ 是矩阵的F范式。结合前面的相似性公式,并且将loss function 看作经典的线性 $l_2$ 损失函数。最后的公式可以写作 :</p>
+<p>L 是los function ，<code>$\lambda$</code>是正则化参数， <code>$\left \| W\right \|_F$</code> 是矩阵的F范式。结合前面的相似性公式,并且将loss function 看作经典的线性 <code>$l_2$</code> 损失函数。最后的公式可以写作 :</p>
 
-<p>$$F = - \sum<em>{s</em>{ij}\in S}(s<em>{ij}\Phi</em>{ij} -log(1+e^{\Phi<em>{ij}})) + \mu \sum^{N}</em>{i=1} \left|y_i - W<sup>Tb</sup>_i \right|^2_2 + \nu \left|W\right|^2_F$$</p>
+<p><code>$$F = - \sum_{s_{ij}\in S}(s_{ij}\Phi_{ij} -log(1+e^{\Phi_{ij}})) + \mu \sum^{N}_{i=1} \left\|y_i - W^Tb_i \right\|^2_2 + \nu \left\|W\right\|^2_F$$</code></p>
 
 <p>最终的公式会使标签对生成的2进制编码的相似度尽可能的大。</p>
 
@@ -232,56 +256,56 @@ hash stream 用来学习哈希函数，classification stream 被用来挖掘语�
 
 <p>因为 欧几里得空间和Hamming 空间的矛盾，如果完全忽略二进制约束，则会导致次优hash code。我们认为保持 2进制的编码的特性很重要。因此我们在公式中添加了辅助变量:</p>
 
-<p>$$F = - \sum<em>{s</em>{ij}\in S}(s<em>{ij}\psi</em>{ij} -log(1+e^{\psi<em>{ij}})) + \mu \sum^{N}</em>{i=1} \left|y_i - W<sup>Tb</sup>_i \right|^2_2 + \nu \left|W\right|^2_F,$$    <br/>
-$$s.t.  b_i = sgn(h_i),h_i \in \mathbb R^{K \times 1},(i = 1,&hellip;,N)$$</p>
+<p><code>$$F = - \sum_{s_{ij}\in S}(s_{ij}\psi_{ij} -log(1+e^{\psi_{ij}})) + \mu \sum^{N}_{i=1} \left\|y_i - W^Tb_i \right\|^2_2 + \nu \left\|W\right\|^2_F,$$</code>   <br/>
+<code>$$s.t.  b_i = sgn(h_i),h_i \in \mathbb R^{K \times 1},(i = 1,...,N)$$ </code></p>
 
-<p>其中 $\psi_{ij} = \frac{1}{2} h<sup>T</sup>_j h_i$ 可以看作是最后一个全连接层的输出，可以表示为 :</p>
+<p>其中 <code>$\psi_{ij} = \frac{1}{2} h^T_j h_i$</code> 可以看作是最后一个全连接层的输出，可以表示为 :</p>
 
-<p>$$h_i = M<sup>T</sup> \Theta(x_i;\theta) + n$$</p>
+<p><code>$$h_i = M^T \Theta(x_i;\theta) + n$$ </code></p>
 
-<p>其中 $\theta$ 表示最后一个全连接层 <strong>之前</strong> 的前面层的 参数， $M\in\mathbb R^{4096\times K}$ 表示权重矩阵， $n\in\mathbb R^{K\times1}$ 是偏置项。
+<p>其中 $\theta$ 表示最后一个全连接层 <strong>之前</strong> 的前面层的 参数，<code>$M\in\mathbb R^{4096\times K}$</code> 表示权重矩阵， <code>$n\in\mathbb R^{K\times1}$</code> 是偏置项。
     根据拉格朗日乘数法公式可以写成:</p>
 
-<p>$$F = - \sum<em>{s</em>{ij}\in S}(s<em>{ij}\psi</em>{ij} -log(1+e^{\psi<em>{ij}})) + \mu \sum^{N}</em>{i=1} |y_i - W<sup>Tb</sup>_i |^2_2 + \nu \left|W\right|^2_F, +\eta\sum^{N}_{i=1}|b_i-sgn(h_i)|^2_2$$  <br/>
-$$s.t.  b_i = sgn(h_i),h_i \in \mathbb R^{K \times 1},(i = 1,&hellip;,N)$$</p>
+<p><code>$$F = - \sum_{s_{ij}\in S}(s_{ij}\psi_{ij} -log(1+e^{\psi_{ij}})) + \mu \sum^{N}_{i=1} \|y_i - W^Tb_i \|^2_2 + \nu \left\|W\right\|^2_F, +\eta\sum^{N}_{i=1}\|b_i-sgn(h_i)\|^2_2$$</code>  <br/>
+<code>$$s.t.  b_i = sgn(h_i),h_i \in \mathbb R^{K \times 1},(i = 1,...,N)$$</code></p>
 
-<p>其中 $\eta$是拉格朗日乘数.
+<p>其中 <code>$\eta$</code>是拉格朗日乘数.
 关于拉格朗日乘子法，见<a href="https://www.zhihu.com/question/38586401">这里</a></p>
 
 <p>最后一项其实是用来衡量最后一个全连接层的 约束违规。(constraint violation)</p>
 
 <p>引入辅助变量的好处是我们可以将上面的公式变成两个子优化问题，以便可以用交替最小化方法迭代解决。</p>
 
-<p>首先 ， 固定 $b_i,W$( 哈希结果 , 分类器权重) ，我们有  :</p>
+<p>首先 ， 固定<code>$b_i,W$</code>( 哈希结果 , 分类器权重) ，我们有  :</p>
 
-<p>$$\frac{\partial F}{\partial M} = -\frac{1}{2}\sum<em>{j:s</em>{ij}\in S}(s<em>{ij}-\frac{e^{\psi</em>{ij}}}{1+e^{\psi<em>{ij}}})h_j-\frac{1}{2}\sum</em>{j:s<em>{ji}\in S}(s</em>{ji}-\frac{e^{\psi<em>{ji}}}{1+e^{\psi</em>{ji}}})h_j - 2\eta(b_i-h_i)$$</p>
+<p><code>$$\frac{\partial F}{\partial M} = -\frac{1}{2}\sum_{j:s_{ij}\in S}(s_{ij}-\frac{e^{\psi_{ij}}}{1+e^{\psi_{ij}}})h_j-\frac{1}{2}\sum_{j:s_{ji}\in S}(s_{ji}-\frac{e^{\psi_{ji}}}{1+e^{\psi_{ji}}})h_j - 2\eta(b_i-h_i)$$ </code></p>
 
-<p>于是，可以这样更新参数 $M,n,\Theta$</p>
+<p>于是，可以这样更新参数 <code>$M,n,\Theta$</code></p>
 
-<p>$$\frac{\partial F}{\partial M} = \Theta(x_i;\theta)(\frac{\partial F}{\partial h_i})<sup>T</sup>,\frac{\partial F}{\partial n} = \frac{\partial F}{\partial h_i} , \frac{\partial F}{\partial \Theta(x_i;\theta)}= M\frac{\partial F}{\partial h_i} $$</p>
+<p><code>$$\frac{\partial F}{\partial M} = \Theta(x_i;\theta)(\frac{\partial F}{\partial h_i})^T,\frac{\partial F}{\partial n} = \frac{\partial F}{\partial h_i} , \frac{\partial F}{\partial \Theta(x_i;\theta)}= M\frac{\partial F}{\partial h_i} $$</code></p>
 
-<p>第二步，当固定 $M,n,\Theta ,b_i$()时，我们可以求解W :</p>
+<p>第二步，当固定<code>$M,n,\Theta ,b_i$</code>()时，我们可以求解W :</p>
 
-<p>$$F = \mu\sum<sup>N</sup>_{i=1} |y_i - W<sup>Tb</sup>_i|^2_2+\nu|W|^2_F$$</p>
+<p><code>$$F = \mu\sum^N_{i=1} \|y_i - W^Tb_i\|^2_2+\nu\|W\|^2_F$$ </code></p>
 
 <p>上式是最小平方问题，有固定解法:</p>
 
-<p>$$W = (BB<sup>T</sup> + \frac{\nu}{\mu}I)^{-1}B<sup>TY</sup>$$<br/>
-其中 $B = {b_i}^N<em>{i=1} \in {-1,1}^{K \times N} , Y = {y_u}^N</em>{i=1}\in\mathbb R^{C\times N}$</p>
+<p><code>$$W = (BB^T + \frac{\nu}{\mu}I)^{-1}B^TY$$</code>
+其中 <code>$B = \{b_i\}^N_{i=1} \in \{-1,1\}^{K \times N} , Y = \{y_u\}^N_{i=1}\in\mathbb R^{C\times N}$</code></p>
 
-<p>最后，当固定 $M,n,\Theta , W$有：</p>
+<p>最后，当固定 <code>$M,n,\Theta , W$</code>有：</p>
 
-<p>$$F = \mu\sum<sup>N</sup><em>{i=1}|y_i - W<sup>Tb</sup>_i|^2_2 + \nu|W|^2_F+\eta\sum<sup>N</sup></em>{i=1}|b_i-h_i|^2_2$$</p>
+<p><code>$$F = \mu\sum^N_{i=1}\|y_i - W^Tb_i\|^2_2 + \nu\|W\|^2_F+\eta\sum^N_{i=1}\|b_i-h_i\|^2_2$$ </code></p>
 
 <p>这里使用离<strong>散循环坐标下降法</strong>(discrete cyclic coordinate descend method)来来一行一行求解B ：</p>
 
-<p>$$min_B |W<sup>TB</sup>|^2 -2Tr(P), s.t. B\in{-1,1}^{K \times N}$$</p>
+<p><code>$$min_B \|W^TB\|^2 -2Tr(P), s.t. B\in\{-1,1\}^{K \times N}$$</code></p>
 
-<p>其中 $P = WY + \frac{\eta}{\mu}H$,令 $x<sup>T</sup>$ 为B的 第 k(k = 1,&hellip;,K) 行,B_1 是 B去除 $x<sup>T</sup>$ 的矩阵，$p<sup>T</sup>$ 是矩阵P的第k 列 ,$P_1$ 是矩阵P 出去p的矩阵，$w<sup>T</sup>$ 是$W$的第k列，$W_1$ 是W除去w的矩阵，有:</p>
+<p>其中<code>$P = WY + \frac{\eta}{\mu}H$</code>,令 <code>$x^T$</code> 为B的 第 k(k = 1,&hellip;,K) 行,<code>$B_1$</code> 是 B去除<code>$x^T$</code>的矩阵，<code>$p^T$</code> 是矩阵P的第k 列 ,<code>$P_1$</code> 是矩阵P 出去p的矩阵，<code>$w^T$</code> 是<code>$W$</code>的第k列，<code>$W_1$</code> 是W除去w的矩阵，有:</p>
 
-<p>$$x = sgn(p-B<sup>T</sup>_1W_1w)$$</p>
+<p><code>$$x = sgn(p-B^T_1W_1w)$$</code></p>
 
-<p>容易看出hash code 的每一位是由提前学习的 K-1 bit $B_1$ 计算出来的。直到算法收敛，迭代着更新每一位。</p>
+<p>容易看出hash code 的每一位是由提前学习的 K-1 bit <code>$B_1$</code> 计算出来的。直到算法收敛，迭代着更新每一位。</p>
 
 <h2>实验</h2>
 

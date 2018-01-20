@@ -112,32 +112,56 @@ $(document).ready(
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.js" integrity="sha384-ad+n9lzhJjYgO67lARKETJH6WuQVDDlRfj81AJJSswMyMkXTD49wBj5EP004WOY6" crossorigin="anonymous"></script>
 
 
-<script src ="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js"
+<script src ="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js" crossorigin="anonymous"
 ></script>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/contrib/auto-render.min.js" integrity="sha384-EkJr57fExjeMKAZnlVBuoBoX0EJ4BiDPiAd/JyTzIA65ORu4hna7V6aaq4zsUvJ2" crossorigin="anonymous"></script>
 
 
-<script
-src="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.js">
+<script src="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.js" crossorigin="anonymous">
 </script>
-<link rel="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css"
->
-
-<script>
 
 
-<pre><code>let md;
-document.addEventListener("DOMContentLoaded", () =&gt; {
-    const tm = texmath.use(katex);
-    md = markdownit().use(tm);
-   // out.innerHTML = md.render('Euler\'s identity $e^{i\pi}+1=0$ is a beautiful formula.');
-   md.render(document.body);
-})
-</code></pre>
+<p><link rel="stylesheet" href="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css" crossorigin="anonymous"></p>
 
-<p>  </script></p>
+<script
+ src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+<p><link rel="stylesheet" href="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css" crossorigin="anonymous"></p>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    $("code").map(function(){
+   // match = /^\$(.*)\$$/.exec($(this).html());
+   // if (match){
+      //$(this).after("<span class=mathjax_inline>" + match + "</span>");
+      //$(this).hide();
+     // $(this).replaceWith("<span class=hpl_mathjax_inline>" + $(this).html() + "</span>");
+     // MathJax.Hub.Queue(["Typeset",MathJax.Hub,$(this).get(0)]);
+     renderMathInElement(
+           $(this)[0] ,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+   // }
+    });
+    });
+      // document.addEventListener("DOMContentLoaded", function() {
+       
+   // });
+</script>
+
 
 <h1><strong>摘要</strong></h1>
 
