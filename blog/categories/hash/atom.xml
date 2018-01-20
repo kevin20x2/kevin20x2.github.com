@@ -4,7 +4,7 @@
   <title><![CDATA[分类:  hash | ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/blog/categories/hash/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-20T17:45:38+08:00</updated>
+  <updated>2018-01-20T20:50:50+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -138,7 +138,7 @@ hash stream 用来学习哈希函数，classification stream 被用来挖掘语�
 
 <p> 给定N 个图像样本 <code>\(X = \{x_{i}\}^{N}_{i=1} \in \mathbb R^{d \times N}\)</code>,哈希编码是要学习一个K比特2进制编码集合 <code>\(B \in \{-1,1\}^{K \times N}\)</code>,其中第i列的 <code>\(b_i \in \{-1,1\}^K\) 表示第i个样本 \(x_i\)</code>的2进制编码。</p>
 
-<p> 2进制编码是由hash 函数 (h(.))来生成的。哈希函数可以写成 (h(x_i) = [h_1(x_i),&hellip;,h_c(x_i)].) 对于数据样本(x_i) ,其hash code 可以表示为 (b_i = h(x_i) = [h_1(x_i),..h_c(x_i)].)，通常来说，哈希化是学习一个哈希函数来将图片样本处理为2进制编码。</p>
+<p> 2进制编码是由hash 函数 <code>$h(.)$</code>来生成的。哈希函数可以写成 <code>$h(x_i) = [h_1(x_i),...,h_c(x_i)]$</code> 对于数据样本<code>$x_i$</code> ,其hash code 可以表示为 <code>$b_i = h(x_i) = [h_1(x_i),..h_c(x_i)]$</code>，通常来说，哈希化是学习一个哈希函数来将图片样本处理为2进制编码。</p>
 
 <h3>相似度衡量 (Similarity meaure)</h3>
 

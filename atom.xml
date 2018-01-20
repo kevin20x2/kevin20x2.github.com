@@ -4,7 +4,7 @@
   <title><![CDATA[ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-20T17:45:38+08:00</updated>
+  <updated>2018-01-20T20:50:50+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -12,6 +12,125 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[解决markdown 和latex 冲突的问题]]></title>
+    <link href="http://kevin20x2.github.io/blog/2018/01/20/latex-in-markdown/"/>
+    <updated>2018-01-20T20:14:36+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2018/01/20/latex-in-markdown</id>
+    <content type="html"><![CDATA[<p>最近配置了 VSCODE 用来写blog ，毕竟有实时预览和数学公式的插件，但是在写论文翻译的时候，在VSCODE 下预览没问题的地方部署的时候确没有正确转义，于是想着怎么解决这个问题。</p>
+
+<!--more-->
+
+
+<hr />
+
+<p>最开始以为是 MathJax 的问题，后来换了Katex ，照着github 上的教程加了一些js 代码进去，发现有的能够正常显示，有的还是不行，效果跟Katex 一致。 后来直接百度发现 是 Markdown 转换 成 HTML 和latex 公式引擎转换的问题。</p>
+
+<p>看了一下生成的html 文件，发现公式中的 ‘_’ 下划线有些被替代成了 \&lt;em>标签。这里就是问题所在了。    <br/>
+参照<a href="https://liam0205.me/2015/09/09/fix-conflict-between-mathjax-and-markdown/">这里</a> <br/>
+其思路是先用 markdown 中的 ` 反括号取消转义 ，表现在html上是用\&lt;code> 标签页包含要取消转义的部分，<br/>
+用 js 做正则匹配，获取html 中 \&lt;code>标签页中的\$\$ 字符，然后调用 MathJax 的js 代码来渲染公式。</p>
+
+<p>因为我用的是katex ，所以加上的代码稍有不同，也没有做正则匹配， 直接将原来有公式的地方 用 ` 反转义就好了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="nx">link</span> <span class="nx">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.css&quot;</span> <span class="nx">integrity</span><span class="o">=</span><span class="s2">&quot;sha384-L/SNYu0HM7XECWBeshTGLluQO9uVI1tvkCtunuoUbCHHoTH76cDyXty69Bb9I0qZ&quot;</span> <span class="nx">crossorigin</span><span class="o">=</span><span class="s2">&quot;anonymous&quot;</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.js&quot;</span> <span class="nx">integrity</span><span class="o">=</span><span class="s2">&quot;sha384-ad+n9lzhJjYgO67lARKETJH6WuQVDDlRfj81AJJSswMyMkXTD49wBj5EP004WOY6&quot;</span> <span class="nx">crossorigin</span><span class="o">=</span><span class="s2">&quot;anonymous&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span> <span class="o">=</span><span class="s2">&quot;https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js&quot;</span> <span class="nx">crossorigin</span><span class="o">=</span><span class="s2">&quot;anonymous&quot;</span>
+</span><span class='line'><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/contrib/auto-render.min.js&quot;</span> <span class="nx">integrity</span><span class="o">=</span><span class="s2">&quot;sha384-EkJr57fExjeMKAZnlVBuoBoX0EJ4BiDPiAd/JyTzIA65ORu4hna7V6aaq4zsUvJ2&quot;</span> <span class="nx">crossorigin</span><span class="o">=</span><span class="s2">&quot;anonymous&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.js&quot;</span> <span class="nx">crossorigin</span><span class="o">=</span><span class="s2">&quot;anonymous&quot;</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/script&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">link</span> <span class="nx">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css&quot;</span> <span class="nx">crossorigin</span><span class="o">=</span><span class="s2">&quot;anonymous&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">script</span>
+</span><span class='line'> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">link</span> <span class="nx">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css&quot;</span> <span class="nx">crossorigin</span><span class="o">=</span><span class="s2">&quot;anonymous&quot;</span><span class="o">&gt;&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;code&quot;</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>   <span class="nx">renderMathInElement</span><span class="p">(</span>
+</span><span class='line'>           <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="nx">delimiters</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>                  <span class="p">{</span><span class="nx">left</span><span class="o">:</span> <span class="s2">&quot;$$&quot;</span><span class="p">,</span> <span class="nx">right</span><span class="o">:</span> <span class="s2">&quot;$$&quot;</span><span class="p">,</span> <span class="nx">display</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span>
+</span><span class='line'>                  <span class="p">{</span><span class="nx">left</span><span class="o">:</span> <span class="s2">&quot;\\[&quot;</span><span class="p">,</span> <span class="nx">right</span><span class="o">:</span> <span class="s2">&quot;\\]&quot;</span><span class="p">,</span> <span class="nx">display</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span>
+</span><span class='line'>                  <span class="p">{</span><span class="nx">left</span><span class="o">:</span> <span class="s2">&quot;$&quot;</span><span class="p">,</span> <span class="nx">right</span><span class="o">:</span> <span class="s2">&quot;$&quot;</span><span class="p">,</span> <span class="nx">display</span><span class="o">:</span> <span class="kc">false</span><span class="p">},</span>
+</span><span class='line'>                  <span class="p">{</span><span class="nx">left</span><span class="o">:</span> <span class="s2">&quot;\\(&quot;</span><span class="p">,</span> <span class="nx">right</span><span class="o">:</span> <span class="s2">&quot;\\)&quot;</span><span class="p">,</span> <span class="nx">display</span><span class="o">:</span> <span class="kc">false</span><span class="p">}</span>
+</span><span class='line'>              <span class="p">]</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>其实我没写过js 代码，但是大致能够看懂，这里的坑有要用jquery ，不然代码中会有语法错误。 <br/>
+基本思想是 找到markdown 生成的html文件中的 \&lt;code>标签，然后将其中的内容用renderMathInElement 函数处理就行了。用的是texmath 插件，跟VSCode 上的插件保持一致。</p>
+
+<p>但是这个问题其实并没有完美解决，生成的 inline 公式在html 中会用一个黑框包起来，看起来不是很美观，这个是应该是主题的问题，应该找到\&lt;code> 字段的css文件将样式改一下就好了。</p>
+
+<p>另外一个问题是用了反转义之后 VSCODE 插件上就不能正确预览了。 暂时只能先写公式确定没问题之后再加上 ` 字符了。这个问题感觉我这个前端新手需要花比较大的精力去解决。</p>
+
+<div id="container"></div>
+
+
+<p><link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"></p>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+
+
+<script>
+var gitment = new Gitment({
+  id: 'location.href', // 可选。默认为 location.href
+  owner: 'kevin20x2',
+  repo: 'blog_comment',
+  oauth: {
+    client_id: '0d172133d26f520041e6',
+    client_secret: '14eef65983bd9d0e16313feaffcf1684fc3713a9',
+  },
+})
+gitment.render('container')
+</script>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[(论文整理1)Deep_Supervised_Discrete_hashing]]></title>
@@ -138,7 +257,7 @@ hash stream 用来学习哈希函数，classification stream 被用来挖掘语�
 
 <p> 给定N 个图像样本 <code>\(X = \{x_{i}\}^{N}_{i=1} \in \mathbb R^{d \times N}\)</code>,哈希编码是要学习一个K比特2进制编码集合 <code>\(B \in \{-1,1\}^{K \times N}\)</code>,其中第i列的 <code>\(b_i \in \{-1,1\}^K\) 表示第i个样本 \(x_i\)</code>的2进制编码。</p>
 
-<p> 2进制编码是由hash 函数 (h(.))来生成的。哈希函数可以写成 (h(x_i) = [h_1(x_i),&hellip;,h_c(x_i)].) 对于数据样本(x_i) ,其hash code 可以表示为 (b_i = h(x_i) = [h_1(x_i),..h_c(x_i)].)，通常来说，哈希化是学习一个哈希函数来将图片样本处理为2进制编码。</p>
+<p> 2进制编码是由hash 函数 <code>$h(.)$</code>来生成的。哈希函数可以写成 <code>$h(x_i) = [h_1(x_i),...,h_c(x_i)]$</code> 对于数据样本<code>$x_i$</code> ,其hash code 可以表示为 <code>$b_i = h(x_i) = [h_1(x_i),..h_c(x_i)]$</code>，通常来说，哈希化是学习一个哈希函数来将图片样本处理为2进制编码。</p>
 
 <h3>相似度衡量 (Similarity meaure)</h3>
 
@@ -4226,241 +4345,6 @@ In test 2,the books are already sorted.</p>
 
 
 <p></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[hdu4858]]></title>
-    <link href="http://kevin20x2.github.io/blog/2015/03/31/hdu4858/"/>
-    <updated>2015-03-31T21:39:56+08:00</updated>
-    <id>http://kevin20x2.github.io/blog/2015/03/31/hdu4858</id>
-    <content type="html"><![CDATA[<h2><a href="http://acm.hdu.edu.cn/showproblem.php?pid=4858">项目管理</a></h2>
-
-<!--more-->
-
-
-<p>Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 32768/32768 K (Java/Others)
-Total Submission(s): 1521    Accepted Submission(s): 556</p>
-
-<h3>Problem Description</h3>
-
-<p>我们建造了一个大项目！这个项目有n个节点，用很多边连接起来，并且这个项目是连通的！
-两个节点间可能有多条边，不过一条边的两端必然是不同的节点。
-每个节点都有一个能量值。</p>
-
-<p>现在我们要编写一个项目管理软件，这个软件呢有两个操作：
-1.给某个项目的能量值加上一个特定值。
-2.询问跟一个项目相邻的项目的能量值之和。（如果有多条边就算多次，比如a和b有2条边，那么询问a的时候b的权值算2次）。</p>
-
-<h3>Input</h3>
-
-<p>第一行一个整数T(1 &lt;= T &lt;= 3),表示测试数据的个数。
-然后对于每个测试数据，第一行有两个整数n(1 &lt;= n &lt;= 100000)和m(1 &lt;= m &lt;= n + 10)，分别表示点数和边数。</p>
-
-<p>然后m行，每行两个数a和b，表示a和b之间有一条边。
-然后一个整数Q。</p>
-
-<p>然后Q行，每行第一个数cmd表示操作类型。如果cmd为0，那么接下来两个数u v表示给项目u的能量值加上v(0 &lt;= v &lt;= 100)。
-如果cmd为1，那么接下来一个数u表示询问u相邻的项目的能量值之和。</p>
-
-<p>所有点从1到n标号。</p>
-
-<h3>Output</h3>
-
-<p>对每个询问，输出一行表示答案。</p>
-
-<h3>Sample Input</h3>
-
-<p>1<br/>
-3 2<br/>
-1 2<br/>
-1 3<br/>
-6<br/>
-0 1 15<br/>
-0 3 4 <br/>
-1 1<br/>
-1 3 <br/>
-0 2 33<br/>
-1 2</p>
-
-<h3>Sample Output</h3>
-
-<p>4<br/>
-15<br/>
-15</p>
-
-<h4>Author</h4>
-
-<p>CLJ</p>
-
-<h4>Source</h4>
-
-<p>BestCoder Round #1</p>
-
-<p>直接模拟就行了， 会超时的原因是卡了输入和输出， 这个时候又要用挂了orz</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include&lt;cstdio&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;iostream&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;cstring&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;cmath&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;vector&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;algorithm&gt;</span>
-</span><span class='line'><span class="k">typedef</span>  <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#define clr(x) memset((x),0,sizeof(x))</span>
-</span><span class='line'><span class="cp">#define inf 0x3f3f3f3f</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span><span class='line'><span class="n">vector</span> <span class="o">&lt;</span><span class="kt">int</span> <span class="o">&gt;</span> <span class="n">v</span><span class="p">[</span><span class="mi">100010</span><span class="p">];</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">ans</span> <span class="p">[</span><span class="mi">100010</span><span class="p">];</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span>
-</span><span class='line'><span class="kt">void</span> <span class="nf">read2</span><span class="p">(</span><span class="kt">int</span> <span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>      <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">bool</span> <span class="n">neg</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">while</span><span class="p">(((</span><span class="n">c</span><span class="o">=</span><span class="n">getchar</span><span class="p">())</span><span class="o">&lt;</span><span class="sc">&#39;0&#39;</span><span class="o">||</span><span class="n">c</span><span class="o">&gt;</span><span class="sc">&#39;9&#39;</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="n">c</span><span class="o">!=</span><span class="sc">&#39;-&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="n">neg</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">while</span><span class="p">((</span><span class="n">c</span><span class="o">=</span><span class="n">getchar</span><span class="p">())</span><span class="o">&lt;</span><span class="sc">&#39;0&#39;</span><span class="o">||</span><span class="n">c</span><span class="o">&gt;</span><span class="sc">&#39;9&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="n">x</span><span class="o">=</span><span class="n">c</span><span class="o">-</span><span class="sc">&#39;0&#39;</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">getchar</span><span class="p">(),</span><span class="n">c</span><span class="o">&gt;=</span><span class="sc">&#39;0&#39;</span><span class="o">&amp;&amp;</span><span class="n">c</span><span class="o">&lt;=</span><span class="sc">&#39;9&#39;</span><span class="p">)</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="n">c</span><span class="o">-</span><span class="sc">&#39;0&#39;</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">neg</span><span class="p">)</span> <span class="n">x</span><span class="o">=-</span><span class="n">x</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="kt">void</span> <span class="nf">out</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="o">&gt;</span><span class="mi">9</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">out</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">putchar</span><span class="p">(</span><span class="n">a</span><span class="o">%</span><span class="mi">10</span><span class="o">+</span><span class="sc">&#39;0&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">t</span> <span class="p">;</span>
-</span><span class='line'>    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="n">t</span><span class="o">--</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>            <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">clear</span><span class="p">();</span>
-</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">m</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>            <span class="n">read2</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="n">read2</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-</span><span class='line'>            <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-</span><span class='line'>            <span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">q</span><span class="p">;</span>
-</span><span class='line'>        <span class="n">memset</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span> <span class="n">ans</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">q</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">while</span><span class="p">(</span><span class="n">q</span><span class="o">--</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>            <span class="n">read2</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>            <span class="p">{</span>
-</span><span class='line'>                <span class="n">read2</span><span class="p">(</span><span class="n">y</span><span class="p">);</span><span class="n">read2</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
-</span><span class='line'>                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">].</span><span class="n">size</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>                <span class="p">{</span>
-</span><span class='line'>                    <span class="n">ans</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">z</span><span class="p">;</span>
-</span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>            <span class="k">else</span>
-</span><span class='line'>            <span class="p">{</span>
-</span><span class='line'>                <span class="n">read2</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-</span><span class='line'>                <span class="n">out</span><span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">y</span><span class="p">]);</span>
-</span><span class='line'>                <span class="n">putchar</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
