@@ -4,7 +4,7 @@
   <title><![CDATA[ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-20T20:50:50+08:00</updated>
+  <updated>2018-01-20T21:13:49+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -952,7 +952,7 @@ A accumulator buffers ，大小为<strong>2xFxI</strong> 这样能够最大化�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[new_start]]></title>
+    <title type="html"><![CDATA[New_start]]></title>
     <link href="http://kevin20x2.github.io/blog/2018/01/05/new-start/"/>
     <updated>2018-01-05T22:15:16+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2018/01/05/new-start</id>
@@ -1800,7 +1800,7 @@ master上放的其实是本地的 _deploy文件夹，也就是运行blog的文�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[hdu5261]]></title>
+    <title type="html"><![CDATA[Hdu5261]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/06/08/hdu5261/"/>
     <updated>2015-06-08T19:48:25+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/06/08/hdu5261</id>
@@ -1970,7 +1970,7 @@ i<j-n/2 时 dist[i,j] = (n+i-j)*R
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[poj3017]]></title>
+    <title type="html"><![CDATA[Poj3017]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/06/02/poj3017/"/>
     <updated>2015-06-02T22:19:38+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/06/02/poj3017</id>
@@ -2111,7 +2111,7 @@ dp[i]  = min(dp[j]+ max[j+1,i]);  j&lt;i; <br/>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[poj2411]]></title>
+    <title type="html"><![CDATA[Poj2411]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/05/28/poj2411/"/>
     <updated>2015-05-28T16:41:42+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/05/28/poj2411</id>
@@ -2274,7 +2274,7 @@ dp[i]  = min(dp[j]+ max[j+1,i]);  j&lt;i; <br/>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[poj2288]]></title>
+    <title type="html"><![CDATA[Poj2288]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/05/28/poj2288/"/>
     <updated>2015-05-28T16:19:00+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/05/28/poj2288</id>
@@ -2510,7 +2510,7 @@ dp[k][m|(1&lt;&lt;(k-1)][i] = dp[i][m][j] + v[k]<em><em>v[i] + (如果k和j之�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[poj1848]]></title>
+    <title type="html"><![CDATA[Poj1848]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/05/28/poj1848/"/>
     <updated>2015-05-28T15:53:15+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/05/28/poj1848</id>
@@ -2766,7 +2766,7 @@ dp[x][1]表示当前节点已经在环中。<br/>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[poj1141]]></title>
+    <title type="html"><![CDATA[Poj1141]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/05/28/poj1141/"/>
     <updated>2015-05-28T15:43:37+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/05/28/poj1141</id>
@@ -2966,7 +2966,7 @@ dp[i][j] = dp[i][k]+dp[k+1][j]</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[poj1947]]></title>
+    <title type="html"><![CDATA[Poj1947]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/05/28/poj1947/"/>
     <updated>2015-05-28T15:17:15+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/05/28/poj1947</id>
@@ -3166,7 +3166,7 @@ dp[i][j] = dp[i][k]+dp[k+1][j]</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[codeforces 446C]]></title>
+    <title type="html"><![CDATA[Codeforces 446C]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/05/17/codeforces-446c/"/>
     <updated>2015-05-17T00:04:38+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/05/17/codeforces-446c</id>
@@ -3800,7 +3800,7 @@ In test 2,the books are already sorted.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[codeforces 508E]]></title>
+    <title type="html"><![CDATA[Codeforces 508E]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/04/04/codeforces-508e/"/>
     <updated>2015-04-04T17:13:00+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/04/04/codeforces-508e</id>
@@ -4004,7 +4004,7 @@ In test 2,the books are already sorted.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[codeforces 507E]]></title>
+    <title type="html"><![CDATA[Codeforces 507E]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/04/04/codeforces-507e/"/>
     <updated>2015-04-04T16:51:31+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/04/04/codeforces-507e</id>

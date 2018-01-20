@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[分类:  codefoces | ZVINK's garden]]></title>
+  <title><![CDATA[分类: Codefoces | ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/blog/categories/codefoces/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-20T20:50:50+08:00</updated>
+  <updated>2018-01-20T21:13:49+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[codeforces 446C]]></title>
+    <title type="html"><![CDATA[Codeforces 446C]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/05/17/codeforces-446c/"/>
     <updated>2015-05-17T00:04:38+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/05/17/codeforces-446c</id>

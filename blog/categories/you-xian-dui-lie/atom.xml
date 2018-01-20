@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[分类:  优先队列 | ZVINK's garden]]></title>
+  <title><![CDATA[分类: 优先队列 | ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/blog/categories/you-xian-dui-lie/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-20T20:50:50+08:00</updated>
+  <updated>2018-01-20T21:13:49+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[hdu5261]]></title>
+    <title type="html"><![CDATA[Hdu5261]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/06/08/hdu5261/"/>
     <updated>2015-06-08T19:48:25+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/06/08/hdu5261</id>
@@ -110,7 +110,7 @@ int main()
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[poj3017]]></title>
+    <title type="html"><![CDATA[Poj3017]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/06/02/poj3017/"/>
     <updated>2015-06-02T22:19:38+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/06/02/poj3017</id>

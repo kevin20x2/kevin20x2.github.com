@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[分类:  贪心 | ZVINK's garden]]></title>
+  <title><![CDATA[分类: 贪心 | ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/blog/categories/tan-xin/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-20T20:50:50+08:00</updated>
+  <updated>2018-01-20T21:13:49+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[codeforces 508E]]></title>
+    <title type="html"><![CDATA[Codeforces 508E]]></title>
     <link href="http://kevin20x2.github.io/blog/2015/04/04/codeforces-508e/"/>
     <updated>2015-04-04T17:13:00+08:00</updated>
     <id>http://kevin20x2.github.io/blog/2015/04/04/codeforces-508e</id>
