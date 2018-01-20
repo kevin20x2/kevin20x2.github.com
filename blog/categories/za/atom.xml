@@ -4,7 +4,7 @@
   <title><![CDATA[分类:  杂 | ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/blog/categories/za/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-15T16:19:45+08:00</updated>
+  <updated>2018-01-20T15:44:43+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -75,6 +75,28 @@ make install
 
 <p>验证安装: <br/>
 用qtcreator  打开 qwt下的example 目录下的任意项目 ，编译运行没有问题即可 。</p>
+
+<div id="container"></div>
+
+
+<p><link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"></p>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+
+
+<script>
+var gitment = new Gitment({
+  id: 'location.href', // 可选。默认为 location.href
+  owner: 'kevin20x2',
+  repo: 'blog_comment',
+  oauth: {
+    client_id: '0d172133d26f520041e6',
+    client_secret: '14eef65983bd9d0e16313feaffcf1684fc3713a9',
+  },
+})
+gitment.render('container')
+</script>
+
 ]]></content>
   </entry>
   

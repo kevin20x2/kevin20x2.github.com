@@ -1,0 +1,499 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>(论文整理1)Deep_Supervised_Discrete_hashing  | ZVINK&#8217;s garden</title>
+
+<meta name="author" content="ZVINK"> 
+
+<meta name="description" content="摘要 随着图片和视频数据的增长，哈希被大规模的使用在图片和视频的研究中。得益于深度学习，深度哈希方法(deep hasing methods)在图像检索中已经取得了不错的效果。 但是，之前的深度哈希方法有一些限制(如：语义信息没有充分利用)。在本paper中，我们提出了一个 深度监督离散哈希算法 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="ZVINK's garden" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">ZVINK&#8217;s garden</a></h1>
+<h4>try</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:kevin20x2.github.io">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">(论文整理1)Deep_Supervised_Discrete_hashing</h2>
+	<div class="entry-content"><p><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.css" integrity="sha384-L/SNYu0HM7XECWBeshTGLluQO9uVI1tvkCtunuoUbCHHoTH76cDyXty69Bb9I0qZ" crossorigin="anonymous"></p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.js" integrity="sha384-ad+n9lzhJjYgO67lARKETJH6WuQVDDlRfj81AJJSswMyMkXTD49wBj5EP004WOY6" crossorigin="anonymous"></script>
+
+
+<script src ="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js"
+></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/contrib/auto-render.min.js" integrity="sha384-EkJr57fExjeMKAZnlVBuoBoX0EJ4BiDPiAd/JyTzIA65ORu4hna7V6aaq4zsUvJ2" crossorigin="anonymous"></script>
+
+
+<script
+src="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.js">
+</script>
+<link rel="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css"
+>
+
+<script>
+
+
+<pre><code>let md;
+document.addEventListener("DOMContentLoaded", () =&gt; {
+    const tm = texmath.use(katex);
+    md = markdownit().use(tm);
+   // out.innerHTML = md.render('Euler\'s identity $e^{i\pi}+1=0$ is a beautiful formula.');
+   md.render(document.body);
+})
+</code></pre>
+
+<p>  </script></p>
+
+<h1><strong>摘要</strong></h1>
+
+<p>随着图片和视频数据的增长，哈希被大规模的使用在图片和视频的研究中。得益于深度学习，<strong>深度哈希方法</strong>(deep hasing methods)在图像检索中已经取得了不错的效果。 <br/>
+但是，之前的深度哈希方法有一些限制(如：语义信息没有充分利用)。在本paper中，我们提出了一个 <strong>深度监督离散哈希算法</strong>(Deep supervised discrete hashing)，跟据&#8221;学习到的二进制数据对于分类效果应该很好&#8221; 这个假设。<br/>
+在同一个流框架中，同时使用 <strong>标签信息</strong>和<strong>分类信息</strong>作为一对数据来学习哈希代码。我们强制<strong>使最后一层直接输出二进制数据</strong>，之前很少有人做过这方面的深度哈希。因为哈希代码离散的天性，可以使用一个交替化最小方法来优化目标函数。实验表明，我们的方法比最先进的方法还要更好。</p>
+
+<!--more-->
+
+
+<h1><strong>简介</strong></h1>
+
+<p>因为网络上图像和视频数据的快速增长，<strong>哈希(hashing)</strong> 近年来吸引到了很多的注意力。因为其<strong>低计算消耗</strong>和<strong>高存储效率</strong>的特性，已经成为最流行的技术之一。简单来讲，哈希是用来编码高纬度数据到二进制编码(binary codes)中，同时保持图像和数据的相似性的(similarity)。现有的哈希方法大体可以分为两种: 数据独立的方法(data independent methods)，和数据相关的方法(data dependent methods)。</p>
+
+<h3><strong>数据独立的方法</strong></h3>
+
+<p>依赖于 <strong>随机投影</strong>(random projections) 来构建哈希函数。<strong>局部敏感哈希</strong>(LSH) 是其中代表之一。它使用随机线性投影来将相邻的数据映射到相似的二进制编码中。LSH在图像检索中被大规模使用。为了泛化LSH来适应任意的内核函数(kernel function), <strong>核心局部敏感哈希</strong>(KLSH)被提出来用于处理高维度的核心化的数据。也有其他LSH的变体，如super-bit LSH，non-metric LSH 。但是 <strong>数据独立的哈希方法的限制是没有使用训练数据</strong>。训练低效而且需要很长的hash code来获取高准确度。因为数据独立哈希方法的这些限制，最近的哈希方法尝试利用各种机器学习的技术在给定的数据集来学习更有效的哈希函数。</p>
+
+<h3><strong>数据相关的方法</strong></h3>
+
+<p>指的是使用训练数据来学习哈希函数。进一步可以分为 有监督的哈希方法和无监督的哈希方法。无监督的方法根据某种距离度量来检索相邻数据。<strong>迭代量化</strong>(ITQ)是其中一种有代表性的无监督哈希方法，其 根据给定的训练样本，通过<strong>迭代投影</strong>(iterative projection)和阈值处理(thresholding)来优化投影矩阵。<br/>
+为了利用数据样本的语义表情，有如下有监督的哈希算法:</p>
+
+<ul>
+<li>KSH (supervised Hashing with Kernels)<br/>
+通过最小化 相似对之间的Hamming 距离，同时最大化不相似对之间的距离，来学习hash code。</li>
+<li>BRE (Binary Reconstruction Embedding)<br/>
+利用最小化Hamming 空间的初始距离和重构距离之间的错误。</li>
+<li>OPH (Order Preserving Hashing)<br/>
+维护根据语义标签计算出来的 监督的 raking list 信息来学习哈希 code。</li>
+<li>SDH (Superived Discrete Hashing)<br/>
+直接通过<strong>离散循环坐标下降法</strong>(discrete cyclic coordinate descent method)优化hash code.</li>
+</ul>
+
+
+<h3><strong>基于深度学习的hash 方法</strong> :</h3>
+
+<ul>
+<li>CNNH (Convolutional Neural Network Hashing)</li>
+<li>NINH (Network in Network Hashing)</li>
+<li>DSRH (Deep Semantic Ranking Hashing)</li>
+<li>ADMM (ADMM)</li>
+</ul>
+
+
+<p>虽然基于深度学习的方法在图像检索中取得了很大的成就，但是仍然有一些限制(eg. 没有充分利用语义信息) 。 相关工作尝试将学习流程分为两个多任务学习框架流。<br/>
+hash stream 用来学习哈希函数，classification stream 被用来挖掘语义信息。<br/>
+虽然这种框架能够提升检索表现，但是 分类流只用来学习图像表示 (image representations) ，对于哈希函数没有直接影响。 <br/>
+在这篇paper 中，我们使用CNN来<strong>同时学习图像表示和哈希函数</strong> 。CNN的最后一层基于<strong>标签数据和分类数据对</strong>直接输出2进制编码。</p>
+
+<h3><strong>贡献:</strong></h3>
+
+<ol>
+<li>我们方法的最后一层被限制为直接输出二进制代码。 学习二进制代码以保持相似性关系并同时保持标签一致。第一个在一个流框架中同时使用标签和分类数据来学习hash code.</li>
+<li>因为哈希代码离散的天性，可以使用一个交替化最小方法来优化目标函数。</li>
+<li>实验表明，我们的方法比最先进的方法还要更好。</li>
+</ol>
+
+
+<h2><strong>深度监督离散哈希(Deep superised discrete hashing)</strong></h2>
+
+<h3>问题定义</h3>
+
+<p> 给定N 个图像样本 $X = {x<em>{i}}^{N}</em>{i=1} \in \mathbb R^{d \times N}$ ,哈希编码是要学习一个K比特2进制编码集合 $B \in {-1,1}^{K \times N}$,其中第i列的 $b_i \in {-1,1}^K$ 表示第i个样本 $x_i$的2进制编码。</p>
+
+<p> 2进制编码是由hash 函数 $h(.)$来生成的。哈希函数可以写成 $h(x_i) = [h_1(x_i),&hellip;,h_c(x_i)].$ 对于数据样本$x_i$ ,其hash code 可以表示为 $b_i = h(x_i) = [h_1(x_i),..h_c(x_i)].$，通常来说，哈希化是学习一个哈希函数来将图片样本处理为2进制编码。</p>
+
+<h3>相似度衡量 (Similarity meaure)</h3>
+
+<p> 在监督哈希化中，标签信息被表示为 $Y = {y<em>{i}}^{N}</em>{i=1}\in \mathbb R^{c \times N}$ ,其中 $y_i\in{0,1}^c$ 与样本 $x_i$对应，c是分类的个数。 <strong>一个样本可能属于多个分类集合</strong>。<br/>
+ 给定 语义标签信息，配对标签信息(pairwise label information)可以写成 : $S = {s<em>{ij}},s</em>{i,j}\in{0,1}$ 。 当$s_{ij}=1$时说明 $x_i$和 $x_j$ 相似，反之等于0时不相似。<br/>
+ Hamming 距离 可以由如下公式表示:</p>
+
+<p>$$ dist_{H}(b_i,b_j) = \frac{1}{2}(K -&lt;b_i,b_j> ) $$<br/>
+其中 $&lt;b_i,b_j>$表示 两者的内积。 如果内积很小，那么Hamming距离就很大，反之亦然。因此，不同的hash code 的内积 可以用来标识其相似度。</p>
+
+<p>给定 配对相似度关系 $S={s_{i,j}}$， 其 <strong>最大后验估计</strong>(MAP estimation) 可以表示为 :</p>
+
+<p> $$p(B|S) \propto p(S|B)p(B) = \prod<em>{s</em>{ij}\in S}p(s_{ij}|B)p(B) $$</p>
+
+<p> 其中 p(S|B) 是相似函数，p(B) 是先验分布。对于每一对图像， $p(s<em>{ij}|B)$ 是给定hash code B 的$s</em>{ij}$条件概率,定义如下:</p>
+
+<p> $$p(s<em>{ij}|B) = \begin{cases} \sigma(\Phi</em>{ij}), s<em>{ij} =1\ 1- \sigma(\Phi</em>{ij}), s_{ij} =0\end{cases} $$</p>
+
+<p> 其中 $\sigma(x) = 1/(1 + e^{-x})$ 是sigmmoid 激活函数，$\Phi_{ij} = \frac{1}{2}&lt;b_i,b_j>$ 上述公式说明，内积越大，$b_i$和$b_j$ 应该被分类成相似的，反之亦然，因此对于hash code 来说上述公式是reasonable 的。</p>
+
+<hr />
+
+<h3>注:<strong>最大后验估计 MAP</strong></h3>
+
+<p> <strong>文中没有详细解释最大后验估计，这里参照<a href="https://www.cnblogs.com/easoncheng/archive/2012/11/08/2760675.html">这里</a> 的例子来说明。<br/>
+ 举例来说：</strong></p>
+
+<p>　　假设有五个袋子，各袋中都有无限量的饼干(樱桃口味或柠檬口味)，已知五个袋子中两种口味的比例分别是</p>
+
+<table>
+<thead>
+<tr>
+<th>樱桃</th>
+<th>柠檬</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>樱桃 100%</td>
+<td> 柠檬 0%</td>
+</tr>
+<tr>
+<td>樱桃 75% </td>
+<td> 柠檬 25%</td>
+</tr>
+<tr>
+<td>樱桃 50% </td>
+<td> 柠檬 50%</td>
+</tr>
+<tr>
+<td>樱桃 25% </td>
+<td> 柠檬 75%</td>
+</tr>
+<tr>
+<td>樱桃 0%</td>
+<td>柠檬 100%</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>　　如果只有如上所述条件，那问从同一个袋子中连续拿到2个柠檬饼干，那么这个袋子最有可能是上述五个的哪一个？</p>
+
+<p>我们首先采用最大似然估计来解这个问题，写出似然函数。假设从袋子中能拿出柠檬饼干的概率为p(我们通过这个概率p来确定是从哪个袋子中拿出来的)，则似然函数可以写作</p>
+
+<p>$$p(2lemon|packet) = p<sup>2</sup>$$</p>
+
+<p>　　</p>
+
+<p>　　由于p的取值是一个离散值，即上面描述中的0,25%，50%，75%，1。我们只需要评估一下这五个值哪个值使得似然函数最大即可，得到为袋子5。这里便是最大似然估计的结果。</p>
+
+<p>上述最大似然估计有一个问题，就是没有考虑到模型本身的概率分布，下面我们扩展这个饼干的问题。</p>
+
+<p>假设拿到袋子1或5的机率都是0.1，拿到2或4的机率都是0.2，拿到3的机率是0.4，那同样上述问题的答案呢？这个时候就变MAP了。我们根据公式</p>
+
+<p>$$MAP = p<sup>2</sup> \times g$$<br/>
+　　</p>
+
+<p>写出我们的MAP函数。</p>
+
+<p>　　</p>
+
+<p>根据题意的描述可知，p的取值分别为0,25%，50%，75%，1，g的取值分别为0.1，0.2,0.4,0.2,0.1.分别计算出MAP函数的结果为：0,0.0125,0.125,0.28125,0.1.由上可知，通过MAP估计可得结果是从第四个袋子中取得的最高。</p>
+
+<hr />
+
+<h2>Loss function</h2>
+
+<p>我们采用现有CNN的优势来学习hash function，为了与其他deep hashing methods 相比较，选择 CNN-F 网络架构来作为算法的基本组件。具体来说，我们分别有两个共享权值的CNN来学习hash function，样本对被当作这两个CNN的输入。 CNN 模型有5个卷积层和2两个全连接层。最后一层的神经元g额数等于hash code 的个数。<br/>
+考虑到相似度衡量，以下loss function 被用来学习hash code :</p>
+
+<p>$$J = -log p(S|B) = - \sum<em>{s</em>{ij}\in S} log p(s<em>{ij}|B) = -\sum</em>{s<em>{ij}\in S}(s</em>{ij}\Phi<em>{ij} -log(1+e^{\Phi</em>{ij}}))$$</p>
+
+<p>上述公式 使得两个相似样本的Hamming 距离尽可能小，同时使得两个不相似样本的距离尽可能大。</p>
+
+<p>尽管标签对信息被用来学习hash function，但是标签信息并没有被充分利用。大部分之前的工作在两个<strong>多任务学习框架</strong>中利用标签信息。 我们基本假定学习2进制编码对于分类很理想。为直接利用标签信息，我们期望学习的二进制编码对于联合学习的线性分类器是最优的。 <br/>
+我们使用一个简单的线性分类器来给学习完的的2进制编码和标签信息 建模:</p>
+
+<p>$$ Y = W<sup>TB</sup>$$</p>
+
+<p>其中 $W = [w_1,w_2,&hellip;,w_k]$ 是分类器的权重， $Y = [y_1,y_2,&hellip;,y_N]$是实际的标签向量。 loss function 可以写成 :</p>
+
+<p>$$Q = L(Y,W<sup>Tb</sup>_i) + \lambda \left | W\right |^2_F $$</p>
+
+<p>L 是los function ，$\lambda$是正则化参数， $\left | W\right |_F$ 是矩阵的F范式。结合前面的相似性公式,并且将loss function 看作经典的线性 $l_2$ 损失函数。最后的公式可以写作 :</p>
+
+<p>$$F = - \sum<em>{s</em>{ij}\in S}(s<em>{ij}\Phi</em>{ij} -log(1+e^{\Phi<em>{ij}})) + \mu \sum^{N}</em>{i=1} \left|y_i - W<sup>Tb</sup>_i \right|^2_2 + \nu \left|W\right|^2_F$$</p>
+
+<p>最终的公式会使标签对生成的2进制编码的相似度尽可能的大。</p>
+
+<h2>优化 (Optimization)</h2>
+
+<p>上面公式的最小化是一个离散优化问题，通常直接优化是比较困难的。
+在训练阶段，在最后一个全连接层，sigmoid 或者tanh 激活函数被用来取代RelU 函数，并且hash code 的结果为连续的输出.在测试阶段，会在连续的output上使用阈函数。这种方法的一个缺点是比较慢，除此之外，还会存在大量的量化错误。sign fuction 强制使ouput变成2进制变量，但是sign 函数不可微分，因此很难用反向传播算法来计算loss function。</p>
+
+<p>因为 欧几里得空间和Hamming 空间的矛盾，如果完全忽略二进制约束，则会导致次优hash code。我们认为保持 2进制的编码的特性很重要。因此我们在公式中添加了辅助变量:</p>
+
+<p>$$F = - \sum<em>{s</em>{ij}\in S}(s<em>{ij}\psi</em>{ij} -log(1+e^{\psi<em>{ij}})) + \mu \sum^{N}</em>{i=1} \left|y_i - W<sup>Tb</sup>_i \right|^2_2 + \nu \left|W\right|^2_F,$$    <br/>
+$$s.t.  b_i = sgn(h_i),h_i \in \mathbb R^{K \times 1},(i = 1,&hellip;,N)$$</p>
+
+<p>其中 $\psi_{ij} = \frac{1}{2} h<sup>T</sup>_j h_i$ 可以看作是最后一个全连接层的输出，可以表示为 :</p>
+
+<p>$$h_i = M<sup>T</sup> \Theta(x_i;\theta) + n$$</p>
+
+<p>其中 $\theta$ 表示最后一个全连接层 <strong>之前</strong> 的前面层的 参数， $M\in\mathbb R^{4096\times K}$ 表示权重矩阵， $n\in\mathbb R^{K\times1}$ 是偏置项。
+    根据拉格朗日乘数法公式可以写成:</p>
+
+<p>$$F = - \sum<em>{s</em>{ij}\in S}(s<em>{ij}\psi</em>{ij} -log(1+e^{\psi<em>{ij}})) + \mu \sum^{N}</em>{i=1} |y_i - W<sup>Tb</sup>_i |^2_2 + \nu \left|W\right|^2_F, +\eta\sum^{N}_{i=1}|b_i-sgn(h_i)|^2_2$$  <br/>
+$$s.t.  b_i = sgn(h_i),h_i \in \mathbb R^{K \times 1},(i = 1,&hellip;,N)$$</p>
+
+<p>其中 $\eta$是拉格朗日乘数.
+关于拉格朗日乘子法，见<a href="https://www.zhihu.com/question/38586401">这里</a></p>
+
+<p>最后一项其实是用来衡量最后一个全连接层的 约束违规。(constraint violation)</p>
+
+<p>引入辅助变量的好处是我们可以将上面的公式变成两个子优化问题，以便可以用交替最小化方法迭代解决。</p>
+
+<p>首先 ， 固定 $b_i,W$( 哈希结果 , 分类器权重) ，我们有  :</p>
+
+<p>$$\frac{\partial F}{\partial M} = -\frac{1}{2}\sum<em>{j:s</em>{ij}\in S}(s<em>{ij}-\frac{e^{\psi</em>{ij}}}{1+e^{\psi<em>{ij}}})h_j-\frac{1}{2}\sum</em>{j:s<em>{ji}\in S}(s</em>{ji}-\frac{e^{\psi<em>{ji}}}{1+e^{\psi</em>{ji}}})h_j - 2\eta(b_i-h_i)$$</p>
+
+<p>于是，可以这样更新参数 $M,n,\Theta$</p>
+
+<p>$$\frac{\partial F}{\partial M} = \Theta(x_i;\theta)(\frac{\partial F}{\partial h_i})<sup>T</sup>,\frac{\partial F}{\partial n} = \frac{\partial F}{\partial h_i} , \frac{\partial F}{\partial \Theta(x_i;\theta)}= M\frac{\partial F}{\partial h_i} $$</p>
+
+<p>第二步，当固定 $M,n,\Theta ,b_i$()时，我们可以求解W :</p>
+
+<p>$$F = \mu\sum<sup>N</sup>_{i=1} |y_i - W<sup>Tb</sup>_i|^2_2+\nu|W|^2_F$$</p>
+
+<p>上式是最小平方问题，有固定解法:</p>
+
+<p>$$W = (BB<sup>T</sup> + \frac{\nu}{\mu}I)^{-1}B<sup>TY</sup>$$<br/>
+其中 $B = {b_i}^N<em>{i=1} \in {-1,1}^{K \times N} , Y = {y_u}^N</em>{i=1}\in\mathbb R^{C\times N}$</p>
+
+<p>最后，当固定 $M,n,\Theta , W$有：</p>
+
+<p>$$F = \mu\sum<sup>N</sup><em>{i=1}|y_i - W<sup>Tb</sup>_i|^2_2 + \nu|W|^2_F+\eta\sum<sup>N</sup></em>{i=1}|b_i-h_i|^2_2$$</p>
+
+<p>这里使用离<strong>散循环坐标下降法</strong>(discrete cyclic coordinate descend method)来来一行一行求解B ：</p>
+
+<p>$$min_B |W<sup>TB</sup>|^2 -2Tr(P), s.t. B\in{-1,1}^{K \times N}$$</p>
+
+<p>其中 $P = WY + \frac{\eta}{\mu}H$,令 $x<sup>T</sup>$ 为B的 第 k(k = 1,&hellip;,K) 行,B_1 是 B去除 $x<sup>T</sup>$ 的矩阵，$p<sup>T</sup>$ 是矩阵P的第k 列 ,$P_1$ 是矩阵P 出去p的矩阵，$w<sup>T</sup>$ 是$W$的第k列，$W_1$ 是W除去w的矩阵，有:</p>
+
+<p>$$x = sgn(p-B<sup>T</sup>_1W_1w)$$</p>
+
+<p>容易看出hash code 的每一位是由提前学习的 K-1 bit $B_1$ 计算出来的。直到算法收敛，迭代着更新每一位。</p>
+
+<h2>实验</h2>
+
+<ol>
+<li>实验设置</li>
+<li>实验使用两个数据集 ： CIFAR-10 ， NUS-WIDE.</li>
+<li>对比实验，分成两组 ， 传统hash 方法和 deep hash 方法。</li>
+<li>非监督的hashing 方法 ，包括 SH，ITQ ，监督hash 方法包括: SPLH,KSH,FastH,LFH,SDH。</li>
+<li><p>深度hash 算法包括 DQN,DHN,CNNH,NINH,DSRH,DSCH,DRCSH,DPSH,DTSH,VDSH</p></li>
+<li><p>实验结论 <br/>
+比最新的好</p></li>
+</ol>
+
+
+<p>(这个地方太繁杂，建议直接看原文)</p>
+
+<p>体会 :</p>
+
+<ul>
+<li>本文所说的hash 并不是deep compression ，hashNet 那种为了减少权重和压缩模型的hash。方向在于hash 输入输出特征图。 根据标签中相同的语义将 相似的图像数据hash成 相似的hash code。意义是 提高 图像检索的准确度。</li>
+<li>其中设计到了很多数学方法和公式 : 概率论中 的 MAP ，机器学习常见的BP，以及正则化方法，还有高数中的拉格朗日乘子法。(让我这个数学弱渣情何以堪) 很多地方其实只能看个大概，要自己做这个研究数学功底肯定是要比较深厚的。</li>
+<li>本文也其实体现了图像检索的一个基本思想 : 将相似的图片 (语义相似，标签相似) ,通过CNN学习hash 函数，hash 成相似的2进制code ，以此在查询的时候输出最相似的图片，完成查询流程。</li>
+</ul>
+
+
+<div id="container"></div>
+
+
+<p><link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"></p>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+
+
+<script>
+var gitment = new Gitment({
+  id: 'location.href', // 可选。默认为 location.href
+  owner: 'kevin20x2',
+  repo: 'blog_comment',
+  oauth: {
+    client_id: '0d172133d26f520041e6',
+    client_secret: '14eef65983bd9d0e16313feaffcf1684fc3713a9',
+  },
+})
+gitment.render('container')
+</script>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-01-18T18:24:06+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/hash/'>hash</a>, <a class='category' href='/blog/categories/nips-2017/'>nips_2017</a>, <a class='category' href='/blog/categories/quantization/'>quantization</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2018/01/18/deep-supervised-discrete-hashing/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2018
+
+    ZVINK
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'kevin20x2';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://kevin20x2.github.io/blog/2018/01/18/deep-supervised-discrete-hashing/';
+        var disqus_url = 'http://kevin20x2.github.io/blog/2018/01/18/deep-supervised-discrete-hashing/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

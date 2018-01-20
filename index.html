@@ -9,7 +9,7 @@
 
 <meta name="author" content="ZVINK"> 
 
-<meta name="description" content=" 项目需要不联网安装 QT,Qwt ，于是就开始了折腾之旅。 阅读全文 杂 Comments "> <meta name="keywords" content="">
+<meta name="description" content="摘要 随着图片和视频数据的增长，哈希被大规模的使用在图片和视频的研究中。得益于深度学习，深度哈希方法(deep hasing methods)在图像检索中已经取得了不错的效果。 但是，之前的深度哈希方法有一些限制(如：语义信息没有充分利用)。在本paper中，我们提出了一个 深度监督离散哈希算法 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,87 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/01/18/deep-supervised-discrete-hashing/">
+		
+			(论文整理1)Deep_Supervised_Discrete_hashing</a>
+	</h2>
+	<div class="entry-content">
+		<p><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.css" integrity="sha384-L/SNYu0HM7XECWBeshTGLluQO9uVI1tvkCtunuoUbCHHoTH76cDyXty69Bb9I0qZ" crossorigin="anonymous"></p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.js" integrity="sha384-ad+n9lzhJjYgO67lARKETJH6WuQVDDlRfj81AJJSswMyMkXTD49wBj5EP004WOY6" crossorigin="anonymous"></script>
+
+
+<script src ="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js"
+></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/contrib/auto-render.min.js" integrity="sha384-EkJr57fExjeMKAZnlVBuoBoX0EJ4BiDPiAd/JyTzIA65ORu4hna7V6aaq4zsUvJ2" crossorigin="anonymous"></script>
+
+
+<script
+src="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.js">
+</script>
+<link rel="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css"
+>
+
+<script>
+
+
+<pre><code>let md;
+document.addEventListener("DOMContentLoaded", () =&gt; {
+    const tm = texmath.use(katex);
+    md = markdownit().use(tm);
+   // out.innerHTML = md.render('Euler\'s identity $e^{i\pi}+1=0$ is a beautiful formula.');
+   md.render(document.body);
+})
+</code></pre>
+
+<p>  </script></p>
+
+<h1><strong>摘要</strong></h1>
+
+<p>随着图片和视频数据的增长，哈希被大规模的使用在图片和视频的研究中。得益于深度学习，<strong>深度哈希方法</strong>(deep hasing methods)在图像检索中已经取得了不错的效果。 <br/>
+但是，之前的深度哈希方法有一些限制(如：语义信息没有充分利用)。在本paper中，我们提出了一个 <strong>深度监督离散哈希算法</strong>(Deep supervised discrete hashing)，跟据&#8221;学习到的二进制数据对于分类效果应该很好&#8221; 这个假设。<br/>
+在同一个流框架中，同时使用 <strong>标签信息</strong>和<strong>分类信息</strong>作为一对数据来学习哈希代码。我们强制<strong>使最后一层直接输出二进制数据</strong>，之前很少有人做过这方面的深度哈希。因为哈希代码离散的天性，可以使用一个交替化最小方法来优化目标函数。实验表明，我们的方法比最先进的方法还要更好。</p>
+
+
+		
+		<a href="/blog/2018/01/18/deep-supervised-discrete-hashing/" class="more-link"> 阅读全文 </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-01-18T18:24:06+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/hash/'>hash</a>, <a class='category' href='/blog/categories/nips-2017/'>nips_2017</a>, <a class='category' href='/blog/categories/quantization/'>quantization</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2018/01/18/deep-supervised-discrete-hashing//index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -540,51 +621,6 @@ MathJax.Hub.Config({
 
 	
 		<span class="comments"><a href="/blog/2015/05/28/poj2411//index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/05/28/poj2288/">
-		
-			Poj2288</a>
-	</h2>
-	<div class="entry-content">
-		<h3><a href="http://poj.org/problem?id=2288">Islands and Bridges</a></h3>
-
-
-		
-		<a href="/blog/2015/05/28/poj2288/" class="more-link"> 阅读全文 </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-05-28T16:19:00+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/zhuang-ya-dp/'>状压dp</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2015/05/28/poj2288//index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
