@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Quantized-CNN - ZVINK&#8217;s garden</title>
+  <meta name="author" content="ZVINK">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://kevin20x2.github.io/blog/2018/01/27/quantized-cnn/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="ZVINK's garden" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://kevin20x2.github.io/blog/2018/01/27/quantized-cnn/">
+  <meta property="og:title" content="Quantized-CNN - ZVINK's garden">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      
+        <header role="banner">
+          <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">ZVINK&#8217;s garden</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ><a href="#">Projects</a></li>
+<li ><a href="/blog/archives">Archives</a></li>
+<li ><a href="#">About</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="navbar-form navbar-right" action="https://www.google.com/search" method="GET">
+                    <input type="hidden" name="sitesearch" value="kevin20x2.github.io">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+
+        </header>
+      
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="ZVINK's garden" />
+    
+    <meta itemprop="url" content="http://kevin20x2.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2018-01-27T15:28:16+08:00"  data-updated="true" itemprop="datePublished dateCreated">2018 年1  月 27 日</time>
+        
+           | <a href="#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://kevin20x2.github.io">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        Quantized-CNN
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.css" integrity="sha384-L/SNYu0HM7XECWBeshTGLluQO9uVI1tvkCtunuoUbCHHoTH76cDyXty69Bb9I0qZ" crossorigin="anonymous"></p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/katex.min.js" integrity="sha384-ad+n9lzhJjYgO67lARKETJH6WuQVDDlRfj81AJJSswMyMkXTD49wBj5EP004WOY6" crossorigin="anonymous"></script>
+
+
+<script src ="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js" crossorigin="anonymous"
+></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta/contrib/auto-render.min.js" integrity="sha384-EkJr57fExjeMKAZnlVBuoBoX0EJ4BiDPiAd/JyTzIA65ORu4hna7V6aaq4zsUvJ2" crossorigin="anonymous"></script>
+
+
+<script src="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.js" crossorigin="anonymous">
+</script>
+
+
+<p><link rel="stylesheet" href="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css" crossorigin="anonymous"></p>
+
+<script
+ src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+<p><link rel="stylesheet" href="https://gitcdn.xyz/cdn/goessner/markdown-it-texmath/master/texmath.css" crossorigin="anonymous"></p>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    $("code").map(function(){
+   // match = /^\$(.*)\$$/.exec($(this).html());
+   // if (match){
+      //$(this).after("<span class=mathjax_inline>" + match + "</span>");
+      //$(this).hide();
+     // $(this).replaceWith("<span class=hpl_mathjax_inline>" + $(this).html() + "</span>");
+     // MathJax.Hub.Queue(["Typeset",MathJax.Hub,$(this).get(0)]);
+     renderMathInElement(
+           $(this)[0] ,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+   // }
+    });
+    });
+      // document.addEventListener("DOMContentLoaded", function() {
+       
+   // });
+</script>
+
+
+<h1>Quantized Convolutional Neural Networks for Mobile Devices</h1>
+
+<hr />
+
+<h2>摘要:</h2>
+
+<hr />
+
+<ul>
+<li>提出了量化 CNN，同时<strong>加速计算</strong> 和 <strong>压缩模型</strong></li>
+<li>同时量化卷积层的kernel 和 全连接层的参数。</li>
+<li>ILSVRC-12 上做实验，在1%的准确度损失下，得到了4-6x 加速比和15-20的压缩比</li>
+</ul>
+
+
+<!--more-->
+
+
+<h2>简介</h2>
+
+<hr />
+
+<ol>
+<li>说明了CNN 在图像分类领域的成功。</li>
+<li>引出，虽然在GPU平台上速度很快，但是在普通的手机设备上，因为有限的算力和内存容量CNN的模型大小和计算速度都不尽人意。</li>
+<li>说明CNN中，<strong>卷积层</strong>的计算是最消耗算力的地方，而<strong>全连接层</strong>是参数最多的层。</li>
+<li>简单了提了一下相关工作，说明其他人的工作要么是着重于提高计算速度，要么是着重于压缩。很少有人能够做到同时加速和压缩。</li>
+<li>引出Q-CNN，同时加速和压缩CNN。网络的参数量化之后，卷积层和全连接层可以通过 approximate inner product computation来有效估计。</li>
+<li>为了减小误差同时量化CNN中的层，提出了一个训练机制。</li>
+<li>说明Q-CNN 计算前向传播的速度很快，并且减少了内存消耗。</li>
+<li>说明Q-CNN在两个测试集上做过测试，MNIST 和 ILSVRC-12，对于MNIST ， 获得了12x的压缩率，并且比有些基准获得更少了accuracy loss。 对于 ILSVRC-12，在<strong>AlexNet</strong> ，<strong>CaffeNet</strong>，<strong>CNN-S</strong>，<strong>VGG-16</strong>上做过测试。Q-CNN 获得了<strong>4x</strong>的加速比和<strong>15x</strong>的压缩比，损失了不到<strong>1%</strong>的<strong>top-5</strong>精度。</li>
+<li>并且实现了移动设备上的quantized CNN 模型。</li>
+</ol>
+
+
+<hr />
+
+<h2>准备工作</h2>
+
+<hr />
+
+<p>文中的基本想法是: 不管是全连接层还是卷积层的计算，都能够看成<strong>向量内积</strong>的和。</p>
+
+<p>考虑卷积层的输入 <code>$S\in\mathbb R^{d_s\times d_s\times C_s}$</code> 和输出 <code>$T\in \mathbb R^{d_t\times d_t\times C_t}$ , $d_s,d_t$</code> 是输入，输出特征图的大小。 <code>$C_s,C_t$</code>是特征图的通道。于是输出的特征图中，第ct 个通道中，位置 <code>$p_t$</code>上的输出为:</p>
+
+<p><code>$$T_{p_t}(c_t) = \sum_{(p_k,p_s)} &lt;W_{c_t,p_k},S_{p_s}&gt;$$</code></p>
+
+<p>其中 <code>$W_{c_t}\in \mathbb R^{d_k\times d_k\times C_s}$</code>是第ct个卷积核，<code>$d_k$</code>是kernel size。
+这里很好理解，因为卷积运算能够转换成矩阵乘法，实际上也就是多个向量乘积的和。
+全连接层本身就可以看作向量的内积，这里不详细说。</p>
+
+<p>文中是考虑了每一个向量的内积和: 假设要求向量<code>$x,y \in \mathbb R^D$</code>的内积。先将x,y 都切分成 M 个 子向量，用 <code>$x^{(m)},y^{(m)}$</code> 表示。 然后，每一个<code>$x^{(m)}$</code> 被一个sub-codebook 中的第m个sub-codeword 量化，于是有 :</p>
+
+<p><code>$$&lt;y,x&gt; = \sum_{m}&lt;y^{(m)},x^{(m)}&gt;  \approx \sum_m&lt;y^{(m)},c^{m}_{k_m}&gt;$$</code></p>
+
+<p>假如将每个<code>$y^{(m)}$</code>和转换后的sub-codeword 的子内积提前计算出来的话，就可以避免乘法运算，并且最后只有M次加法运算。 <br/>
+这种方法可以量化卷积层和全连接层，并且减少运算。</p>
+
+<hr />
+
+<h2>Q-CNN</h2>
+
+<hr />
+
+<h3>量化全连接层</h3>
+
+<p><img src="https://github.com/kevin20x2/kevin20x2.github.com/blob/master/images/Q-CNN-2.png?raw=true" alt="figure_2" /></p>
+
+<p>设W 是权重矩阵，首先要生成大小为m的codebook， 于是用k-means 聚类算法，将W 按照行数分成m个子矩阵，然后聚m类。得到codebooks。<br/>
+计算的时候，将输入的input 向量也拆分成m个子向量，然后每一个子向量与codebooks里面的每一个向量相乘，得到预先计算的结果。<br/>
+然后将不同的结果相加得到输出的结果。 <br/>
+算法将原来的<code>$O(C_sC_t)$</code>的时间复杂度优化至 <code>$O(C_K+C_tM)$</code>。</p>
+
+<h3>量化卷积层</h3>
+
+<p>卷积层的量化方式跟全连接层类似，权重的切分方式是每个kernel 级别的切分。然后也是用k-means 聚类算法，计算出codebooks，算出预先计算的结果，简化计算。</p>
+
+<hr />
+
+<h2>带错误纠正的量化</h2>
+
+<hr />
+
+<p>说明了只有上面的量化是不够的，主要有两个缺点:
+1. 最小化参数的量化误差并不一定就能给出比较好的分类准确度。
+2. 每一层的量化是独立的，因此每一层的量化误差可能累积起来，导致最终的结果不好。</p>
+
+<h3><strong>全连接层的错误纠正</strong></h3>
+
+<p>错误纠正的思路都是类似的，因为没有量化的输出结果是最精准的结果，因此，量化后的结果只要尽量跟原始结果相等就行了。剩下的就是公式化的描述和量化参数的更新方式:</p>
+
+<p><code>$$min_{D^{(m)},B^{(m)}} \sum_n \|T_n - \sum_m(D^{(m)}B^{(m)})^TS^{(m)}_n\|^2_F$$</code></p>
+
+<p>其中Sn 是第n个图像$In$ 的输入，Tn是原始的输出。D 是subcodebooks向量， B是类似与开关的向量，$B^{(m)} \in {0,1}^{K \times C_t}$ ，标识选择codebooks中的word 来进行量化。最小化上述误差值是错误纠正的目标。</p>
+
+<p>上面的公式是总体的目标，具体到分割成m个的，每一个的子空间的误差表示为:</p>
+
+<p><code>$$R^{(m)}_n = T_n-\sum_{m'\ne m}(D^{(m')}B^{(m')})^TS^{(m')}_n$$</code></p>
+
+<p>也就是正确输出的值，减去所有其他子层输出的和。</p>
+
+<h4>更新 D</h4>
+
+<p>当固定B 的时候，对于每一个子空间，变成一个最小2乘问题。</p>
+
+<h4>更新 B</h4>
+
+<p>当 D 固定的时候，会发现最小值通过枚举就能得到。</p>
+
+<h3><strong>卷积层的错误纠正</strong></h3>
+
+<p>思路是类似的，全连接层的输出向量变成了输出矩阵，因此需要加一维pt 表示位置。 文中说可以用block coordinate descent。</p>
+
+<h3><strong>多层的错误纠正</strong></h3>
+
+<p>这里主要说多个层数之间的输入和输出的问题，文中是假定前面一层已经经过量化好的，也就是说该层的输入是前一层量化后的输出不变化，然后这一层的输出是由该输入，用原始方法算出来的输入来进行纠正的。说了那么多也就是确定跟想象的一致。</p>
+
+<p>文中提到了可以用反向传播算法来更新量化值，但是由于太难，于是就没有做。</p>
+
+<h2>总结</h2>
+
+<p>后面的实验部分没有看，总的来说这个量化思路感觉还是比较好的，虽然没有用到反向传播算法来更新。</p>
+
+<div id="container"></div>
+
+
+<p><link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"></p>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+
+
+<script>
+var gitment = new Gitment({
+  id: 'location.href', // 可选。默认为 location.href
+  owner: 'kevin20x2',
+  repo: 'blog_comment',
+  oauth: {
+    client_id: '0d172133d26f520041e6',
+    client_secret: '14eef65983bd9d0e16313feaffcf1684fc3713a9',
+  },
+})
+gitment.render('container')
+</script>
+
+</div>
+
+
+      <footer class="post-footer">
+        <p class="meta text-muted">
+          
+  
+
+
+
+<figure class="author-image">
+    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
+</figure>
+
+<section class="author">
+    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">ZVINK</span></span></h4>
+
+    <div class="author-meta">
+        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://kevin20x2.github.io">http://kevin20x2.github.io</a></span>
+    </div>
+</section>
+
+<hr>
+
+<section class="share">
+    
+    <h4>Share this post</h4>
+    
+    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://kevin20x2.github.io/blog/2018/01/27/quantized-cnn/;" 
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://kevin20x2.github.io/blog/2018/01/27/quantized-cnn/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://kevin20x2.github.io/blog/2018/01/27/quantized-cnn/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+    
+</section>
+
+
+
+
+<!--
+<footer class="post-footer">
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+
+        </footer>
+
+
+&#8211;>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2018-01-27T15:28:16+08:00"  data-updated="true" itemprop="datePublished dateCreated">2018 年1  月 27 日</time>
+          <br>
+
+
+        </p>
+        
+          <div class="pager">
+            
+            
+              
+                <a href="/blog/2018/01/20/latex-in-markdown/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: 解决markdown 和latex 冲突的问题"> 
+                  <div class="text-muted">
+                    <small>Previous Post</small>
+                  </div>
+                  <div class="pager-title">
+                    <h4>解决markdown 和latex 冲突的问题</h4>
+                  </div>
+                </a>
+              
+            
+            
+            
+          </div>
+        
+      </footer>
+    </article>
+    
+      <section>
+        <h2>Comments</h2>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2018 - ZVINK<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'kevin20x2';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://kevin20x2.github.io/blog/2018/01/27/quantized-cnn/';
+        var disqus_url = 'http://kevin20x2.github.io/blog/2018/01/27/quantized-cnn/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr.js"></script>
+
+
+  </body>
+</html>
