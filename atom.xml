@@ -4,7 +4,7 @@
   <title><![CDATA[ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-27T22:10:50+08:00</updated>
+  <updated>2018-02-09T23:44:47+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -12,6 +12,121 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Windows10 搭建Unity Android 环境]]></title>
+    <link href="http://kevin20x2.github.io/blog/2018/02/09/build-unity-android-platform/"/>
+    <updated>2018-02-09T22:16:08+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2018/02/09/build-unity-android-platform</id>
+    <content type="html"><![CDATA[<p>Unity 环境为2017.2.0f3 <br/>
+VS版本是2017 社区版</p>
+
+<!--more-->
+
+
+<p>本人是直接按照unity 的引导一步步来的，步骤如下 :</p>
+
+<h2>安装jdk</h2>
+
+<hr />
+
+<p>直接去<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">官网</a>安装最新的JDK 即可。</p>
+
+<h2>安装Android 相关工具</h2>
+
+<hr />
+
+<p>由于家里电信的网络对于相关网站的网路速度有影响，这里是通过sdk-tools 来安装的。<br/>
+1. 去 <a href="http://www.android-studio.org/">http://www.android-studio.org/</a> 安装sdk-tools.
+2. 将zip压缩包解压至某一目录(如:C:\sdk-tools),这时的目录结构应该是 C:\sdk-tools\tools
+3. 打开命令行 ,切换目录到tools\bin 下
+运行</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sdkmanager --list
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+会发现显示了当前的安装状况，现在需要安装的有: <br/>
+安卓的平台：platforms;android-27 <br/>
+构建工具:  build-tools;27.0.3<br/>
+这里我直接选了当前最新的版本。<br/>
+安装方法是</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sdkmanager <span class="s2">&quot;platforms;android-27&quot;</span>
+</span><span class='line'>sdkmanager <span class="s2">&quot;build-tools;27.0.3&quot;</span>
+</span><span class='line'><span class="c">#如果不安装build-tools 会报没有aapt.exe的错误</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h2>在unity 编辑器中指定相关路径</h2>
+
+<p>在构建的时候会提示你选择 sdk 和jdk 路径，sdk 的话制定的是上文的 <br/>
+C:\sdk-tools (自行修改目录) <br/>
+jdk的话制定的是 <br/>
+C:\Program Files\Java\jdk1.8.0_161 (自行修改安装目录)</p>
+
+<p>这中间的坑有:</p>
+
+<hr />
+
+<ol>
+<li>没有安装build-tools</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Win32Exception: <span class="nv">ApplicationName</span><span class="o">=</span><span class="s1">&#39;C:/sdk-tools\platform-tools\aapt.exe&#39;</span>, <span class="nv">CommandLine</span><span class="o">=</span><span class="s1">&#39;package --auto-add-overlay -v -f -m -J &quot;gen&quot; -M &quot;AndroidManifest.xml&quot; -S &quot;res&quot; -I &quot;C:/sdk-tools\platforms\android-27\android.jar&quot; -F bin/resources.ap_&#39;</span>, <span class="nv">CurrentDirectory</span><span class="o">=</span><span class="err">&#39;</span>Temp/StagingArea
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+会导致上述错误</p>
+
+<ol>
+<li>检测到的sdk 的tools的版本不对 <br/>
+这里我的解决方法是用现在的sdk tools 安装最新的sdk tools:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sdkmanager <span class="s2">&quot;tools&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>注意</strong>:由于新安装tools 会删除原来的文件，然而现在正在运行的tools就占用了tools文件夹，因此需要先将tools文件夹重新命名(如: tools-old) 然后再在tools-old\bin中执行上面的命令。</p>
+
+<div id="container"></div>
+
+
+<p><link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"></p>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+
+
+<script>
+var gitment = new Gitment({
+  id: 'location.href', // 可选。默认为 location.href
+  owner: 'kevin20x2',
+  repo: 'blog_comment',
+  oauth: {
+    client_id: '0d172133d26f520041e6',
+    client_secret: '14eef65983bd9d0e16313feaffcf1684fc3713a9',
+  },
+})
+gitment.render('container')
+</script>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Quantized-CNN]]></title>
@@ -4000,210 +4115,6 @@ In test 2,the books are already sorted.</p>
 </span><span class='line'>        <span class="p">}</span>
 </span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sums</span> <span class="o">-</span> <span class="n">ans</span><span class="p">);</span>
 </span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Codeforces 508E]]></title>
-    <link href="http://kevin20x2.github.io/blog/2015/04/04/codeforces-508e/"/>
-    <updated>2015-04-04T17:13:00+08:00</updated>
-    <id>http://kevin20x2.github.io/blog/2015/04/04/codeforces-508e</id>
-    <content type="html"><![CDATA[<h2><a href="http://acm.hust.edu.cn/vjudge/problem/visitOriginUrl.action?id=111976">C - Arthur and Brackets</a></h2>
-
-<!--more-->
-
-
-<h3>Description</h3>
-
-<p>Notice that the memory limit is non-standard.</p>
-
-<p>Recently Arthur and Sasha have studied correct bracket sequences. Arthur understood this topic perfectly and become so amazed about correct bracket sequences, so he even got himself a favorite correct bracket sequence of length 2n. Unlike Arthur, Sasha understood the topic very badly, and broke Arthur&rsquo;s favorite correct bracket sequence just to spite him.</p>
-
-<p>All Arthur remembers about his favorite sequence is for each opening parenthesis (&lsquo;(&rsquo;) the approximate distance to the corresponding closing one (&lsquo;)&rsquo;). For the i-th opening bracket he remembers the segment [li, ri], containing the distance to the corresponding closing bracket.</p>
-
-<p>Formally speaking, for the i-th opening bracket (in order from left to right) we know that the difference of its position and the position of the corresponding closing bracket belongs to the segment [li, ri].</p>
-
-<p>Help Arthur restore his favorite correct bracket sequence!</p>
-
-<h3>Input</h3>
-
-<p>The first line contains integer n (1 ≤ n ≤ 600), the number of opening brackets in Arthur&rsquo;s favorite correct bracket sequence.</p>
-
-<p>Next n lines contain numbers li and ri (1 ≤ li ≤ ri &lt; 2n), representing the segment where lies the distance from the i-th opening bracket and the corresponding closing one.</p>
-
-<p>The descriptions of the segments are given in the order in which the opening brackets occur in Arthur&rsquo;s favorite sequence if we list them from left to right.</p>
-
-<h3>Output</h3>
-
-<p>If it is possible to restore the correct bracket sequence by the given data, print any possible choice.</p>
-
-<p>If Arthur got something wrong, and there are no sequences corresponding to the given information, print a single line &ldquo;IMPOSSIBLE&rdquo; (without the quotes).</p>
-
-<h2>Sample Input</h2>
-
-<h3>Input</h3>
-
-<p>4<br/>
-1 1<br/>
-1 1<br/>
-1 1<br/>
-1 1</p>
-
-<h3>Output</h3>
-
-<p>()()()()</p>
-
-<h3>Input</h3>
-
-<p>3<br/>
-5 5<br/>
-3 3<br/>
-1 1</p>
-
-<h3>Output</h3>
-
-<p>((()))</p>
-
-<h3>Input</h3>
-
-<p>3<br/>
-5 5<br/>
-3 3<br/>
-2 2</p>
-
-<h3>Output</h3>
-
-<p>IMPOSSIBLE</p>
-
-<h3>Input</h3>
-
-<p>3<br/>
-2 3<br/>
-1 4<br/>
-1 4</p>
-
-<h3>Output</h3>
-
-<p>(())()</p>
-
-<p>这种带括号匹配的问题一般都能用到栈,然而我却傻乎乎的用dfs然后wa了很久。</p>
-
-<p>代码借鉴了别人的，我加点注释吧orz。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include&lt;cstdio&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;iostream&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;cstring&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;cmath&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;vector&gt;</span>
-</span><span class='line'><span class="cp">#include&lt;algorithm&gt;</span>
-</span><span class='line'><span class="k">typedef</span>  <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#define clr(x) memset((x),0,sizeof(x))</span>
-</span><span class='line'><span class="cp">#define inf 0x3f3f3f3f</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span><span class='line'><span class="kt">char</span> <span class="n">ans</span><span class="p">[</span><span class="mi">1250</span><span class="p">];</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">l</span><span class="p">[</span><span class="mi">650</span><span class="p">],</span><span class="n">r</span><span class="p">[</span><span class="mi">650</span><span class="p">];</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">pos</span><span class="p">[</span><span class="mi">650</span><span class="p">];</span><span class="c1">//存放第i个&#39;(&#39;的位置</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">s</span><span class="p">[</span><span class="mi">1250</span><span class="p">];</span><span class="c1">//栈</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
-</span><span class='line'><span class="kt">bool</span> <span class="n">flag</span> <span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">flag</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="c1">//表示位置</span>
-</span><span class='line'>    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="o">&amp;</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">flag</span> <span class="p">)</span>  <span class="k">continue</span><span class="p">;</span>
-</span><span class='line'>        <span class="n">s</span><span class="p">[</span><span class="o">++</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-</span><span class='line'>        <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">len</span><span class="p">;</span>
-</span><span class='line'>        <span class="n">ans</span><span class="p">[</span><span class="n">len</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;(&#39;</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">while</span><span class="p">(</span><span class="n">top</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span> <span class="n">pos</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">top</span><span class="p">]]</span><span class="o">+</span><span class="n">l</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">top</span><span class="p">]]</span> <span class="o">&lt;=</span><span class="n">len</span><span class="p">)</span><span class="c1">//表示要匹配栈顶左括号时候若这时候实际长度可能</span>
-</span><span class='line'>        <span class="p">{</span>                                          <span class="c1">//在匹配范围之内</span>
-</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">top</span><span class="p">]]</span><span class="o">+</span><span class="n">r</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">top</span><span class="p">]]</span><span class="o">&lt;</span><span class="n">len</span><span class="p">)</span>      <span class="c1">//不在匹配范围之内</span>
-</span><span class='line'>            <span class="p">{</span>
-</span><span class='line'>                <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>            <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                <span class="n">ans</span><span class="p">[</span><span class="n">len</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;)&#39;</span><span class="p">;</span>  <span class="c1">//匹配到，出栈</span>
-</span><span class='line'>                <span class="n">s</span><span class="p">[</span><span class="n">top</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">flag</span><span class="o">&amp;&amp;</span><span class="n">top</span> <span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="c1">//top!=0 还有括号没有得到匹配</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="n">puts</span><span class="p">(</span><span class="n">ans</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>     <span class="n">puts</span><span class="p">(</span><span class="s">&quot;IMPOSSIBLE&quot;</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>

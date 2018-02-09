@@ -4,7 +4,7 @@
   <title><![CDATA[分类: 杂 | ZVINK's garden]]></title>
   <link href="http://kevin20x2.github.io/blog/categories/za/atom.xml" rel="self"/>
   <link href="http://kevin20x2.github.io/"/>
-  <updated>2018-01-27T22:10:50+08:00</updated>
+  <updated>2018-02-09T23:44:47+08:00</updated>
   <id>http://kevin20x2.github.io/</id>
   <author>
     <name><![CDATA[ZVINK]]></name>
@@ -12,6 +12,121 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Windows10 搭建Unity Android 环境]]></title>
+    <link href="http://kevin20x2.github.io/blog/2018/02/09/build-unity-android-platform/"/>
+    <updated>2018-02-09T22:16:08+08:00</updated>
+    <id>http://kevin20x2.github.io/blog/2018/02/09/build-unity-android-platform</id>
+    <content type="html"><![CDATA[<p>Unity 环境为2017.2.0f3 <br/>
+VS版本是2017 社区版</p>
+
+<!--more-->
+
+
+<p>本人是直接按照unity 的引导一步步来的，步骤如下 :</p>
+
+<h2>安装jdk</h2>
+
+<hr />
+
+<p>直接去<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">官网</a>安装最新的JDK 即可。</p>
+
+<h2>安装Android 相关工具</h2>
+
+<hr />
+
+<p>由于家里电信的网络对于相关网站的网路速度有影响，这里是通过sdk-tools 来安装的。<br/>
+1. 去 <a href="http://www.android-studio.org/">http://www.android-studio.org/</a> 安装sdk-tools.
+2. 将zip压缩包解压至某一目录(如:C:\sdk-tools),这时的目录结构应该是 C:\sdk-tools\tools
+3. 打开命令行 ,切换目录到tools\bin 下
+运行
+<code>bash
+sdkmanager --list
+</code>
+会发现显示了当前的安装状况，现在需要安装的有: <br/>
+安卓的平台：platforms;android-27 <br/>
+构建工具:  build-tools;27.0.3<br/>
+这里我直接选了当前最新的版本。<br/>
+安装方法是
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sdkmanager <span class="p">&amp;</span>ldquo<span class="p">;</span>platforms<span class="p">;</span>android-27<span class="p">&amp;</span>rdquo<span class="p">;</span>
+</span><span class='line'>sdkmanager <span class="p">&amp;</span>ldquo<span class="p">;</span>build-tools<span class="p">;</span>27.0.3<span class="p">&amp;</span>rdquo<span class="p">;</span>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;如果不安装build-tools 会报没有aapt.exe的错误&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;&quot;</span>&gt;
+</span><span class='line'>
+</span><span class='line'><span class="c">## 在unity 编辑器中指定相关路径   </span>
+</span><span class='line'>在构建的时候会提示你选择 sdk 和jdk 路径，sdk 的话制定的是上文的
+</span><span class='line'>C:<span class="se">\\</span>sdk-tools <span class="o">(</span>自行修改目录<span class="o">)</span>
+</span><span class='line'>jdk的话制定的是
+</span><span class='line'>C:<span class="se">\P</span>rogram Files<span class="se">\J</span>ava<span class="se">\j</span>dk1.8.0_161 <span class="o">(</span>自行修改安装目录<span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>这中间的坑有:
+</span><span class='line'>
+</span><span class='line'>---
+</span><span class='line'>1. 没有安装build-tools
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Win32Exception: <span class="nv">ApplicationName</span><span class="o">=</span><span class="p">&amp;</span>lsquo<span class="p">;</span>C:/sdk-tools<span class="se">\p</span>latform-tools<span class="se">\a</span>apt.exe<span class="p">&amp;</span>rsquo<span class="p">;</span>, <span class="nv">CommandLine</span><span class="o">=</span><span class="p">&amp;</span>lsquo<span class="p">;</span>package <span class="p">&amp;</span>ndash<span class="p">;</span>auto-add-overlay -v -f -m -J <span class="p">&amp;</span>ldquo<span class="p">;</span>gen<span class="p">&amp;</span>rdquo<span class="p">;</span> -M <span class="p">&amp;</span>ldquo<span class="p">;</span>AndroidManifest.xml<span class="p">&amp;</span>rdquo<span class="p">;</span> -S <span class="p">&amp;</span>ldquo<span class="p">;</span>res<span class="p">&amp;</span>rdquo<span class="p">;</span> -I <span class="p">&amp;</span>ldquo<span class="p">;</span>C:/sdk-tools<span class="se">\p</span>latforms<span class="se">\a</span>ndroid-27<span class="se">\a</span>ndroid.jar<span class="p">&amp;</span>rdquo<span class="p">;</span> -F bin/resources.ap_<span class="p">&amp;</span>rsquo<span class="p">;</span>, <span class="nv">CurrentDirectory</span><span class="o">=</span><span class="p">&amp;</span>lsquo<span class="p">;</span>Temp/StagingArea
+</span></code></pre></td></tr></table></div></figure><br/>
+会导致上述错误</p>
+
+<ol>
+<li>检测到的sdk 的tools的版本不对 <br/>
+这里我的解决方法是用现在的sdk tools 安装最新的sdk tools:
+<code>bash
+sdkmanager "tools"
+</code>
+<strong>注意</strong>:由于新安装tools 会删除原来的文件，然而现在正在运行的tools就占用了tools文件夹，因此需要先将tools文件夹重新命名(如: tools-old) 然后再在tools-old\bin中执行上面的命令。</li>
+</ol>
+
+
+<div id="container"></div>
+
+
+<p><link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"></p>
+
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+
+
+<script>
+var gitment = new Gitment({
+  id: 'location.href', // 可选。默认为 location.href
+  owner: 'kevin20x2',
+  repo: 'blog_comment',
+  oauth: {
+    client_id: '0d172133d26f520041e6',
+    client_secret: '14eef65983bd9d0e16313feaffcf1684fc3713a9',
+  },
+})
+gitment.render('container')
+</script>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[解决markdown 和latex 冲突的问题]]></title>
@@ -440,151 +555,6 @@ int main()
 
     }
     return 0;
-}
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hdu4857]]></title>
-    <link href="http://kevin20x2.github.io/blog/2015/03/31/hdu4857/"/>
-    <updated>2015-03-31T21:30:22+08:00</updated>
-    <id>http://kevin20x2.github.io/blog/2015/03/31/hdu4857</id>
-    <content type="html"><![CDATA[<!--more-->
-
-
-<h2><a href="http://acm.hdu.edu.cn/showproblem.php?pid=4857">逃生</a></h2>
-
-<h3>Problem Description</h3>
-
-<p>糟糕的事情发生啦，现在大家都忙着逃命。但是逃命的通道很窄，大家只能排成一行。</p>
-
-<p>现在有n个人，从1标号到n。同时有一些奇怪的约束条件，每个都形如：a必须在b之前。
-同时，社会是不平等的，这些人有的穷有的富。1号最富，2号第二富，以此类推。有钱人就贿赂负责人，所以他们有一些好处。</p>
-
-<p>负责人现在可以安排大家排队的顺序，由于收了好处，所以他要让1号尽量靠前，如果此时还有多种情况，就再让2号尽量靠前，如果还有多种情况，就让3号尽量靠前，以此类推。</p>
-
-<p>那么你就要安排大家的顺序。我们保证一定有解。</p>
-
-<h3>Input</h3>
-
-<p>第一行一个整数T(1 &lt;= T &lt;= 5),表示测试数据的个数。
-然后对于每个测试数据，第一行有两个整数n(1 &lt;= n &lt;= 30000)和m(1 &lt;= m &lt;= 100000)，分别表示人数和约束的个数。</p>
-
-<p>然后m行，每行两个整数a和b，表示有一个约束a号必须在b号之前。a和b必然不同。</p>
-
-<h3>Output</h3>
-
-<p>对每个测试数据，输出一行排队的顺序，用空格隔开。</p>
-
-<h3>Sample Input</h3>
-
-<p>1<br/>
-5 10<br/>
-3 5<br/>
-1 4<br/>
-2 5<br/>
-1 2<br/>
-3 4<br/>
-1 4<br/>
-2 3<br/>
-1 5<br/>
-3 5<br/>
-1 2</p>
-
-<h3>Sample Output</h3>
-
-<p>1 2 3 4 5</p>
-
-<h4>Author</h4>
-
-<p>CLJ</p>
-
-<h4>Source</h4>
-
-<p>BestCoder Round #1</p>
-
-<p>拓扑排序加优先队列 ， 放在hdu上的测试 丧心病狂的卡了时间 用输入挂解决，再就是题目中要求编号小的尽量放前面，因此是逆序建图，然后优先队列先处理大的。</p>
-
-<pre><code class="cpp">#include&lt;cstdio&gt;
-#include&lt;cstring&gt;
-#include&lt;cmath&gt;
-#include&lt;iostream&gt;
-#include&lt;algorithm&gt;
-#include&lt;vector&gt;
-#include&lt;queue&gt;
-const int maxn=30010;
-using namespace std;
-
-vector&lt;int&gt; e[maxn];
-int n,m,in[maxn],ans[maxn],cnt;
-
-struct cmp
-{
-  bool operator ()(int &amp;a,int &amp;b){
-    return a&lt;b;//最大值优先
-  }
-};
-void read2(int &amp;x)
-{
-    char c;
-    bool neg = false;
-    while(((c=getchar())&lt;'0'||c&gt;'9')&amp;&amp;c!='-');
-    if(c=='-')
-    {
-        neg = true;
-        while((c=getchar())&lt;'0'||c&gt;'9');
-    }
-    x= c-'0';
-    while(c=getchar(),c&gt;='0'&amp;&amp;c&lt;='9') x= x*10+c-'0';
-    if(neg) x=-x;
-}
-
-void topo()
-{
-  priority_queue&lt;int,vector&lt;int&gt;,cmp&gt; q;
-  for(int i=1;i&lt;=n;i++)
-    if(in[i]==0) q.push(i);
-  int flag=0;
-  int x,i;
-  while(!q.empty())
-  {
-    x=q.top();
-    q.pop();
-    ans[++cnt]=x;
-    for(i=0;i&lt;e[x].size();i++)
-    {
-      in[e[x][i]]--;
-      if(in[e[x][i]]==0)
-        q.push(e[x][i]);
-    }
-  }
-}
-
-int main()
-{
-  int t,a,b,i;
-  scanf("%d",&amp;t);
-  while(t--)
-  {
-    scanf("%d%d",&amp;n,&amp;m);
-    for(i=0;i&lt;=n;i++)
-      e[i].clear();
-    memset(in,0,sizeof in);
-    while(m--)
-    {
-      read2(a);read2(b);
-      e[b].push_back(a);
-      in[a]++;
-    }
-    cnt=0;
-    topo();
-    printf("%d",ans[cnt]);
-    for(i=cnt-1;i&gt;0;i--)
-      printf(" %d",ans[i]);
-    puts("");
-  }
-  return 0;
 }
 </code></pre>
 ]]></content>
